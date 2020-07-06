@@ -1,6 +1,10 @@
 package com.neolab.heroesGame.arena;
 
-import java.util.*;
+import com.neolab.heroesGame.heroes.Hero;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class Army {
     private final int playerId;
@@ -25,21 +29,21 @@ public class Army {
         return availableHero;
     }
 
-    public Optional<Hero> getHero(SquareCoordinate coord) {
-        return new Optional<Hero>(heroes.get(coord));
-    }
-
-    public Optional<Hero> getAvailableHero(SquareCoordinate coord) {
-        return new Optional<Hero>(availableHero.get(coord));
-    }
+//    public Optional<Hero> getHero(SquareCoordinate coord) {
+//        return new Optional<Hero>(heroes.get(coord));
+//    }
+//
+//    public Optional<Hero> getAvailableHero(SquareCoordinate coord) {
+//        return new Optional<Hero>(availableHero.get(coord));
+//    }
 
     public boolean killHero(Hero hero) {
         removeAvailableHero(hero);
-        return  heroes.values().removeIf(value -> value.equal(hero));
+        return  heroes.values().removeIf(value -> value.equals(hero));
     }
 
     public boolean removeAvailableHero(Hero hero) {
-        return availableHero.values().removeIf(value -> value.equal(hero));
+        return availableHero.values().removeIf(value -> value.equals(hero));
     }
 
     
