@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Консольный многопользовательский чат.
  * Сервер
  */
-public class Server {
+public class Server extends Thread{
 
     static final int PORT = 8083;
     static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
@@ -244,7 +244,7 @@ public class Server {
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
-    private void startServer() throws IOException {
+    public void startServer() throws IOException {
         history = new History();
         System.out.println(String.format("Server started, port: %d", PORT));
         try (final ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -263,10 +263,5 @@ public class Server {
         } catch (final BindException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(final String[] args) throws IOException {
-        final Server server = new Server();
-        server.startServer();
     }
 }

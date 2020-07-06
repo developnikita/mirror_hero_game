@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Консольный многопользовательский чат.
@@ -11,8 +13,7 @@ import java.util.Date;
  */
 public class Client {
 
-    private static final String IP = "127.0.0.1";//"localhost";
-    private static final int PORT = Server.PORT;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
     private static final SimpleDateFormat DATE_FORMAT = Server.DATE_FORMAT;
 
     private final String ip; // ip адрес клиента
@@ -21,7 +22,7 @@ public class Client {
     private Socket socket = null;
     private BufferedReader in = null; // поток чтения из сокета
     private BufferedWriter out = null; // поток записи в сокет
-    private BufferedReader inputUser = null; // поток чтения с консоли
+    public BufferedReader inputUser = null; // поток чтения с консоли
     private String nickname = null; // имя клиента
 
     /**
@@ -30,12 +31,15 @@ public class Client {
      * @param ip   ip адрес клиента
      * @param port порт соединения
      */
-    private Client(final String ip, final int port) {
+    public Client(final String ip, final int port) {
+        LOGGER.debug("client constructor");
         this.ip = ip;
         this.port = port;
     }
 
-    private void startClient() {
+    public void startClient() {
+        LOGGER.debug("startClient");
+
         try {
             socket = new Socket(this.ip, this.port);
         } catch (final IOException e) {
@@ -63,7 +67,7 @@ public class Client {
      *
      * @param message сообщение
      */
-    private void send(final String message) throws IOException {
+    public void send(final String message) throws IOException {
         out.write(message + "\n");
         out.flush();
     }
@@ -85,8 +89,8 @@ public class Client {
     private void pressNickname() {
         System.out.print("Press your nick: ");
         try {
-            nickname = inputUser.readLine();
-            send(nickname);
+            //nickname = "ivan";  //inputUser.readLine();
+            send("ivan");
         } catch (final IOException ignored) {
         }
     }
@@ -160,8 +164,10 @@ public class Client {
         }
     }
 
-    public static void main(final String[] args) {
-        final Client client = new Client(IP, PORT);
-        client.startClient();
-    }
+//    public static void main(String[] args) {
+//        final String IP = "127.0.0.1";//"localhost";
+//        final int PORT = Server.PORT;
+//        final Client client1 = new Client(IP, PORT);
+//        client1.startClient();
+//    }
 }
