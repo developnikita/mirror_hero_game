@@ -14,7 +14,7 @@ public class Army {
     public Army(int playerId, Map<SquareCoordinate, Hero> heroes) {
         this.playerId = playerId;
         this.heroes = heroes;
-        this.availableHero = new HashMap<SquareCoordinate, Hero>(heroes);
+        this.availableHero = new HashMap<>(heroes);
     }
 
     public int getPlayerId() {
@@ -29,13 +29,13 @@ public class Army {
         return availableHero;
     }
 
-//    public Optional<Hero> getHero(SquareCoordinate coord) {
-//        return new Optional<Hero>(heroes.get(coord));
-//    }
-//
-//    public Optional<Hero> getAvailableHero(SquareCoordinate coord) {
-//        return new Optional<Hero>(availableHero.get(coord));
-//    }
+    public Optional<Hero> getHero(SquareCoordinate coord) {
+        return Optional.of(heroes.get(coord));
+    }
+
+    public Optional<Hero> getAvailableHero(SquareCoordinate coord) {
+        return Optional.of(availableHero.get(coord));
+    }
 
     public boolean killHero(Hero hero) {
         removeAvailableHero(hero);
@@ -46,5 +46,4 @@ public class Army {
         return availableHero.values().removeIf(value -> value.equals(hero));
     }
 
-    
 }
