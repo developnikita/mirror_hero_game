@@ -1,9 +1,12 @@
 package com.neolab.heroesGame.client.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.client.ai.ActionEffect;
 
 public class AnswerServerResponse {
+    private static final ObjectMapper mapper = new ObjectMapper();
     private BattleArena board;
     private ActionEffect previousActionEffect;
 
@@ -13,7 +16,11 @@ public class AnswerServerResponse {
     }
 
     public void setBoard(String jsonString) {
-        board = null;
+        try {
+            board = mapper.readValue(jsonString, BattleArena.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     public BattleArena getBoard() {
@@ -25,6 +32,10 @@ public class AnswerServerResponse {
     }
 
     public void setPreviousActionEffect(String jsonString) {
-        previousActionEffect = null;
+        try {
+            previousActionEffect = mapper.readValue(jsonString, ActionEffect.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }

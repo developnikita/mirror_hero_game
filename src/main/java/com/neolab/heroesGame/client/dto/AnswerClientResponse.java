@@ -1,8 +1,11 @@
 package com.neolab.heroesGame.client.dto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neolab.heroesGame.client.ai.Answer;
 
 public class AnswerClientResponse {
+    private static final ObjectMapper mapper = new ObjectMapper();
     private String jsonAnswer;
 
     public AnswerClientResponse(Answer answer) {
@@ -10,10 +13,15 @@ public class AnswerClientResponse {
     }
 
     public void setAnswer(Answer answer) {
-        jsonAnswer = "";
+        try {
+            jsonAnswer = mapper.writeValueAsString(answer);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public Answer getAnswer() {
-        return null;
+    public String getAnswer() {
+        return jsonAnswer;
     }
 }
