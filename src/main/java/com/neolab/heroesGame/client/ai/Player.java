@@ -2,6 +2,7 @@ package com.neolab.heroesGame.client.ai;
 
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.errors.HeroExceptions;
 
 public class Player {
     private final int id;
@@ -10,7 +11,7 @@ public class Player {
         this.id = id;
     }
 
-    public Answer getAnswer(BattleArena board) {
+    public Answer getAnswer(BattleArena board) throws HeroExceptions {
         return null;
     }
 
@@ -33,5 +34,9 @@ public class Player {
 
     private SquareCoordinate setDeffenceOfUnit(BattleArena board) {
         return null;
+    }
+
+    public int getId() {
+        return id;
     }
 }
