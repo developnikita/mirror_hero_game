@@ -1,27 +1,28 @@
-package com.neolab.heroesGame.client.dto;
+package com.neolab.heroesGame.server.dto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.neolab.heroesGame.client.ai.Answer;
+import com.neolab.heroesGame.arena.BattleArena;
 
-public class AnswerClientResponse {
+public class AnswerServerResponse {
     private static final ObjectMapper mapper = new ObjectMapper();
     private String jsonAnswer;
 
-    public AnswerClientResponse(Answer answer) {
-        setAnswer(answer);
+    public AnswerServerResponse(BattleArena board) {
+        setBoard(board);
     }
 
-    public void setAnswer(Answer answer) {
+    public void setBoard(BattleArena board) {
         try {
-            jsonAnswer = mapper.writeValueAsString(answer);
+            jsonAnswer = mapper.writeValueAsString(board);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
     }
 
-    public String getAnswerJson() {
+    public String getBoardJson() {
         return jsonAnswer;
     }
 }
+
