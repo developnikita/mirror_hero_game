@@ -3,9 +3,9 @@ package com.neolab.heroesGame.arena;
 import java.util.Map;
 
 public class BattleArena {
-    private Map<int, Army> armies;
+    private final Map<Integer, Army> armies;
 
-    public BattleArena(Map<int, Army> armies) {
+    public BattleArena(Map<Integer, Army> armies) {
         this.armies = armies;
     }
 

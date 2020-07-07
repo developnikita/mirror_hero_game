@@ -9,8 +9,8 @@ public class SetInitialStateTest {
     private static final String IP = "127.0.0.1";//"localhost";
     private static final int PORT = Server.PORT;
 
-//    @Test
-//    public void startServerAndClientsTest() throws InterruptedException {
+    @Test
+    public void startServerAndClientsTest() throws InterruptedException {
 //        Thread server = new Thread(() -> {
 //            final Server server1 = new Server();
 //            try {
@@ -35,5 +35,5 @@ public class SetInitialStateTest {
 //        client.start();
 //
 //        server.join();
-//    }
+    }
 }

@@ -1,7 +1,7 @@
 package com.neolab.heroesGame.client.dto;
 
 import com.neolab.heroesGame.arena.BattleArena;
-import com.neolab.heroesGame.server.ActionEffect;
+import com.neolab.heroesGame.client.ai.ActionEffect;
 
 public class AnswerServerResponse {
     private BattleArena board;

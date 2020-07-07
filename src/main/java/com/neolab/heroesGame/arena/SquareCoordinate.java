@@ -2,7 +2,7 @@ package com.neolab.heroesGame.arena;
 
 import java.util.Objects;
 
-public class SquareCoordinate {
+public class SquareCoordinate implements Comparable<SquareCoordinate>{
     private final int X;
     private final int Y;
 
@@ -17,6 +17,16 @@ public class SquareCoordinate {
 
     public int getY() {
         return Y;
+    }
+
+    /**
+     * Compare a given SquareCoordinate with current(this) object.
+     * X compare name and than Y
+     */
+    @Override
+    public int compareTo(SquareCoordinate coordinate) {
+        int diff = X - coordinate.getX();
+        return (diff == 0) ? Y - coordinate.getY() : diff;
     }
 
     @Override

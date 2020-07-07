@@ -1,8 +1,8 @@
 package com.neolab.heroesGame.client.console;
 
 import com.neolab.heroesGame.arena.*;
+import com.neolab.heroesGame.client.ai.ActionEffect;
 import com.neolab.heroesGame.heroes.Hero;
-import com.neolab.heroesGame.server.ActionEffect;
 
 import java.io.PrintStream;
 import java.util.HashMap;
