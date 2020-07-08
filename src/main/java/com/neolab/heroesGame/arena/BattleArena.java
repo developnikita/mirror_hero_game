@@ -1,5 +1,8 @@
 package com.neolab.heroesGame.arena;
 
+import com.neolab.heroesGame.heroes.Hero;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class BattleArena {
@@ -15,5 +18,13 @@ public class BattleArena {
 
     public boolean isWarlordAlive(int playerId) {
         return armies.get(playerId).isWarlordAlive();
+    }
+
+    public Map<Integer, Army> getArmies() {
+        return armies;
+    }
+
+    public Army getArmy(int playerId) {
+        return armies.get(playerId);
     }
 }
