@@ -1,8 +1,5 @@
 package com.neolab.heroesGame.arena;
 
-import com.neolab.heroesGame.heroes.Hero;
-
-import java.util.HashMap;
 import java.util.Map;
 
 public class BattleArena {

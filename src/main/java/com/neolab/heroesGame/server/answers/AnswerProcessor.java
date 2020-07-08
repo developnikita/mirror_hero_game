@@ -13,7 +13,6 @@ import com.neolab.heroesGame.heroes.Hero;
 
 public final class AnswerProcessor {
 
-    private static Player serverBot;
     private static Player player;
     private static Player activePlayer;
     private static BattleArena board;

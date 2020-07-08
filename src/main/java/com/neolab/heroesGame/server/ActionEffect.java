@@ -1,34 +1,40 @@
 package com.neolab.heroesGame.server;
 
 import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.enumerations.HeroActions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActionEffect {
-    private final String action;
-    private final Integer value;
-    private final SquareCoordinate sourceUnit;
-    private final SquareCoordinate targetUnit;
+    private HeroActions action;
+    private Map<SquareCoordinate, Integer> targetUnitsMap;
+    private SquareCoordinate sourceUnit;
 
-    public ActionEffect(String action, Integer value, SquareCoordinate sourceUnit, SquareCoordinate targetUnit) {
-        this.action = action;
-        this.value = value;
-        this.sourceUnit = sourceUnit;
-        this.targetUnit = targetUnit;
-    }
 
-    public String getAction() {
+    public HeroActions getAction() {
         return action;
-    }
-
-    public Integer getValue() {
-        return value;
     }
 
     public SquareCoordinate getSourceUnit() {
         return sourceUnit;
     }
 
-    public SquareCoordinate getTargetUnit() {
-        return targetUnit;
+    public Map<SquareCoordinate, Integer> getTargetUnitsMap() {
+        return targetUnitsMap;
+    }
+
+    public void setTargetUnitsMap(Map<SquareCoordinate, Integer> targetUnitsMap) {
+        this.targetUnitsMap = new HashMap<>();
+        this.targetUnitsMap.putAll(targetUnitsMap);
+    }
+
+    public void setSourceUnit(SquareCoordinate sourceUnit) {
+        this.sourceUnit = new SquareCoordinate(sourceUnit.getX(), sourceUnit.getY());
+    }
+
+    public void setAction(HeroActions action) {
+        this.action = action;
     }
 }
 

@@ -36,6 +36,7 @@ public class Army {
         return Optional.of(heroes.get(coord));
     }
 
+    //todo нигде не используется можно удалить
     public Optional<Hero> getAvailableHero(SquareCoordinate coord) {
         return Optional.of(availableHero.get(coord));
     }

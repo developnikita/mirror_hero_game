@@ -114,8 +114,7 @@ public abstract class Hero {
 
     protected void removeTarget(Hero targetAttack, SquareCoordinate position, Army army){
         if(targetAttack.getHp() <= 0){
-            army.getHeroes().remove(position);
-            army.getAvailableHero().remove(position);
+            army.killHero(targetAttack);
         }
     }
 
