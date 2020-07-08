@@ -4,11 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neolab.heroesGame.server.answers.Answer;
 
-public class AnswerClientResponse {
+
+/**
+ * класс который принимает ответ клиента в формате JSON и преобразует в объект
+ */
+public class ClientResponse {
     private static final ObjectMapper mapper = new ObjectMapper();
     private Answer answer;
 
-    public AnswerClientResponse(String jsonString) {
+    public ClientResponse(String jsonString) throws JsonProcessingException {
         setAnswer(jsonString);
     }
 
@@ -16,12 +20,8 @@ public class AnswerClientResponse {
         return answer;
     }
 
-    public void setAnswer(String jsonString) {
-        try {
-            this.answer = mapper.readValue(jsonString, Answer.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+    public void setAnswer(String jsonString) throws JsonProcessingException {
+        this.answer = mapper.readValue(jsonString, Answer.class);
     }
 
 }
