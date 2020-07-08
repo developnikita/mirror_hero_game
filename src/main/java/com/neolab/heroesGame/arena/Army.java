@@ -98,11 +98,26 @@ public class Army {
     }
 
     private void improve(Hero hero, float improveCoeff) {
-        int value = hero.getHp() + Math.round((float)hero.getHp() * improveCoeff);
-        hero.setHp(value);
-        value = hero.getDamage() + Math.round((float)hero.getDamage() * improveCoeff);
+        int value = hero.getHpMax() + Math.round((float) hero.getHpMax() * improveCoeff);
+        hero.setHpMax(value);
+        value = hero.getDamageDefault() + Math.round((float) hero.getDamageDefault() * improveCoeff);
         hero.setDamage(value);
-        float armor = (1 + improveCoeff) * hero.getArmor();
+        float armor = (1.0f + improveCoeff) * hero.getArmorDefault();
         hero.setArmor(armor);
+    }
+
+    public void cancleImprove() {
+        heroes.values()
+                .stream()
+                .filter(h -> h.getClass().equals(WarlordFootman.class) ||
+                        h.getClass().equals(WarlordMagician.class) ||
+                        h.getClass().equals(WarlordVampire.class))
+                .peek(this::cancle);
+    }
+
+    private void cancle(Hero hero) {
+        hero.setArmor(hero.getArmorDefault());
+        hero.setHpMax(hero.getHpDefault());
+        hero.setDamage(hero.getDamageDefault());
     }
 }
