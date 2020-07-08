@@ -1,8 +1,13 @@
 package com.neolab.heroesGame;
 
+import com.neolab.heroesGame.arena.SquareCoordinate;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 public class SetInitialStateTest {
 
@@ -11,6 +16,16 @@ public class SetInitialStateTest {
 
     @Test
     public void startServerAndClientsTest() throws InterruptedException {
+
+        SquareCoordinate sq1 = new SquareCoordinate(1,1);
+        SquareCoordinate sq2 = new SquareCoordinate(1,1);
+
+        Map<SquareCoordinate, String> map = new HashMap<>();
+        map.put(sq1, "aaa");
+
+        assertEquals("aaa", map.get(sq1));
+
+
 //        Thread server = new Thread(() -> {
 //            final Server server1 = new Server();
 //            try {
