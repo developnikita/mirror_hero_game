@@ -36,5 +36,25 @@ public class ActionEffect {
     public void setAction(HeroActions action) {
         this.action = action;
     }
+
+    public String makeStringForLog() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(String.format("Юнит на позиции (%d, %d) ", sourceUnit.getX(), sourceUnit.getY()));
+        if (action == HeroActions.DEFENCE) {
+            stringBuilder.append("встал в защиту");
+        } else {
+            String stringAction = (action == HeroActions.HEAL) ? "восстановил" : "нанес";
+            String effectName = (action == HeroActions.HEAL) ? "" : " урона";
+            for (SquareCoordinate key : targetUnitsMap.keySet()) {
+                if (targetUnitsMap.get(key) <= 0) {
+                    stringBuilder.append("промахнулся по юниту на позиции (%d, %d)", key.getX(), key.getY());
+                } else {
+                    stringBuilder.append(String.format("%s юниту на позиции (%d, %d) %d HP%s ",
+                            stringAction, key.getX(), key.getY(), targetUnitsMap.get(key), effectName));
+                }
+            }
+        }
+        return stringBuilder.toString();
+    }
 }
 

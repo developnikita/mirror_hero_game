@@ -1,5 +1,8 @@
 package com.neolab.heroesGame;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.BindException;
 import java.net.ServerSocket;
@@ -13,7 +16,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Консольный многопользовательский чат.
  * Сервер
  */
-public class Server extends Thread{
+public class Server extends Thread {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
 
     static final int PORT = 8083;
     static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
@@ -91,6 +96,8 @@ public class Server extends Thread{
                     }
                 }
             } catch (final IOException e) {
+                LOGGER.error(String.format("Соединение с пользователем [%s] будет разорвано. Возникла ошибка: ",
+                        this.nickName, e.getMessage()));
                 this.downService();
             }
         }
@@ -106,9 +113,11 @@ public class Server extends Thread{
             final String preparedMessage = getPreparedMessage(message);
             sendMessage(preparedMessage);
             if (Command.STOP_CLIENT.equalCommand(message)) {
+                LOGGER.info(String.format("Пользователь [%s] запрос разрыв соединения", this.nickName));
                 downService();
                 return false;
             } else if (Command.STOP_ALL_CLIENTS.equalCommand(message) || Command.STOP_SERVER.equalCommand(message)) {
+                LOGGER.info(String.format("Пользователь [%s] отправил команду %s", this.nickName, message));
                 for (final ServerSomething ss : server.serverList) {
                     ss.send(message);
                     ss.downService();
@@ -152,6 +161,7 @@ public class Server extends Thread{
             send(duplicatedMessage);
             send(formatCommandMessage(Command.STOP_CLIENT_FROM_SERVER.commandName, duplicatedNickName));
             send(Command.STOP_CLIENT_FROM_SERVER.commandName);
+            LOGGER.info("Имя пользователя дубилроваллось. Отправлен запрос пользователю на прекращение работы.");
             downService();
         }
 
@@ -160,6 +170,7 @@ public class Server extends Thread{
             server.history.printStory(out);
             final String connectMessage = formatMessage("Connect " + formatNickName(nickName));
             sendMessage(connectMessage);
+            LOGGER.info("Пользователю [%s] отправлена история сообщений");
         }
 
         /**
@@ -196,6 +207,7 @@ public class Server extends Thread{
                     in.close();
                     out.close();
                     server.serverList.remove(this);
+                    LOGGER.info(String.format("Соединение с пользователем [%s] успешно разорвано"), this.nickName);
                 }
             } catch (final IOException ignored) {
             }
@@ -246,7 +258,7 @@ public class Server extends Thread{
     @SuppressWarnings("InfiniteLoopStatement")
     public void startServer() throws IOException {
         history = new History();
-        System.out.println(String.format("Server started, port: %d", PORT));
+        LOGGER.info(String.format("Server started, port: %d", PORT));
         try (final ServerSocket serverSocket = new ServerSocket(PORT)) {
             // serverSocket.setSoTimeout(1000);
             while (true) { // приложение с помощью System.exit() закрывается по команде от клиента
@@ -258,9 +270,12 @@ public class Server extends Thread{
                     // Если завершится неудачей, закрывается сокет,
                     // в противном случае, нить закроет его:
                     socket.close();
+                    LOGGER.error("Не удалось установить подключение с новым пользователем. Возникла ошибка: "
+                            + e.getMessage());
                 }
             }
         } catch (final BindException e) {
+            LOGGER.error("Работа сервера будет прекращена. Возникла ошибка: " + e.getMessage());
             e.printStackTrace();
         }
     }

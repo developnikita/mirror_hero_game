@@ -44,17 +44,17 @@ public class SomeFunction {
 
     public static Set<SquareCoordinate> getCorrectTargetForFootman(SquareCoordinate activeUnit, Army enemyArmy) {
         HashSet<SquareCoordinate> validateTarget = new HashSet<>();
-        for (int y = 1; y >= 0; y--) {
-            if (enemyArmy.getHero(new SquareCoordinate(activeUnit.getX(), y)).isPresent()) {
-                validateTarget.add(new SquareCoordinate(activeUnit.getX(), y));
+        for (int x = 1; x >= 0; x--) {
+            if (enemyArmy.getHero(new SquareCoordinate(x, activeUnit.getY())).isPresent()) {
+                validateTarget.add(new SquareCoordinate(x, activeUnit.getY()));
             }
-            if (enemyArmy.getHero(new SquareCoordinate(1, y)).isPresent()) {
-                validateTarget.add(new SquareCoordinate(1, y));
+            if (enemyArmy.getHero(new SquareCoordinate(x, 1)).isPresent()) {
+                validateTarget.add(new SquareCoordinate(x, 1));
             }
             if (!validateTarget.isEmpty()) {
                 break;
             }
-            int x = activeUnit.getX() == 2 ? 0 : 2;
+            int y = activeUnit.getY() == 2 ? 0 : 2;
             if (enemyArmy.getHero(new SquareCoordinate(x, y)).isPresent()) {
                 validateTarget.add(new SquareCoordinate(x, y));
                 break;

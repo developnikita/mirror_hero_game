@@ -3,6 +3,7 @@ package com.neolab.heroesGame.client.ai;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.errors.HeroExceptions;
+import com.neolab.heroesGame.server.answers.Answer;
 
 public class Player {
     private final int id;

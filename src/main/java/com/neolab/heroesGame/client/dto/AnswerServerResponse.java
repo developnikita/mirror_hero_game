@@ -3,7 +3,7 @@ package com.neolab.heroesGame.client.dto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neolab.heroesGame.arena.BattleArena;
-import com.neolab.heroesGame.client.ai.ActionEffect;
+import com.neolab.heroesGame.server.ActionEffect;
 
 public class AnswerServerResponse {
     private static final ObjectMapper mapper = new ObjectMapper();

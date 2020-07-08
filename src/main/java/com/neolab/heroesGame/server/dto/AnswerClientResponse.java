@@ -2,7 +2,7 @@ package com.neolab.heroesGame.server.dto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.neolab.heroesGame.client.ai.Answer;
+import com.neolab.heroesGame.server.answers.Answer;
 
 public class AnswerClientResponse {
     private static final ObjectMapper mapper = new ObjectMapper();

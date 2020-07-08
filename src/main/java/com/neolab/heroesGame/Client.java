@@ -43,8 +43,10 @@ public class Client {
 
         try {
             socket = new Socket(this.ip, this.port);
+            LOGGER.info(String.format("Клиент получил сокет для связи с сервером ip: %s, port^ %d", ip, port));
         } catch (final IOException e) {
             System.err.println("Socket failed");
+            LOGGER.error("Socket failed");
             return;
         }
 
@@ -54,6 +56,7 @@ public class Client {
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         } catch (final IOException e) {
             downService();
+            LOGGER.error("Streaming failed");
             return;
         }
 
@@ -71,6 +74,7 @@ public class Client {
     public void send(final String message) throws IOException {
         out.write(message + "\n");
         out.flush();
+        LOGGER.debug("Пользователь " + nickname + " отправил сообщение: " + message);
     }
 
     private String formatMessage(final String message) {
@@ -109,6 +113,7 @@ public class Client {
                 if (out != null) {
                     out.close();
                 }
+                LOGGER.info("Соединение успешно завершено");
             }
         } catch (final IOException ignored) {
         }
@@ -123,17 +128,22 @@ public class Client {
                 while (true) {
                     message = in.readLine(); // ждем сообщения с сервера
                     if (Server.Command.STOP_CLIENT.equalCommand(message)) {
+                        LOGGER.info("Получечн запрос сервера на отключение клиента");
                         downService();
                         break; // нить чтения данных из консоли по этой команде прекращает работу сама
                     } else if (Server.Command.STOP_CLIENT_FROM_SERVER.equalCommand(message)
                             || Server.Command.STOP_ALL_CLIENTS.equalCommand(message)
                             || Server.Command.STOP_SERVER.equalCommand(message)) {
+                        LOGGER.info("Получечн запрос сервера на прекращение работы клиента");
                         downService();
+                        LOGGER.info("Работа клиента успешно.");
                         System.exit(0);
                     }
                     System.out.println(message); // пишем сообщение с сервера на консоль
                 }
             } catch (final IOException e) {
+                LOGGER.error("Возникла ошибка при получении ответа с сервера. Соединение будет разорвано/n"
+                        + e.getMessage());
                 downService();
             }
         }
@@ -149,6 +159,7 @@ public class Client {
                 try {
                     message = inputUser.readLine();
                     if (Server.Command.isCommandMessage(message)) {
+                        LOGGER.info("Поступила команда" + message);
                         send(formatCommandMessage(message));
                         send(message);
                         if (Server.Command.STOP_CLIENT.equalCommand(message)) {
@@ -159,6 +170,7 @@ public class Client {
                         send(formatMessage(message));
                     }
                 } catch (final IOException e) {
+                    LOGGER.error("Возникла ошибка отправки сообщения. Соединение будет разорвано/n" + e.getMessage());
                     downService();
                 }
             }
