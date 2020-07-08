@@ -1,5 +1,6 @@
 package com.neolab.heroesGame.client.ai;
 
+import com.neolab.heroesGame.aditional.SomeFunction;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
@@ -34,24 +35,24 @@ public class PlayerBot extends Player {
      */
     @Override
     public Answer getAnswer(BattleArena board) throws HeroExceptions {
-        Army thisBotArmy = getThisBotArmy(board);
-        Army enemyArmy = getEnemyArmy(board);
+        Army thisBotArmy = SomeFunction.getCurrentPlayerArmy(board, getId());
+        Army enemyArmy = SomeFunction.getEnemyArmy(board, thisBotArmy);
 
         SquareCoordinate activeHero = chooseUnit(thisBotArmy);
         Hero hero = Optional.of(thisBotArmy.getHeroes().get(activeHero)).orElseThrow(
-                new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT));
+                new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA));
 
-        if (isUnitMagician(hero)) {
+        if (SomeFunction.isUnitMagician(hero)) {
             return new Answer(activeHero, HeroActions.ATTACK, new SquareCoordinate(-1, -1), getId());
         }
 
-        if (isUnitArcher(hero)) {
+        if (SomeFunction.isUnitArcher(hero)) {
             return new Answer(activeHero, HeroActions.ATTACK, chooseTargetByArcher(enemyArmy), getId());
         }
 
         SquareCoordinate targetUnit;
         HeroActions action;
-        if (isUnitHealer(hero)) {
+        if (SomeFunction.isUnitHealer(hero)) {
             targetUnit = chooseTargetByHealer(thisBotArmy);
             action = HeroActions.HEAL;
         } else {
@@ -67,20 +68,6 @@ public class PlayerBot extends Player {
     private SquareCoordinate chooseUnit(Army army) {
         Set<SquareCoordinate> availableHeroes = army.getAvailableHero().keySet();
         return availableHeroes.iterator().next();
-    }
-
-    private boolean isUnitMagician(Hero hero) {
-        return hero.getClass() == Magician.class
-                || hero.getClass() == WarlordMagician.class
-                || hero.getClass() == WarlordVampire.class;
-    }
-
-    private boolean isUnitArcher(Hero hero) {
-        return hero.getClass() == Archer.class;
-    }
-
-    private boolean isUnitHealer(Hero hero) {
-        return hero.getClass() == Healer.class;
     }
 
     private SquareCoordinate chooseTargetByArcher(Army enemyArmy) {
@@ -103,35 +90,14 @@ public class PlayerBot extends Player {
         return damagedHeroes.iterator().next();
     }
 
-    private SquareCoordinate chooseTargetByFootman(SquareCoordinate activeUnit, Army enemyArmy) {
+    private SquareCoordinate chooseTargetByFootman(SquareCoordinate activeUnit, Army enemyArmy) throws HeroExceptions {
         if (RANDOM.nextInt(10) == 0) {
             return new SquareCoordinate(-1, -1);
         }
-        HashSet<SquareCoordinate> validateTarget = new HashSet<>();
-        for (int y = 1; y >= 0; y--) {
-            if (enemyArmy.getHero(new SquareCoordinate(activeUnit.getX(), y)).isPresent()) {
-                validateTarget.add(new SquareCoordinate(activeUnit.getX(), y));
-            }
-            if (enemyArmy.getHero(new SquareCoordinate(1, y)).isPresent()) {
-                validateTarget.add(new SquareCoordinate(1, y));
-            }
-            if (!validateTarget.isEmpty()) {
-                break;
-            }
-            int x = activeUnit.getX() == 2 ? 0 : 2;
-            if (enemyArmy.getHero(new SquareCoordinate(x, y)).isPresent()) {
-                validateTarget.add(new SquareCoordinate(x, y));
-                break;
-            }
+        Set<SquareCoordinate> validateTarget = SomeFunction.getCorrectTargetForFootman(activeUnit, enemyArmy);
+        if (validateTarget.isEmpty()) {
+            throw new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA);
         }
         return validateTarget.iterator().next();
-    }
-
-    private Army getEnemyArmy(BattleArena board) {
-        return null;
-    }
-
-    private Army getThisBotArmy(BattleArena board) {
-        return null;
     }
 }

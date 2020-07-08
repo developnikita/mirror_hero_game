@@ -6,11 +6,12 @@ public enum HeroErrorCode {
     ERROR_ACTIVE_UNIT("Невозможно выбрать данного юнита"),
     ERROR_UNIT_ATTACK("Этот юнит не может атаковать"),
     ERROR_UNIT_HEAL("Этот юнит не может лечить"),
-    ERROR_DESERIALIZATION("Невозможно установить ход");
+    ERROR_DESERIALIZATION("Невозможно установить ход"),
+    ERROR_ON_BATTLE_ARENA("Произошло что-то непредвиденное");
 
     private String errorString;
 
-    HeroErrorCode(String errorString){
+    HeroErrorCode(String errorString) {
         this.errorString = errorString;
     }
 
