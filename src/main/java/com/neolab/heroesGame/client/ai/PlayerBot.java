@@ -75,7 +75,6 @@ public class PlayerBot extends Player {
         return availableHeroes.iterator().next();
     }
 
-    //todo эта проверка никогда ни будет проходить if (targetUnit == null)
     private SquareCoordinate chooseTargetByHealer(Army army) {
         Map<SquareCoordinate, Hero> heroes = army.getHeroes();
         HashSet<SquareCoordinate> damagedHeroes = new HashSet<>();
@@ -86,15 +85,14 @@ public class PlayerBot extends Player {
             }
         }
         if (damagedHeroes.isEmpty()) {
-            return new SquareCoordinate(-1, -1);
+            return null;
         }
         return damagedHeroes.iterator().next();
     }
 
-    //todo эта проверка никогда ни будет проходить if (targetUnit == null)
     private SquareCoordinate chooseTargetByFootman(SquareCoordinate activeUnit, Army enemyArmy) throws HeroExceptions {
         if (RANDOM.nextInt(10) == 0) {
-            return new SquareCoordinate(-1, -1);
+            return null;
         }
         Set<SquareCoordinate> validateTarget = SomeFunction.getCorrectTargetForFootman(activeUnit, enemyArmy);
         if (validateTarget.isEmpty()) {
