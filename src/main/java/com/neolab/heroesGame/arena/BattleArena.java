@@ -7,15 +7,9 @@ import java.util.Map;
 
 public class BattleArena {
     private final Map<Integer, Army> armies;
-    private final Map<SquareCoordinate, Hero> allHeroes = new HashMap<>();
 
     public BattleArena(Map<Integer, Army> armies) {
         this.armies = armies;
-        armies.values().forEach(army -> this.allHeroes.putAll(army.getHeroes()));
-    }
-
-    public Map<SquareCoordinate, Hero> getAllHeroes() {
-        return allHeroes;
     }
 
     public Map<Integer, Army> getArmies() {
