@@ -12,12 +12,12 @@ import java.util.Optional;
 public class Army {
     private final int playerId;
     private final Map<SquareCoordinate, Hero> heroes;
-    private final Map<SquareCoordinate, Hero> availableHero;
+    private Map<SquareCoordinate, Hero> availableHero;
 
     public Army(int playerId, Map<SquareCoordinate, Hero> heroes) {
         this.playerId = playerId;
         this.heroes = heroes;
-        this.availableHero = new HashMap<>(heroes);
+        setAvailableHeroes();
     }
 
     public int getPlayerId() {
@@ -36,9 +36,8 @@ public class Army {
         return Optional.of(heroes.get(coord));
     }
 
-    //todo нигде не используется можно удалить
-    public Optional<Hero> getAvailableHero(SquareCoordinate coord) {
-        return Optional.of(availableHero.get(coord));
+    public void setAvailableHeroes() {
+        this.availableHero = new HashMap<>(heroes);
     }
 
     public boolean killHero(Hero hero) {
@@ -113,10 +112,10 @@ public class Army {
                 .filter(h -> h.getClass().equals(WarlordFootman.class) ||
                         h.getClass().equals(WarlordMagician.class) ||
                         h.getClass().equals(WarlordVampire.class))
-                .peek(this::cancle);
+                .peek(this::cancel);
     }
 
-    private void cancle(Hero hero) {
+    private void cancel(Hero hero) {
         hero.setArmor(hero.getArmorDefault());
         hero.setHpMax(hero.getHpDefault());
         hero.setDamage(hero.getDamageDefault());

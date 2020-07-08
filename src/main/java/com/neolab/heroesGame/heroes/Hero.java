@@ -88,6 +88,7 @@ public abstract class Hero {
     }
 
     public void setDefence(boolean defence) {
+        this.armor = (float) (this.armor + 0.5);
         this.defence = defence;
     }
 
@@ -95,7 +96,6 @@ public abstract class Hero {
      * Если герой погибает удаляем его из обеих коллекций
      * @param position позиция героя
      * @param army армия противника
-     * @throws HeroExceptions
      */
     public void toAttack(SquareCoordinate position, Army army) throws HeroExceptions {
         Hero targetAttack = searchTarget(position, army);

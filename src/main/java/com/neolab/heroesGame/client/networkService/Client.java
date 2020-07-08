@@ -1,4 +1,29 @@
 package com.neolab.heroesGame.client.networkService;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.neolab.heroesGame.client.ai.Player;
+import com.neolab.heroesGame.client.ai.PlayerBot;
+import com.neolab.heroesGame.client.dto.ClientRequest;
+import com.neolab.heroesGame.client.dto.ServerResponse;
+import com.neolab.heroesGame.errors.HeroExceptions;
+import com.neolab.heroesGame.server.answers.Answer;
+
 public class Client {
+    private final Player player;
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Client(int playerId){
+        this.player = new PlayerBot(playerId);
+    }
+
+    public String getClientAnswer(String board, String actionEffect) throws JsonProcessingException {
+        ServerResponse serverResponse = new ServerResponse(board, actionEffect);
+        Answer answer =  player.getAnswer(serverResponse.getBoard(), serverResponse.getActionEffect());
+        ClientRequest clientRequest = new ClientRequest(answer);
+        return clientRequest.getAnswerJson();
+    }
+
 }
