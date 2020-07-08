@@ -27,7 +27,7 @@ public class Server {
     }
 
     /**
-     * главный циккл игры
+     * главный цикл игры
      * опрашиваем игроков по очереди
      * если у одного закончились доступные ходы
      * другой ходит подряд до конца текущего раунда
@@ -36,27 +36,25 @@ public class Server {
         Client[] arrClients = clients.values().toArray(new Client[2]);
         int endRes;
 
-        while(true){
-            for (int i = 1; i <= arrClients.length; i++) {
-                if(i == 2) {
-                    if(checkAvailableHero(arrClients[i].getPlayer().getId())){
-                        askNextPlayer(i, arrClients);
-                    }
-                    i = 1;
-                }
-                else if(checkAvailableHero(arrClients[i].getPlayer().getId())) {
+        for (int i = 1; i <= arrClients.length; i++) {
+            if(i == 2) {
+                if(checkAvailableHero(arrClients[i].getPlayer().getId())){
                     askNextPlayer(i, arrClients);
                 }
-                //в конце раунда доступны все живые герои
-                if(checkEndRound()){
-                    AnswerProcessor.getBoard().getArmies().values().forEach(Army::setAvailableHeroes);
-                }
+                i = 1;
             }
-
+            else if(checkAvailableHero(arrClients[i].getPlayer().getId())) {
+                askNextPlayer(i, arrClients);
+            }
+            //проверка завершения игры
             endRes = checkEndGame();
             if(endRes > 0){
                 LOGGER.info(String.format("Пользователь c id = [%d] победил", endRes));
                 return;
+            }
+            //в конце раунда доступны все живые герои
+            if(checkEndRound()){
+                AnswerProcessor.getBoard().getArmies().values().forEach(Army::setAvailableHeroes);
             }
         }
     }
