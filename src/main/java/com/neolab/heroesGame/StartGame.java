@@ -28,8 +28,8 @@ public class StartGame {
 
         WarlordFootman footman1 = createWarlordFootman(bot1Id);
         WarlordFootman footman2 = createWarlordFootman(bot2Id);
-        Army playerArmy = new Army(initArmy(bot1Id), footman1, new SquareCoordinate(1,1));
-        Army botArmy = new Army(initArmy(bot2Id), footman2, new SquareCoordinate(1,1));
+        Army playerArmy = new Army(initArmy(bot1Id), footman1, new SquareCoordinate(1, 1));
+        Army botArmy = new Army(initArmy(bot2Id), footman2, new SquareCoordinate(1, 1));
 
         Map<Integer, Army> armies = new HashMap<>();
         armies.put(bot1Id, playerArmy);
@@ -42,7 +42,7 @@ public class StartGame {
         while (true) {
             try {
                 switch (t) {
-                    case BOT1 : {
+                    case BOT1: {
                         if (!battleArena.getArmy(bot1Id).getAvailableHero().isEmpty()) {
                             System.out.println("Bot1");
                             answer = bot1.getAnswer(battleArena);
@@ -54,7 +54,7 @@ public class StartGame {
                         t = Turn.BOT2;
                         break;
                     }
-                    case BOT2 : {
+                    case BOT2: {
                         if (!battleArena.getArmy(bot2Id).getAvailableHero().isEmpty()) {
                             System.out.println("Bot2");
                             answer = bot2.getAnswer(battleArena);

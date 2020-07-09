@@ -18,7 +18,9 @@ public class ServerRequest {
         setActionEffect(actionEffect);
     }
 
-    public String getActionEffectJson() { return actionEffect; }
+    public String getActionEffectJson() {
+        return actionEffect;
+    }
 
     public String getBoardJson() {
         return boardJson;

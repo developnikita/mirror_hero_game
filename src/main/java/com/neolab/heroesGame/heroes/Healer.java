@@ -13,10 +13,12 @@ public class Healer extends Hero {
     public Healer(int hp, int healing, float precision, float armor, int armyId) {
         super(hp, healing, precision, armor, armyId);
     }
+
     /**
      * Невозможно превысить максимальный запас здоровья
+     *
      * @param position позиция героя
-     * @param army армия союзников
+     * @param army     армия союзников
      */
     public Map<SquareCoordinate, Integer> toHeal(SquareCoordinate position, Army army) throws HeroExceptions {
         Hero targetHeal = searchTarget(position, army);

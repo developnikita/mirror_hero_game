@@ -2,7 +2,7 @@ package com.neolab.heroesGame.arena;
 
 import java.util.Objects;
 
-public class SquareCoordinate implements Comparable<SquareCoordinate>{
+public class SquareCoordinate implements Comparable<SquareCoordinate> {
     private final int X;
     private final int Y;
 

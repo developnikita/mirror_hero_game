@@ -1,6 +1,7 @@
 package com.neolab.heroesGame.arena;
 
-import com.neolab.heroesGame.heroes.*;
+import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.heroes.IWarlord;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,18 +46,18 @@ public class Army {
     }
 
     public boolean isWarlordAlive() {
-        Optional<IWarlord> warlord =  getWarlord();
+        Optional<IWarlord> warlord = getWarlord();
         return warlord.isPresent();
     }
 
     public void improveAllies() {
         Optional<IWarlord> warlord = getWarlord();
         warlord.ifPresent(iWarlord -> heroes.values()
-            .forEach(h -> improve(h, iWarlord.getImproveCoefficient())));
+                .forEach(h -> improve(h, iWarlord.getImproveCoefficient())));
     }
 
     public Optional<IWarlord> getWarlord() {
-        return  Optional.of(this.warlord);
+        return Optional.of(this.warlord);
     }
 
     private void improve(Hero hero, float improveCoeff) {

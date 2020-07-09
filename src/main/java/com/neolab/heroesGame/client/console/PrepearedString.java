@@ -7,7 +7,7 @@ public enum PrepearedString {
     CAN_ACTION("CA"),
     CANT_ACTION("W"),
     DEFENCE("D");
-    private String display;
+    private final String display;
 
     PrepearedString(String display) {
         this.display = display;

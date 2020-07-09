@@ -59,7 +59,9 @@ public abstract class Hero {
         return armor;
     }
 
-    public int getArmyId() { return armyId; }
+    public int getArmyId() {
+        return armyId;
+    }
 
     public boolean isDefence() {
         return defence;
@@ -92,14 +94,15 @@ public abstract class Hero {
 
     /**
      * Если герой погибает удаляем его из обеих коллекций
+     *
      * @param position позиция героя
-     * @param army армия противника
+     * @param army     армия противника
      * @return возращается значение нанесенного урона и координата цели(ей)
      */
     public Map<SquareCoordinate, Integer> toAttack(SquareCoordinate position, Army army) throws HeroExceptions {
         Hero targetAttack = searchTarget(position, army);
         int damageDone = 0;
-        if(isHit(this.getPrecision())){
+        if (isHit(this.getPrecision())) {
             damageDone = calculateDamage(targetAttack);
             targetAttack.setHp(targetAttack.getHp() - damageDone);
             removeTarget(targetAttack, army);
@@ -115,22 +118,23 @@ public abstract class Hero {
         );
     }
 
-    protected void removeTarget(Hero targetAttack, Army army){
-        if(targetAttack.getHp() <= 0){
+    protected void removeTarget(Hero targetAttack, Army army) {
+        if (targetAttack.getHp() <= 0) {
             army.killHero(targetAttack);
         }
     }
 
-    protected int calculateDamage(Hero targetAttack){
+    protected int calculateDamage(Hero targetAttack) {
         return Math.round(this.getDamage() - targetAttack.getArmor() * this.getDamage());
     }
 
     /**
      * подбрасываем монетку
+     *
      * @param precision точность
      * @return boolean
      */
-    protected boolean isHit(float precision){
+    protected boolean isHit(float precision) {
         Random rnd = new Random();
         float number = rnd.nextFloat();
         return precision > number;

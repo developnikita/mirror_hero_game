@@ -37,7 +37,7 @@ public class ActionEffect {
         this.action = action;
     }
 
-    public String makeStringForLog() {
+    public String toLog() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("Юнит на позиции (%d, %d) ", sourceUnit.getX(), sourceUnit.getY()));
         if (action == HeroActions.DEFENCE) {
@@ -54,6 +54,7 @@ public class ActionEffect {
                 }
             }
         }
+        stringBuilder.append("/n");
         return stringBuilder.toString();
     }
 }

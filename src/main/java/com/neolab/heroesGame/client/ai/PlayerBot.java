@@ -7,7 +7,7 @@ import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroActions;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
-import com.neolab.heroesGame.heroes.*;
+import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.server.answers.Answer;
 
 import java.util.*;

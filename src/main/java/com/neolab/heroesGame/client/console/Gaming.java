@@ -1,13 +1,15 @@
 package com.neolab.heroesGame.client.console;
 
-import com.neolab.heroesGame.arena.*;
+import com.neolab.heroesGame.arena.Army;
+import com.neolab.heroesGame.arena.BattleArena;
+import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.server.ActionEffect;
 
 import java.io.PrintStream;
 
 public class Gaming {
-    private static PrintStream out = System.out;
+    private static final PrintStream out = System.out;
 
     static public void printLastAction(ActionEffect actionEffect) {
 

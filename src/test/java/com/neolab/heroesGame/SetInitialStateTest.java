@@ -3,7 +3,6 @@ package com.neolab.heroesGame;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +16,8 @@ public class SetInitialStateTest {
     @Test
     public void startServerAndClientsTest() throws InterruptedException {
 
-        SquareCoordinate sq1 = new SquareCoordinate(1,1);
-        SquareCoordinate sq2 = new SquareCoordinate(1,1);
+        SquareCoordinate sq1 = new SquareCoordinate(1, 1);
+        SquareCoordinate sq2 = new SquareCoordinate(1, 1);
 
         Map<SquareCoordinate, String> map = new HashMap<>();
         map.put(sq1, "aaa");

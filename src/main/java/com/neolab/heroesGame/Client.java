@@ -24,7 +24,7 @@ public class Client {
     private BufferedReader in = null; // поток чтения из сокета
     private BufferedWriter out = null; // поток записи в сокет
     public BufferedReader inputUser = null; // поток чтения с консоли
-    private String nickname = null; // имя клиента
+    private final String nickname = null; // имя клиента
 
     /**
      * для создания необходимо принять адрес и номер порта

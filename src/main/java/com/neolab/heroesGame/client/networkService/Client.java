@@ -15,13 +15,13 @@ public class Client {
         return player;
     }
 
-    public Client(int playerId){
+    public Client(int playerId) {
         this.player = new PlayerBot(playerId);
     }
 
     public String getClientAnswer(String board, String actionEffect) throws JsonProcessingException, HeroExceptions {
         ServerResponse serverResponse = new ServerResponse(board, actionEffect);
-        Answer answer =  player.getAnswer(serverResponse.getBoard());
+        Answer answer = player.getAnswer(serverResponse.getBoard());
         ClientRequest clientRequest = new ClientRequest(answer);
         return clientRequest.getAnswerJson();
     }

@@ -9,9 +9,9 @@ public enum HeroErrorCode {
     ERROR_ON_BATTLE_ARENA("Произошло что-то непредвиденное"),
     ERROR_ANSWER("Невозможно установить ход");
 
-    private String errorString;
+    private final String errorString;
 
-    HeroErrorCode(String errorString){
+    HeroErrorCode(String errorString) {
         this.errorString = errorString;
     }
 
