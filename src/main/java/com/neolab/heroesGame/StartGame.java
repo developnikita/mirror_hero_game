@@ -26,25 +26,23 @@ public class StartGame {
         Player bot1 = new PlayerBot(bot1Id);
         Player bot2 = new PlayerBot(bot2Id);
 
-        //todo теперь нужно передавать армию(5 чел), варлорда, и его позицию
-        Army playerArmy = new Army(initArmy(bot1Id), null, null);
-        Army botArmy = new Army(initArmy(bot2Id), null, null);
+        WarlordFootman footman1 = createWarlordFootman(bot1Id);
+        WarlordFootman footman2 = createWarlordFootman(bot2Id);
+        Army playerArmy = new Army(initArmy(bot1Id), footman1, new SquareCoordinate(1,1));
+        Army botArmy = new Army(initArmy(bot2Id), footman2, new SquareCoordinate(1,1));
 
         Map<Integer, Army> armies = new HashMap<>();
         armies.put(bot1Id, playerArmy);
         armies.put(bot2Id, botArmy);
 
         BattleArena battleArena = new BattleArena(armies);
-        //todo отсюда можно убрать так как импрувится сразу в конструкторе
-        battleArena.getArmies().get(bot1Id).improveAllies();
-        battleArena.getArmies().get(bot2Id).improveAllies();
         Turn t = Turn.BOT1;
         Answer answer;
 
         while (true) {
             try {
                 switch (t) {
-                    case BOT1 -> {
+                    case BOT1 : {
                         if (!battleArena.getArmy(bot1Id).getAvailableHero().isEmpty()) {
                             System.out.println("Bot1");
                             answer = bot1.getAnswer(battleArena);
@@ -54,8 +52,9 @@ public class StartGame {
                             AnswerProcessor.handleAnswer(answer);
                         }
                         t = Turn.BOT2;
+                        break;
                     }
-                    case BOT2 -> {
+                    case BOT2 : {
                         if (!battleArena.getArmy(bot2Id).getAvailableHero().isEmpty()) {
                             System.out.println("Bot2");
                             answer = bot2.getAnswer(battleArena);
@@ -65,8 +64,11 @@ public class StartGame {
                             AnswerProcessor.handleAnswer(answer);
                         }
                         t = Turn.BOT1;
+                        break;
                     }
-                    default -> System.out.println("Error");
+                    default:
+                        System.out.println("Error");
+                        break;
                 }
             } catch (HeroExceptions ex) {
                 System.out.println("Test");
@@ -102,8 +104,8 @@ public class StartGame {
         army.put(new SquareCoordinate(0, 0), createArcher(id));
         army.put(new SquareCoordinate(1, 0), createHealer(id));
         army.put(new SquareCoordinate(2, 0), createMagician(id));
+
         army.put(new SquareCoordinate(0, 1), createFootman(id));
-        army.put(new SquareCoordinate(1, 1), createWarlordFootman(id));
         army.put(new SquareCoordinate(2, 1), createFootman(id));
 
         return army;
