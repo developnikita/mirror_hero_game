@@ -9,9 +9,7 @@ import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Healer;
 import com.neolab.heroesGame.heroes.Hero;
-import com.neolab.heroesGame.heroes.Magician;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public final class AnswerProcessor {
@@ -54,15 +52,17 @@ public final class AnswerProcessor {
             if(answer.getAction() == HeroActions.ATTACK){
                 Hero activeHero = getActiveHero(board, answer);
                 //если маг или арчер то первый аргумент не используется
-                activeHero.toAttack(answer.getTargetUnit(), board.getArmy(player.getId()));
+                Map<SquareCoordinate, Integer> enemyHeroPosDamage = activeHero
+                        .toAttack(answer.getTargetUnit(), board.getArmy(player.getId()));
                 removeUsedHero(board, activeHero);
-                setActionEffect(answer, activeHero);
+                setActionEffect(answer, enemyHeroPosDamage);
             }
             else if(answer.getAction() == HeroActions.HEAL){
                 Healer activeHero = (Healer) getActiveHero(board, answer);
-                activeHero.toHeal(answer.getTargetUnit(), board.getArmy(activePlayer.getId()));
+                Map<SquareCoordinate, Integer> allyHeroPosHeal =  activeHero
+                        .toHeal(answer.getTargetUnit(), board.getArmy(activePlayer.getId()));
                 removeUsedHero(board, activeHero);
-                setActionEffect(answer, activeHero);
+                setActionEffect(answer, allyHeroPosHeal);
             }
             else {
                 //получаем героя который хочет встать в оборону
@@ -70,7 +70,7 @@ public final class AnswerProcessor {
                 activeHero.setArmor(activeHero.getArmor() * (float) 1.5);
                 activeHero.setDefence(true);
                 removeUsedHero(board, activeHero);
-                setActionEffect(answer, activeHero);
+                setActionEffect(answer, null);
             }
         }
         else throw new HeroExceptions(HeroErrorCode.ERROR_ANSWER);
@@ -85,20 +85,10 @@ public final class AnswerProcessor {
         board.getArmy(activePlayer.getId()).removeAvailableHero(hero);
     }
 
-    private static void setActionEffect(Answer answer, Hero activeHero){
+    private static void setActionEffect(Answer answer, Map<SquareCoordinate, Integer> enemyHeroPosDamage){
         actionEffect.setAction(answer.getAction());
         actionEffect.setSourceUnit(answer.getActiveHero());
-
         if(answer.getAction() != HeroActions.DEFENCE){
-            Map<SquareCoordinate, Integer> enemyHeroPosDamage =  new HashMap<>();
-
-            if(activeHero instanceof Magician){
-                //todo -1 заглушка, нужно передать значение урона
-                board.getArmy(player.getId()).getHeroes().keySet().forEach(coord -> enemyHeroPosDamage.put(coord, -1));
-            }
-            else {
-                enemyHeroPosDamage.put(answer.getTargetUnit(), -1);
-            }
             actionEffect.setTargetUnitsMap(enemyHeroPosDamage);
         }
     }

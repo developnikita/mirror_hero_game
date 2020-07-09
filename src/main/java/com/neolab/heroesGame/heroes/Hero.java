@@ -5,9 +5,7 @@ import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 public abstract class Hero {
     private final int hpDefault;
@@ -96,14 +94,19 @@ public abstract class Hero {
      * Если герой погибает удаляем его из обеих коллекций
      * @param position позиция героя
      * @param army армия противника
+     * @return возращается значение нанесенного урона и координата цели(ей)
      */
-    public void toAttack(SquareCoordinate position, Army army) throws HeroExceptions {
+    public Map<SquareCoordinate, Integer> toAttack(SquareCoordinate position, Army army) throws HeroExceptions {
         Hero targetAttack = searchTarget(position, army);
-
+        int damageDone = 0;
         if(isHit(this.getPrecision())){
-            targetAttack.setHp(targetAttack.getHp() - calculateDamage(targetAttack));
-            removeTarget(targetAttack, position, army);
+            damageDone = calculateDamage(targetAttack);
+            targetAttack.setHp(targetAttack.getHp() - damageDone);
+            removeTarget(targetAttack, army);
         }
+        Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
+        enemyHeroPosDamage.put(position, damageDone);
+        return enemyHeroPosDamage;
     }
 
     protected Hero searchTarget(SquareCoordinate position, Army army) throws HeroExceptions {
@@ -112,7 +115,7 @@ public abstract class Hero {
         );
     }
 
-    protected void removeTarget(Hero targetAttack, SquareCoordinate position, Army army){
+    protected void removeTarget(Hero targetAttack, Army army){
         if(targetAttack.getHp() <= 0){
             army.killHero(targetAttack);
         }

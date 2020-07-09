@@ -19,9 +19,9 @@ public class Client {
         this.player = new PlayerBot(playerId);
     }
 
-    public String getClientAnswer(String board, String actionEffect) throws JsonProcessingException {
+    public String getClientAnswer(String board, String actionEffect) throws JsonProcessingException, HeroExceptions {
         ServerResponse serverResponse = new ServerResponse(board, actionEffect);
-        Answer answer =  player.getAnswer(serverResponse.getBoard(), serverResponse.getActionEffect());
+        Answer answer =  player.getAnswer(serverResponse.getBoard());
         ClientRequest clientRequest = new ClientRequest(answer);
         return clientRequest.getAnswerJson();
     }
