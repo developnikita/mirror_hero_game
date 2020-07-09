@@ -6,5 +6,5 @@ public class WarlordMagician extends Magician implements IWarlord{
         super(hp, damage, precision, armor, armyId);
     }
 
-    public float getImproveCoefficient() { return (float) 0.05; }
+    public float getImproveCoefficient() { return 0.05f; }
 }

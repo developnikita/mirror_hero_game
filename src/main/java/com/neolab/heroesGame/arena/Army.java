@@ -8,10 +8,13 @@ import java.util.Optional;
 
 public class Army {
     private final Map<SquareCoordinate, Hero> heroes;
+    private final IWarlord warlord;
     private Map<SquareCoordinate, Hero> availableHero;
 
-    public Army(Map<SquareCoordinate, Hero> heroes) {
+    public Army(Map<SquareCoordinate, Hero> heroes, IWarlord warlord, SquareCoordinate warlordPos) {
         this.heroes = heroes;
+        this.warlord = warlord;
+        this.heroes.put(warlordPos, (Hero) warlord);
         setAvailableHeroes();
         improveAllies();
     }
@@ -42,36 +45,18 @@ public class Army {
     }
 
     public boolean isWarlordAlive() {
-        Optional<Hero> warlord =  getWarlord();
+        Optional<IWarlord> warlord =  getWarlord();
         return warlord.isPresent();
     }
 
     public void improveAllies() {
-        Optional<Hero> warlord = getWarlord();
-
-        if (warlord.isPresent()) {
-            if (warlord.get() instanceof WarlordFootman) {
-                WarlordFootman footman = (WarlordFootman) warlord.get();
-                heroes.values()
-                        .stream()
-                        .filter(h -> !(h instanceof IWarlord))
-                        .forEach(h -> improve(h, footman.getImproveCoefficient()));
-            }
-            else if (warlord.get() instanceof WarlordVampire || warlord.get() instanceof WarlordMagician) {
-                WarlordMagician mage = (WarlordMagician) warlord.get();
-                heroes.values()
-                        .stream()
-                        .filter(h -> !(h instanceof IWarlord))
-                        .forEach(h -> improve(h, mage.getImproveCoefficient()));
-            }
-        }
+        Optional<IWarlord> warlord = getWarlord();
+        warlord.ifPresent(iWarlord -> heroes.values()
+            .forEach(h -> improve(h, iWarlord.getImproveCoefficient())));
     }
 
-    private Optional<Hero> getWarlord() {
-        return heroes.values()
-                .stream()
-                .filter(h -> h instanceof IWarlord)
-                .findAny();
+    public Optional<IWarlord> getWarlord() {
+        return  Optional.of(this.warlord);
     }
 
     private void improve(Hero hero, float improveCoeff) {

@@ -6,5 +6,5 @@ public class WarlordFootman extends Footman implements IWarlord{
         super(hp, damage, precision, armor, armyId);
     }
 
-    public float getImproveCoefficient() { return (float) 0.1; }
+    public float getImproveCoefficient() { return 0.1f; }
 }

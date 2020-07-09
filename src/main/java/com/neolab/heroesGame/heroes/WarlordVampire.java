@@ -7,6 +7,6 @@ public class WarlordVampire extends Magician implements IWarlord{
     }
 
     public float getImproveCoefficient() {
-        return (float) 0.05;
+        return 0.05f;
     }
 }

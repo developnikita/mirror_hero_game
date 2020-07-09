@@ -26,14 +26,16 @@ public class StartGame {
         Player bot1 = new PlayerBot(bot1Id);
         Player bot2 = new PlayerBot(bot2Id);
 
-        Army playerArmy = new Army(initArmy(bot1Id));
-        Army botArmy = new Army(initArmy(bot2Id));
+        //todo теперь нужно передавать армию(5 чел), варлорда, и его позицию
+        Army playerArmy = new Army(initArmy(bot1Id), null, null);
+        Army botArmy = new Army(initArmy(bot2Id), null, null);
 
         Map<Integer, Army> armies = new HashMap<>();
         armies.put(bot1Id, playerArmy);
         armies.put(bot2Id, botArmy);
 
         BattleArena battleArena = new BattleArena(armies);
+        //todo отсюда можно убрать так как импрувится сразу в конструкторе
         battleArena.getArmies().get(bot1Id).improveAllies();
         battleArena.getArmies().get(bot2Id).improveAllies();
         Turn t = Turn.BOT1;
