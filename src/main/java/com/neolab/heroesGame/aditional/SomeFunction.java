@@ -7,10 +7,7 @@ import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class SomeFunction {
     public static Army getEnemyArmy(BattleArena board, Army thisBotArmy) throws HeroExceptions {
@@ -43,19 +40,20 @@ public class SomeFunction {
     }
 
     public static Set<SquareCoordinate> getCorrectTargetForFootman(SquareCoordinate activeUnit, Army enemyArmy) {
+        Map<SquareCoordinate, Hero> heroes = enemyArmy.getHeroes();
         HashSet<SquareCoordinate> validateTarget = new HashSet<>();
         for (int x = 1; x >= 0; x--) {
-            if (enemyArmy.getHero(new SquareCoordinate(x, activeUnit.getY())).isPresent()) {
+            if (heroes.get(new SquareCoordinate(x, activeUnit.getY())) != null) {
                 validateTarget.add(new SquareCoordinate(x, activeUnit.getY()));
             }
-            if (enemyArmy.getHero(new SquareCoordinate(x, 1)).isPresent()) {
+            if (heroes.get(new SquareCoordinate(x, 1)) != null) {
                 validateTarget.add(new SquareCoordinate(x, 1));
             }
             if (!validateTarget.isEmpty()) {
                 break;
             }
             int y = activeUnit.getY() == 2 ? 0 : 2;
-            if (enemyArmy.getHero(new SquareCoordinate(x, y)).isPresent()) {
+            if (heroes.get(new SquareCoordinate(x, y)) != null) {
                 validateTarget.add(new SquareCoordinate(x, y));
                 break;
             }
