@@ -59,7 +59,7 @@ public class AnswerValidator {
     }
 
     private static boolean isErrorActiveHero(Hero hero, Army thisBotArmy) {
-        return thisBotArmy.getAvailableHero().containsValue(hero);
+        return !thisBotArmy.getAvailableHero().containsValue(hero);
     }
 
     private static boolean isHealerCorrect(Hero hero, Answer answer, Army thisBotArmy) throws HeroExceptions {
