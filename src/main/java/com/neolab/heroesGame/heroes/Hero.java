@@ -16,7 +16,6 @@ public abstract class Hero {
     private final float precision;
     private float armor;
     private final float armorDefault;
-    private final int armyId;
     private boolean defence = false;
 
     public void setHpMax(int hpMax) {
@@ -31,7 +30,7 @@ public abstract class Hero {
         return armorDefault;
     }
 
-    public Hero(int hp, int damage, float precision, float armor, int armyId) {
+    public Hero(int hp, int damage, float precision, float armor) {
         this.hpDefault = hp;
         this.hpMax = hp;
         this.hp = hp;
@@ -40,7 +39,6 @@ public abstract class Hero {
         this.precision = precision;
         this.armor = armor;
         this.armorDefault = armor;
-        this.armyId = armyId;
     }
 
     public int getHp() {
@@ -57,10 +55,6 @@ public abstract class Hero {
 
     public float getArmor() {
         return armor;
-    }
-
-    public int getArmyId() {
-        return armyId;
     }
 
     public boolean isDefence() {
@@ -150,12 +144,11 @@ public abstract class Hero {
                 getDamage() == hero.getDamage() &&
                 Float.compare(hero.getPrecision(), getPrecision()) == 0 &&
                 Float.compare(hero.getArmor(), getArmor()) == 0 &&
-                getArmyId() == hero.getArmyId() &&
                 isDefence() == hero.isDefence();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getHpMax(), getHp(), getDamage(), getPrecision(), getArmor(), getArmyId(), isDefence());
+        return Objects.hash(getHpMax(), getHp(), getDamage(), getPrecision(), getArmor(), isDefence());
     }
 }

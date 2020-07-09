@@ -26,10 +26,10 @@ public class StartGame {
         Player bot1 = new PlayerBot(bot1Id);
         Player bot2 = new PlayerBot(bot2Id);
 
-        WarlordFootman footman1 = createWarlordFootman(bot1Id);
-        WarlordFootman footman2 = createWarlordFootman(bot2Id);
-        Army playerArmy = new Army(initArmy(bot1Id), footman1, new SquareCoordinate(1, 1));
-        Army botArmy = new Army(initArmy(bot2Id), footman2, new SquareCoordinate(1, 1));
+        WarlordFootman footman1 = createWarlordFootman();
+        WarlordFootman footman2 = createWarlordFootman();
+        Army playerArmy = new Army(initArmy(), footman1, new SquareCoordinate(1, 1));
+        Army botArmy = new Army(initArmy(), footman2, new SquareCoordinate(1, 1));
 
         Map<Integer, Army> armies = new HashMap<>();
         armies.put(bot1Id, playerArmy);
@@ -98,44 +98,44 @@ public class StartGame {
         }
     }
 
-    public static Map<SquareCoordinate, Hero> initArmy(int id) {
+    public static Map<SquareCoordinate, Hero> initArmy() {
         Map<SquareCoordinate, Hero> army = new HashMap<>();
 
-        army.put(new SquareCoordinate(0, 0), createArcher(id));
-        army.put(new SquareCoordinate(1, 0), createHealer(id));
-        army.put(new SquareCoordinate(2, 0), createMagician(id));
+        army.put(new SquareCoordinate(0, 0), createArcher());
+        army.put(new SquareCoordinate(1, 0), createHealer());
+        army.put(new SquareCoordinate(2, 0), createMagician());
 
-        army.put(new SquareCoordinate(0, 1), createFootman(id));
-        army.put(new SquareCoordinate(2, 1), createFootman(id));
+        army.put(new SquareCoordinate(0, 1), createFootman());
+        army.put(new SquareCoordinate(2, 1), createFootman());
 
         return army;
     }
 
-    public static Archer createArcher(int id) {
-        return new Archer(90, 40, 0.85f, 0.00f, id);
+    public static Archer createArcher() {
+        return new Archer(90, 40, 0.85f, 0.00f);
     }
 
-    public static Footman createFootman(int id) {
-        return new Footman(170, 50, 0.80f, 0.10f, id);
+    public static Footman createFootman() {
+        return new Footman(170, 50, 0.80f, 0.10f);
     }
 
-    public static Healer createHealer(int id) {
-        return new Healer(75, 40, 1.00f, 0.00f, id);
+    public static Healer createHealer() {
+        return new Healer(75, 40, 1.00f, 0.00f);
     }
 
-    public static Magician createMagician(int id) {
-        return new Magician(75, 30, 0.80f, 0.00f, id);
+    public static Magician createMagician() {
+        return new Magician(75, 30, 0.80f, 0.00f);
     }
 
-    public static WarlordFootman createWarlordFootman(int id) {
-        return new WarlordFootman(180, 60, 0.90f, 0.15f, id);
+    public static WarlordFootman createWarlordFootman() {
+        return new WarlordFootman(180, 60, 0.90f, 0.15f);
     }
 
-    public static WarlordMagician createWarlordMagician(int id) {
-        return new WarlordMagician(90, 40, 0.75f, 0.05f, id);
+    public static WarlordMagician createWarlordMagician() {
+        return new WarlordMagician(90, 40, 0.75f, 0.05f);
     }
 
-    public static WarlordVampire createWarlordVampire(int id) {
-        return new WarlordVampire(90, 10, 0.80f, 0.05f, id);
+    public static WarlordVampire createWarlordVampire() {
+        return new WarlordVampire(90, 10, 0.80f, 0.05f);
     }
 }

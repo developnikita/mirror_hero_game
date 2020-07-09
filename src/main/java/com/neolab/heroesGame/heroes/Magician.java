@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class Magician extends Hero {
 
-    public Magician(int hp, int damage, float precision, float armor, int armyId) {
-        super(hp, damage, precision, armor, armyId);
+    public Magician(int hp, int damage, float precision, float armor) {
+        super(hp, damage, precision, armor);
     }
 
     @Override

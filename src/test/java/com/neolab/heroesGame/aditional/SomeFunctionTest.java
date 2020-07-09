@@ -127,6 +127,6 @@ public class SomeFunctionTest {
     }
 
     private Footman getFootman() {
-        return new Footman(170, 50, (float) 0.8, (float) 0.1, 0);
+        return new Footman(170, 50, (float) 0.8, (float) 0.1);
     }
 }

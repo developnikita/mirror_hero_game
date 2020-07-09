@@ -2,8 +2,8 @@ package com.neolab.heroesGame.heroes;
 
 public class WarlordVampire extends Magician implements IWarlord {
 
-    public WarlordVampire(int hp, int damage, float precision, float armor, int armyId) {
-        super(hp, damage, precision, armor, armyId);
+    public WarlordVampire(int hp, int damage, float precision, float armor) {
+        super(hp, damage, precision, armor);
     }
 
     public float getImproveCoefficient() {

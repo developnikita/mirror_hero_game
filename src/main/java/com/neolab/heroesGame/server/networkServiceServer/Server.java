@@ -27,7 +27,7 @@ public class Server {
         clients.put(2, new Client(2));
         AnswerProcessor.setActivePlayer(clients.get(1).getPlayer());
         AnswerProcessor.setPlayer(clients.get(2).getPlayer());
-        AnswerProcessor.setBoard(new BattleArena(FabricArmies.generateArmyes(1, 2)));
+        AnswerProcessor.setBoard(new BattleArena(FabricArmies.generateArmies(1, 2)));
     }
 
     /**
@@ -80,6 +80,7 @@ public class Server {
 
         //todo пока отключил Dto
         Answer answerClient = arrClients[nextClient].getClientAnswer(AnswerProcessor.getBoard()); //AnswerProcessor.getActionEffect()
+        answerClient.toLog();
         AnswerProcessor.handleAnswer(answerClient);
     }
 

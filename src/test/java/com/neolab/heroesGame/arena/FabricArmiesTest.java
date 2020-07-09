@@ -12,7 +12,7 @@ public class FabricArmiesTest {
 
     @Test
     public void testCreateBattleArena() {
-        Map<Integer, Army> armies = FabricArmies.generateArmyes(1, 2);
+        Map<Integer, Army> armies = FabricArmies.generateArmies(1, 2);
         assertEquals(6, armies.get(1).getHeroes().size());
         assertEquals(6, armies.get(2).getHeroes().size());
         assertNotNull(armies.get(1).getWarlord());
