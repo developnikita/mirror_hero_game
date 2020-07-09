@@ -20,6 +20,11 @@ public class Army {
         improveAllies();
     }
 
+    public Army(Map<SquareCoordinate, Hero> heroes) {
+        this.heroes = heroes;
+        this.warlord = null;
+    }
+
     public Map<SquareCoordinate, Hero> getHeroes() {
         return heroes;
     }

@@ -1,13 +1,13 @@
 package com.neolab.heroesGame.arena;
 
-import org.junit.jupiter.api.Test;
-
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.Test;
 
-class FabricArmiesTest {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+public class FabricArmiesTest {
 
     @Test
     public void testCreateBattaleArena() {
