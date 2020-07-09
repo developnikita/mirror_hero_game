@@ -43,4 +43,15 @@ public class Answer {
     public int getPlayerId() {
         return playerId;
     }
+
+    public String toLog() {
+        StringBuilder log = new StringBuilder();
+        log.append(String.format("Игрок <%d> запросии действие %s для юнита на позиции (%d, %d)",
+                playerId, action, activeHero.getX(), activeHero.getY()));
+        if (action != HeroActions.DEFENCE) {
+            log.append(String.format(" на юнита на позиции (%d, %d)", targetUnit.getX(), targetUnit.getY()));
+        }
+        log.append("/n");
+        return log.toString();
+    }
 }
