@@ -26,7 +26,7 @@ public class FabricArmies {
         Hero warlord = createWarlord();
         SquareCoordinate warlordCoord;
         Set<SquareCoordinate> firstLine = makeLine(1);
-        Set<SquareCoordinate> secondLine = makeLine(2);
+        Set<SquareCoordinate> secondLine = makeLine(0);
         if (warlord.getClass() == WarlordFootman.class) {
             warlordCoord = addWarlord(heroes, firstLine, warlord);
         } else {
@@ -74,9 +74,9 @@ public class FabricArmies {
         return new Footman(170, 50, 0.8f, 0.1f);
     }
 
-    private static Set<SquareCoordinate> makeLine(Integer x) {
+    private static Set<SquareCoordinate> makeLine(Integer y) {
         Set<SquareCoordinate> line = new HashSet<>();
-        for (int y = 0; y <= 2; y++) {
+        for (int x = 0; x <= 2; x++) {
             line.add(new SquareCoordinate(x, y));
         }
         return line;

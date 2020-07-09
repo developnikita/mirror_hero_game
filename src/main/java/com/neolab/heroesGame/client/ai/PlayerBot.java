@@ -66,17 +66,17 @@ public class PlayerBot extends Player {
         return new Answer(activeHero, action, targetUnit, getId());
     }
 
-    private SquareCoordinate chooseUnit(Army army) {
+    protected SquareCoordinate chooseUnit(Army army) {
         Set<SquareCoordinate> availableHeroes = army.getAvailableHero().keySet();
         return availableHeroes.iterator().next();
     }
 
-    private SquareCoordinate chooseTargetByArcher(Army enemyArmy) {
+    protected SquareCoordinate chooseTargetByArcher(Army enemyArmy) {
         Set<SquareCoordinate> availableHeroes = enemyArmy.getHeroes().keySet();
         return availableHeroes.iterator().next();
     }
 
-    private SquareCoordinate chooseTargetByHealer(Army army) {
+    protected SquareCoordinate chooseTargetByHealer(Army army) {
         Map<SquareCoordinate, Hero> heroes = army.getHeroes();
         HashSet<SquareCoordinate> damagedHeroes = new HashSet<>();
         for (SquareCoordinate key : heroes.keySet()) {
@@ -91,7 +91,7 @@ public class PlayerBot extends Player {
         return damagedHeroes.iterator().next();
     }
 
-    private SquareCoordinate chooseTargetByFootman(SquareCoordinate activeUnit, Army enemyArmy) throws HeroExceptions {
+    protected SquareCoordinate chooseTargetByFootman(SquareCoordinate activeUnit, Army enemyArmy) throws HeroExceptions {
         if (RANDOM.nextInt(10) == 0) {
             return null;
         }
