@@ -12,10 +12,10 @@ import java.util.Date;
  * Консольный многопользовательский чат.
  * Клиент
  */
-public class Client {
+public class TemplateClient {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Client.class);
-    private static final SimpleDateFormat DATE_FORMAT = Server.DATE_FORMAT;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateClient.class);
+    private static final SimpleDateFormat DATE_FORMAT = TemplateServer.DATE_FORMAT;
 
     private final String ip; // ip адрес клиента
     private final int port; // порт соединения
@@ -32,7 +32,7 @@ public class Client {
      * @param ip   ip адрес клиента
      * @param port порт соединения
      */
-    public Client(final String ip, final int port) {
+    public TemplateClient(final String ip, final int port) {
         LOGGER.debug("client constructor");
         this.ip = ip;
         this.port = port;
@@ -127,13 +127,13 @@ public class Client {
             try {
                 while (true) {
                     message = in.readLine(); // ждем сообщения с сервера
-                    if (Server.Command.STOP_CLIENT.equalCommand(message)) {
+                    if (TemplateServer.Command.STOP_CLIENT.equalCommand(message)) {
                         LOGGER.info("Получечн запрос сервера на отключение клиента");
                         downService();
                         break; // нить чтения данных из консоли по этой команде прекращает работу сама
-                    } else if (Server.Command.STOP_CLIENT_FROM_SERVER.equalCommand(message)
-                            || Server.Command.STOP_ALL_CLIENTS.equalCommand(message)
-                            || Server.Command.STOP_SERVER.equalCommand(message)) {
+                    } else if (TemplateServer.Command.STOP_CLIENT_FROM_SERVER.equalCommand(message)
+                            || TemplateServer.Command.STOP_ALL_CLIENTS.equalCommand(message)
+                            || TemplateServer.Command.STOP_SERVER.equalCommand(message)) {
                         LOGGER.info("Получечн запрос сервера на прекращение работы клиента");
                         downService();
                         LOGGER.info("Работа клиента успешно.");
@@ -158,11 +158,11 @@ public class Client {
                 final String message;
                 try {
                     message = inputUser.readLine();
-                    if (Server.Command.isCommandMessage(message)) {
+                    if (TemplateServer.Command.isCommandMessage(message)) {
                         LOGGER.info("Поступила команда" + message);
                         send(formatCommandMessage(message));
                         send(message);
-                        if (Server.Command.STOP_CLIENT.equalCommand(message)) {
+                        if (TemplateServer.Command.STOP_CLIENT.equalCommand(message)) {
                             downService();
                             break;
                         }
@@ -176,11 +176,4 @@ public class Client {
             }
         }
     }
-
-//    public static void main(String[] args) {
-//        final String IP = "127.0.0.1";//"localhost";
-//        final int PORT = Server.PORT;
-//        final Client client1 = new Client(IP, PORT);
-//        client1.startClient();
-//    }
 }

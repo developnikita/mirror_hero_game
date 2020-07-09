@@ -16,9 +16,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Консольный многопользовательский чат.
  * Сервер
  */
-public class Server extends Thread {
+public class TemplateServer extends Thread {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateServer.class);
 
     static final int PORT = 8083;
     static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
@@ -57,7 +57,7 @@ public class Server extends Thread {
 
     private class ServerSomething extends Thread {
 
-        private final Server server;
+        private final TemplateServer server;
         private final Socket socket;
         private final BufferedReader in; // поток чтения из сокета
         private final BufferedWriter out; // поток завписи в сокет
@@ -69,7 +69,7 @@ public class Server extends Thread {
          * @param server сервер
          * @param socket сокет
          */
-        private ServerSomething(final Server server, final Socket socket) throws IOException {
+        private ServerSomething(final TemplateServer server, final Socket socket) throws IOException {
             this.server = server;
             this.socket = socket;
             // если потоку ввода/вывода приведут к генерированию искдючения, оно проброситься дальше

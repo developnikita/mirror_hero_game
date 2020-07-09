@@ -11,19 +11,10 @@ import static org.junit.Assert.assertEquals;
 public class SetInitialStateTest {
 
     private static final String IP = "127.0.0.1";//"localhost";
-    private static final int PORT = Server.PORT;
+    private static final int PORT = TemplateServer.PORT;
 
     @Test
     public void startServerAndClientsTest() throws InterruptedException {
-
-        SquareCoordinate sq1 = new SquareCoordinate(1, 1);
-        SquareCoordinate sq2 = new SquareCoordinate(1, 1);
-
-        Map<SquareCoordinate, String> map = new HashMap<>();
-        map.put(sq1, "aaa");
-
-        assertEquals("aaa", map.get(sq1));
-
 
 //        Thread server = new Thread(() -> {
 //            final Server server1 = new Server();

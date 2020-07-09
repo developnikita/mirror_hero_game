@@ -1,7 +1,10 @@
 package com.neolab.heroesGame.server.networkServiceServer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.neolab.heroesGame.aditional.SomeFunction;
 import com.neolab.heroesGame.arena.Army;
+import com.neolab.heroesGame.arena.BattleArena;
+import com.neolab.heroesGame.arena.FabricArmies;
 import com.neolab.heroesGame.client.networkService.Client;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.answers.Answer;
@@ -24,6 +27,7 @@ public class Server {
         clients.put(2, new Client(2));
         AnswerProcessor.setActivePlayer(clients.get(1).getPlayer());
         AnswerProcessor.setPlayer(clients.get(2).getPlayer());
+        AnswerProcessor.setBoard(new BattleArena(FabricArmies.generateArmyes(1, 2)));
     }
 
     /**
@@ -68,10 +72,14 @@ public class Server {
      * @param arrClients массив клиентов
      */
     private void askNextPlayer(int nextClient, Client[] arrClients) throws JsonProcessingException, HeroExceptions {
-        ServerRequest serverRequest = new ServerRequest(AnswerProcessor.getBoard(), AnswerProcessor.getActionEffect());
-        String answerJson = arrClients[nextClient].getClientAnswer(serverRequest.getBoardJson(), serverRequest.getActionEffectJson());
-        ClientResponse clientResponse = new ClientResponse(answerJson);
-        Answer answerClient = clientResponse.getAnswer();
+//        ServerRequest serverRequest = new ServerRequest(AnswerProcessor.getBoard(), AnswerProcessor.getActionEffect());
+//        String answerJson = arrClients[nextClient].getClientAnswer(serverRequest.getBoardJson(), serverRequest.getActionEffectJson());
+//        ClientResponse clientResponse = new ClientResponse(answerJson);
+//        Answer answerClient = clientResponse.getAnswer();
+//        AnswerProcessor.handleAnswer(answerClient);
+
+        //todo пока отключил Dto
+        Answer answerClient = arrClients[nextClient].getClientAnswer(AnswerProcessor.getBoard()); //AnswerProcessor.getActionEffect()
         AnswerProcessor.handleAnswer(answerClient);
     }
 

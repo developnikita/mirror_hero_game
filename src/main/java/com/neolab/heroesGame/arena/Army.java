@@ -46,18 +46,18 @@ public class Army {
     }
 
     public boolean isWarlordAlive() {
-        Optional<IWarlord> warlord = getWarlord();
-        return warlord.isPresent();
+        Optional<IWarlord> warlord = Optional.ofNullable(getWarlord());
+        return warlord.isEmpty();
     }
 
     public void improveAllies() {
-        Optional<IWarlord> warlord = getWarlord();
+        Optional<IWarlord> warlord = Optional.ofNullable(getWarlord());
         warlord.ifPresent(iWarlord -> heroes.values()
                 .forEach(h -> improve(h, iWarlord.getImproveCoefficient())));
     }
 
-    public Optional<IWarlord> getWarlord() {
-        return Optional.of(this.warlord);
+    public IWarlord getWarlord() {
+        return this.warlord;
     }
 
     private void improve(Hero hero, float improveCoeff) {

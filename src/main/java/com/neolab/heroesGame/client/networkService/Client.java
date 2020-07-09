@@ -1,6 +1,7 @@
 package com.neolab.heroesGame.client.networkService;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.client.ai.Player;
 import com.neolab.heroesGame.client.ai.PlayerBot;
 import com.neolab.heroesGame.client.dto.ClientRequest;
@@ -19,11 +20,14 @@ public class Client {
         this.player = new PlayerBot(playerId);
     }
 
-    public String getClientAnswer(String board, String actionEffect) throws JsonProcessingException, HeroExceptions {
-        ServerResponse serverResponse = new ServerResponse(board, actionEffect);
-        Answer answer = player.getAnswer(serverResponse.getBoard());
-        ClientRequest clientRequest = new ClientRequest(answer);
-        return clientRequest.getAnswerJson();
+    public Answer getClientAnswer(BattleArena board) throws JsonProcessingException, HeroExceptions {
+//        ServerResponse serverResponse = new ServerResponse(board, actionEffect);
+//        Answer answer = player.getAnswer(serverResponse.getBoard());
+//        ClientRequest clientRequest = new ClientRequest(answer);
+//        return clientRequest.getAnswerJson();
+
+        //todo пока отключил Dto
+        return player.getAnswer(board);
     }
 
 }

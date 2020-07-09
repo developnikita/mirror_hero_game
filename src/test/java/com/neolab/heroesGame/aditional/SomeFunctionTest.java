@@ -4,16 +4,16 @@ import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.heroes.Footman;
 import com.neolab.heroesGame.heroes.Hero;
-import org.junit.jupiter.api.Test;
-
+import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-class SomeFunctionTest {
+
+public class SomeFunctionTest {
 
     @Test
     public void testGetCorrectTargetForFootman1() {
