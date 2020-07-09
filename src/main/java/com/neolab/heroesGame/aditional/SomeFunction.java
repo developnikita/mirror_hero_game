@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class SomeFunction {
     public static Army getEnemyArmy(BattleArena board, Army thisBotArmy) throws HeroExceptions {
-        ArrayList<Army> armies = (ArrayList<Army>) board.getArmies().values();
+        ArrayList<Army> armies = new ArrayList<>(board.getArmies().values());
         armies.remove(thisBotArmy);
         if (armies.size() != 1) {
             throw new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA);
