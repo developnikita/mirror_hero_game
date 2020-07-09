@@ -40,11 +40,14 @@ public class Server {
             if(i == 2) {
                 if(checkAvailableHero(arrClients[i].getPlayer().getId())){
                     askNextPlayer(i, arrClients);
+                    // перед тем как спросить другого игрока проверям жив ли его лорд
+                    checkDeathWarlord(arrClients[i - 1].getPlayer().getId());
                 }
                 i = 1;
             }
             else if(checkAvailableHero(arrClients[i].getPlayer().getId())) {
                 askNextPlayer(i, arrClients);
+                checkDeathWarlord(arrClients[i + 1].getPlayer().getId());
             }
             //проверка завершения игры
             endRes = checkEndGame();
@@ -79,7 +82,7 @@ public class Server {
     private int checkEndGame(){
         int playerId = AnswerProcessor.getPlayer().getId();
 
-        if(AnswerProcessor.getBoard().getArmy(playerId).getHeroes().size() == 0) {
+        if(AnswerProcessor.getBoard().isArmyDied(playerId)) {
             return AnswerProcessor.getActivePlayer().getId();
         }
         return 0;
@@ -98,5 +101,12 @@ public class Server {
 
     private boolean checkAvailableHero(int playerId){
         return AnswerProcessor.getBoard().getArmy(playerId).getAvailableHero().size() != 0;
+    }
+
+    private void checkDeathWarlord(int playerId){
+        Army army = AnswerProcessor.getBoard().getArmy(playerId);
+        if (army.isWarlordAlive()) {
+            army.cancelImprove();
+        }
     }
 }

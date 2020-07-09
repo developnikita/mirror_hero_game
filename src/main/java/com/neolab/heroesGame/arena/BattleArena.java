@@ -17,10 +17,6 @@ public class BattleArena {
         return armies.get(playerId).getHeroes().size() == 0;
     }
 
-    public boolean isWarlordAlive(int playerId) {
-        return armies.get(playerId).isWarlordAlive();
-    }
-
     public Army getArmy(int playerId) {
         return armies.get(playerId);
     }

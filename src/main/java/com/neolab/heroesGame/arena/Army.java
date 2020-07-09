@@ -1,27 +1,19 @@
 package com.neolab.heroesGame.arena;
 
-import com.neolab.heroesGame.heroes.Hero;
-import com.neolab.heroesGame.heroes.WarlordFootman;
-import com.neolab.heroesGame.heroes.WarlordMagician;
-import com.neolab.heroesGame.heroes.WarlordVampire;
+import com.neolab.heroesGame.heroes.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class Army {
-    private final int playerId;
     private final Map<SquareCoordinate, Hero> heroes;
     private Map<SquareCoordinate, Hero> availableHero;
 
-    public Army(int playerId, Map<SquareCoordinate, Hero> heroes) {
-        this.playerId = playerId;
+    public Army(Map<SquareCoordinate, Hero> heroes) {
         this.heroes = heroes;
         setAvailableHeroes();
-    }
-
-    public int getPlayerId() {
-        return playerId;
+        improveAllies();
     }
 
     public Map<SquareCoordinate, Hero> getHeroes() {
@@ -40,50 +32,37 @@ public class Army {
         this.availableHero = new HashMap<>(heroes);
     }
 
-    public boolean killHero(Hero hero) {
+    public void killHero(Hero hero) {
         removeAvailableHero(hero);
-        return heroes.values().removeIf(value -> value.equals(hero));
+        heroes.values().removeIf(value -> value.equals(hero));
     }
 
-    public boolean removeAvailableHero(Hero hero) {
-        return availableHero.values().removeIf(value -> value.equals(hero));
+    public void removeAvailableHero(Hero hero) {
+        availableHero.values().removeIf(value -> value.equals(hero));
     }
 
     public boolean isWarlordAlive() {
-        for (Hero h : heroes.values()) {
-            if (h.getClass().equals(WarlordFootman.class) ||
-                    h.getClass().equals(WarlordMagician.class) ||
-                    h.getClass().equals(WarlordVampire.class)) {
-                if (h.getHp() > 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        Optional<Hero> warlord =  getWarlord();
+        return warlord.isPresent();
     }
 
     public void improveAllies() {
-        Optional<Hero> test = getWarlord();
+        Optional<Hero> warlord = getWarlord();
 
-        if (test.isPresent()) {
-            if (test.get().getClass().equals(WarlordFootman.class)) {
-                WarlordFootman footman = (WarlordFootman) test.get();
+        if (warlord.isPresent()) {
+            if (warlord.get() instanceof WarlordFootman) {
+                WarlordFootman footman = (WarlordFootman) warlord.get();
                 heroes.values()
                         .stream()
-                        .filter(h -> !h.getClass().equals(WarlordFootman.class))
-                        .peek(h -> improve(h, footman.getImproveCoefficient()));
-            } else if (test.get().getClass().equals(WarlordVampire.class)) {
-                WarlordVampire vampire = (WarlordVampire) test.get();
+                        .filter(h -> !(h instanceof IWarlord))
+                        .forEach(h -> improve(h, footman.getImproveCoefficient()));
+            }
+            else if (warlord.get() instanceof WarlordVampire || warlord.get() instanceof WarlordMagician) {
+                WarlordMagician mage = (WarlordMagician) warlord.get();
                 heroes.values()
                         .stream()
-                        .filter(h -> !h.getClass().equals(WarlordVampire.class))
-                        .peek(h -> improve(h, vampire.getImproveCoefficient()));
-            } else if (test.get().getClass().equals(WarlordMagician.class)) {
-                WarlordMagician magician = (WarlordMagician) test.get();
-                heroes.values()
-                        .stream()
-                        .filter(h -> !h.getClass().equals(WarlordMagician.class))
-                        .peek(h -> improve(h, magician.getImproveCoefficient()));
+                        .filter(h -> !(h instanceof IWarlord))
+                        .forEach(h -> improve(h, mage.getImproveCoefficient()));
             }
         }
     }
@@ -91,9 +70,7 @@ public class Army {
     private Optional<Hero> getWarlord() {
         return heroes.values()
                 .stream()
-                .filter(h -> h.getClass().equals(WarlordFootman.class) ||
-                        h.getClass().equals(WarlordMagician.class) ||
-                        h.getClass().equals(WarlordVampire.class))
+                .filter(h -> h instanceof IWarlord)
                 .findAny();
     }
 
@@ -106,13 +83,8 @@ public class Army {
         hero.setArmor(armor);
     }
 
-    public void cancleImprove() {
-        heroes.values()
-                .stream()
-                .filter(h -> h.getClass().equals(WarlordFootman.class) ||
-                        h.getClass().equals(WarlordMagician.class) ||
-                        h.getClass().equals(WarlordVampire.class))
-                .peek(this::cancel);
+    public void cancelImprove() {
+        heroes.values().forEach(this::cancel);
     }
 
     private void cancel(Hero hero) {

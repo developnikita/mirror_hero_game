@@ -26,8 +26,8 @@ public class StartGame {
         Player bot1 = new PlayerBot(bot1Id);
         Player bot2 = new PlayerBot(bot2Id);
 
-        Army playerArmy = new Army(bot1Id, initArmy(bot1Id));
-        Army botArmy = new Army(bot2Id, initArmy(bot2Id));
+        Army playerArmy = new Army(initArmy(bot1Id));
+        Army botArmy = new Army(initArmy(bot2Id));
 
         Map<Integer, Army> armies = new HashMap<>();
         armies.put(bot1Id, playerArmy);
@@ -42,7 +42,7 @@ public class StartGame {
         while (true) {
             try {
                 switch (t) {
-                    case BOT1:
+                    case BOT1 -> {
                         if (!battleArena.getArmy(bot1Id).getAvailableHero().isEmpty()) {
                             System.out.println("Bot1");
                             answer = bot1.getAnswer(battleArena);
@@ -52,8 +52,8 @@ public class StartGame {
                             AnswerProcessor.handleAnswer(answer);
                         }
                         t = Turn.BOT2;
-                        break;
-                    case BOT2:
+                    }
+                    case BOT2 -> {
                         if (!battleArena.getArmy(bot2Id).getAvailableHero().isEmpty()) {
                             System.out.println("Bot2");
                             answer = bot2.getAnswer(battleArena);
@@ -63,9 +63,8 @@ public class StartGame {
                             AnswerProcessor.handleAnswer(answer);
                         }
                         t = Turn.BOT1;
-                        break;
-                    default:
-                        System.out.println("Error");
+                    }
+                    default -> System.out.println("Error");
                 }
             } catch (HeroExceptions ex) {
                 System.out.println("Test");
@@ -79,10 +78,10 @@ public class StartGame {
 
             Army a = battleArena.getArmy(bot1Id);
             Army b = battleArena.getArmy(bot2Id);
-            if (!a.isWarlordAlive()) {
-                a.cancleImprove();
-            } else if (!b.isWarlordAlive()) {
-                b.cancleImprove();
+            if (a.isWarlordAlive()) {
+                a.cancelImprove();
+            } else if (b.isWarlordAlive()) {
+                b.cancelImprove();
             }
 
             if (battleArena.isArmyDied(bot1Id)) {
