@@ -85,10 +85,11 @@ public class Server {
 
         //todo пока отключил Dto
         Answer answerClient = arrClients[nextClient].getClientAnswer(AnswerProcessor.getBoard()); //AnswerProcessor.getActionEffect()
-        LOGGER.info(answerClient.toLog());
         AnswerProcessor.setActivePlayerId(answerClient.getPlayerId());
+        answerClient.toLog();
         AnswerProcessor.handleAnswer(answerClient);
-        LOGGER.info(AnswerProcessor.getActionEffect().toLog());
+        AnswerProcessor.getActionEffect().toLog();
+        AnswerProcessor.getBoard().toLog();
         AnswerProcessor.setPlayerId(answerClient.getPlayerId());
     }
 

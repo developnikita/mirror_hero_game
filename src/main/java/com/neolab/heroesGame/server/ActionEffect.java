@@ -1,6 +1,5 @@
 package com.neolab.heroesGame.server;
 
-import com.neolab.heroesGame.TemplateServer;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroActions;
 import org.slf4j.Logger;
@@ -41,7 +40,7 @@ public class ActionEffect {
         this.action = action;
     }
 
-    public String toLog() {
+    public void toLog() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("Юнит на позиции (%d, %d) ", sourceUnit.getX(), sourceUnit.getY()));
         if (action == HeroActions.DEFENCE) {
@@ -60,7 +59,6 @@ public class ActionEffect {
         }
         stringBuilder.append("\n");
         LOGGER.info(stringBuilder.toString());
-        return stringBuilder.toString();
     }
 }
 
