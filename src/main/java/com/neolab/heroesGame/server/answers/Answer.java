@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class Answer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Answer.class);
     private SquareCoordinate activeHero;
     private HeroActions action;
     private SquareCoordinate targetUnit;

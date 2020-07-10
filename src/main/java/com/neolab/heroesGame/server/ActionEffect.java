@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ActionEffect {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActionEffect.class);
     private HeroActions action;
     private Map<SquareCoordinate, Integer> targetUnitsMap;
     private SquareCoordinate sourceUnit;
@@ -51,7 +51,7 @@ public class ActionEffect {
             String effectName = (action == HeroActions.HEAL) ? "" : " урона";
             for (SquareCoordinate key : targetUnitsMap.keySet()) {
                 if (targetUnitsMap.get(key) <= 0) {
-                    stringBuilder.append("промахнулся по юниту на позиции (%d, %d)", key.getX(), key.getY());
+                    stringBuilder.append(String.format("промахнулся по юниту на позиции (%d, %d)", key.getX(), key.getY()));
                 } else {
                     stringBuilder.append(String.format("%s юниту на позиции (%d, %d) %d HP%s ",
                             stringAction, key.getX(), key.getY(), targetUnitsMap.get(key), effectName));

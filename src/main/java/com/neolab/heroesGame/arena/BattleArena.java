@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 public class BattleArena {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BattleArena.class);
     private final Map<Integer, Army> armies;
 
     public BattleArena(Map<Integer, Army> armies) {
@@ -20,9 +20,6 @@ public class BattleArena {
     }
 
     public boolean isArmyDied(int playerId) {
-        int count = armies.get(playerId).getHeroes().size();
-        //todo удалить
-        System.out.println("В армии игрока с id = " + playerId + " осталось " + count);
         return armies.get(playerId).getHeroes().size() == 0;
     }
 
