@@ -1,6 +1,6 @@
 package com.neolab.heroesGame.client.ai;
 
-import com.neolab.heroesGame.aditional.SomeFunction;
+import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
@@ -9,10 +9,13 @@ import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.server.answers.Answer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class PlayerBot extends Player {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Answer.class);
     private final long SEED = 5916;
     private final Random RANDOM = new Random(SEED);
 
@@ -36,24 +39,24 @@ public class PlayerBot extends Player {
      */
     @Override
     public Answer getAnswer(BattleArena board) throws HeroExceptions {
-        Army thisBotArmy = SomeFunction.getCurrentPlayerArmy(board, getId());
-        Army enemyArmy = SomeFunction.getEnemyArmy(board, thisBotArmy);
+        Army thisBotArmy = CommonFunction.getCurrentPlayerArmy(board, getId());
+        Army enemyArmy = CommonFunction.getEnemyArmy(board, thisBotArmy);
 
         SquareCoordinate activeHero = chooseUnit(thisBotArmy);
         Hero hero = Optional.of(thisBotArmy.getHeroes().get(activeHero)).orElseThrow(
                 new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA));
 
-        if (SomeFunction.isUnitMagician(hero)) {
+        if (CommonFunction.isUnitMagician(hero)) {
             return new Answer(activeHero, HeroActions.ATTACK, new SquareCoordinate(-1, -1), getId());
         }
 
-        if (SomeFunction.isUnitArcher(hero)) {
+        if (CommonFunction.isUnitArcher(hero)) {
             return new Answer(activeHero, HeroActions.ATTACK, chooseTargetByArcher(enemyArmy), getId());
         }
 
         SquareCoordinate targetUnit;
         HeroActions action;
-        if (SomeFunction.isUnitHealer(hero)) {
+        if (CommonFunction.isUnitHealer(hero)) {
             targetUnit = chooseTargetByHealer(thisBotArmy);
             action = HeroActions.HEAL;
         } else {
@@ -97,8 +100,10 @@ public class PlayerBot extends Player {
         if (RANDOM.nextInt(10) == 0) {
             return null;
         }
-        Set<SquareCoordinate> validateTarget = SomeFunction.getCorrectTargetForFootman(activeUnit, enemyArmy);
+        Set<SquareCoordinate> validateTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemyArmy);
         if (validateTarget.isEmpty()) {
+            LOGGER.error(String.format("Юнит (%d,%d) не может найти цель в армии:\n%s",
+                    activeUnit.getX(), activeUnit.getY(), CommonFunction.printArmy(enemyArmy)));
             throw new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA);
         }
         return validateTarget.iterator().next();

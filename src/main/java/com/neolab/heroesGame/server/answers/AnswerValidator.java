@@ -1,6 +1,6 @@
 package com.neolab.heroesGame.server.answers;
 
-import com.neolab.heroesGame.aditional.SomeFunction;
+import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
@@ -16,8 +16,8 @@ import java.util.Set;
 public class AnswerValidator {
 
     public static boolean validateAnswer(Answer answer, BattleArena arena) throws HeroExceptions {
-        Army thisBotArmy = SomeFunction.getCurrentPlayerArmy(arena, answer.getPlayerId());
-        Army enemyArmy = SomeFunction.getEnemyArmy(arena, thisBotArmy);
+        Army thisBotArmy = CommonFunction.getCurrentPlayerArmy(arena, answer.getPlayerId());
+        Army enemyArmy = CommonFunction.getEnemyArmy(arena, thisBotArmy);
         Hero hero = Optional.of(thisBotArmy.getHero(answer.getActiveHero()).get()).orElseThrow(
                 new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT));
         if (isErrorActiveHero(hero, thisBotArmy)) {
@@ -34,10 +34,10 @@ public class AnswerValidator {
         if (answer.getAction() == HeroActions.HEAL) {
             throw new HeroExceptions(HeroErrorCode.ERROR_UNIT_HEAL);
         }
-        if (SomeFunction.isUnitMagician(hero)) {
+        if (CommonFunction.isUnitMagician(hero)) {
             return true;
         }
-        if (SomeFunction.isUnitArcher(hero)) {
+        if (CommonFunction.isUnitArcher(hero)) {
             if (enemyArmy.getHero(answer.getTargetUnit()).isEmpty()) {
                 throw new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK);
             }
@@ -49,7 +49,7 @@ public class AnswerValidator {
     }
 
     private static void footmanTargetCheck(SquareCoordinate activeUnit, SquareCoordinate target, Army army) throws HeroExceptions {
-        Set<SquareCoordinate> validateTarget = SomeFunction.getCorrectTargetForFootman(activeUnit, army);
+        Set<SquareCoordinate> validateTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, army);
         if (validateTarget.isEmpty()) {
             throw new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA);
         }
@@ -63,7 +63,7 @@ public class AnswerValidator {
     }
 
     private static boolean isHealerCorrect(Hero hero, Answer answer, Army thisBotArmy) throws HeroExceptions {
-        if (SomeFunction.isUnitHealer(hero)) {
+        if (CommonFunction.isUnitHealer(hero)) {
             if (answer.getAction() == HeroActions.ATTACK) {
                 throw new HeroExceptions(HeroErrorCode.ERROR_UNIT_ATTACK);
             }
@@ -72,19 +72,6 @@ public class AnswerValidator {
             }
             return true;
         }
-        return false;
-    }
-
-    private static boolean checkActiveHero(SquareCoordinate heroPos, Map<SquareCoordinate, Hero> heroes) {
-
-        return false;
-    }
-
-    private static boolean checkAction(HeroActions action, Map<SquareCoordinate, Hero> heroes) {
-        return false;
-    }
-
-    private static boolean checkTargetUnit(SquareCoordinate heroPos, Map<SquareCoordinate, Hero> heroes) {
         return false;
     }
 }

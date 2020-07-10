@@ -9,7 +9,7 @@ import com.neolab.heroesGame.heroes.*;
 
 import java.util.*;
 
-public class SomeFunction {
+public class CommonFunction {
     public static Army getEnemyArmy(BattleArena board, Army thisBotArmy) throws HeroExceptions {
         ArrayList<Army> armies = new ArrayList<>(board.getArmies().values());
         armies.remove(thisBotArmy);
@@ -93,7 +93,31 @@ public class SomeFunction {
             stringBuilder.append(hpToString(hero));
         }
         stringBuilder.append("\n");
+        for (int x = 0; x < 3; x++) {
+            Hero hero = getHero(army, new SquareCoordinate(x, y));
+            stringBuilder.append(statusToString(hero, army));
+        }
+        stringBuilder.append("\n");
         return stringBuilder.toString();
+    }
+
+    private static String statusToString(Hero hero, Army army) {
+        StringBuilder result = new StringBuilder();
+        if (hero == null) {
+            result.append(String.format("%12s|", ""));
+        } else {
+            if (hero.isDefence()) {
+                result.append(String.format("   D  "));
+            } else {
+                result.append(String.format("      "));
+            }
+            if (army.getAvailableHero().containsValue(hero)) {
+                result.append(String.format("  CA  |"));
+            } else {
+                result.append(String.format("   W  |"));
+            }
+        }
+        return result.toString();
     }
 
     private static String hpToString(Hero hero) {

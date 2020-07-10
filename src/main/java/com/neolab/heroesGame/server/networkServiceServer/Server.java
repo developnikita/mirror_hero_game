@@ -1,7 +1,6 @@
 package com.neolab.heroesGame.server.networkServiceServer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.neolab.heroesGame.aditional.SomeFunction;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FabricArmies;
@@ -9,8 +8,6 @@ import com.neolab.heroesGame.client.networkService.Client;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.answers.Answer;
 import com.neolab.heroesGame.server.answers.AnswerProcessor;
-import com.neolab.heroesGame.server.dto.ClientResponse;
-import com.neolab.heroesGame.server.dto.ServerRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -41,28 +41,32 @@ public class GamingProcess {
             GamingProcess gamingProcess = new GamingProcess();
             while (true) {
                 AnswerProcessor.getBoard().toLog();
-                Player whoIsDead = isSomeOneDead();
-                if (whoIsDead != null) {
-                    LOGGER.info(String.format("Игрок<%d> был побежден", whoIsDead.getId()));
+
+                Player whoIsWin = isSomeOneWin();
+                if (whoIsWin != null) {
+                    LOGGER.info(String.format("Игрок<%d> выиграл это тяжкое сражение", whoIsWin.getId()));
                     break;
+                }
+
+                if (isRoundEnd()) {
+                    LOGGER.info("-----------------Начинается новый раунд---------------");
+                    AnswerProcessor.getBoard().getArmies().values().forEach(Army::setAvailableHeroes);
                 }
 
                 if (checkCanMove(gamingProcess.currentPlayer.getId())) {
                     askPlayerProcess();
-                } else {
-                    changeCurrentAndWaitingPlayers();
-                    if (checkCanMove(gamingProcess.currentPlayer.getId())) {
-                        askPlayerProcess();
-                    } else {
-                        AnswerProcessor.getBoard().getArmies().values().forEach(Army::setAvailableHeroes);
-                    }
                 }
-
                 changeCurrentAndWaitingPlayers();
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
+            LOGGER.error(ex.getMessage());
         }
+    }
+
+    private static boolean isRoundEnd() {
+        return !(checkCanMove(currentPlayer.getId()) || checkCanMove(waitingPlayer.getId()));
     }
 
     private static void askPlayerProcess() {
@@ -76,12 +80,12 @@ public class GamingProcess {
         }
     }
 
-    private static Player isSomeOneDead() {
-        Player isDead = AnswerProcessor.getBoard().isArmyDied(currentPlayer.getId()) ? currentPlayer : null;
-        if (isDead == null) {
-            isDead = AnswerProcessor.getBoard().isArmyDied(waitingPlayer.getId()) ? waitingPlayer : null;
+    private static Player isSomeOneWin() {
+        Player isWinner = AnswerProcessor.getBoard().isArmyDied(currentPlayer.getId()) ? waitingPlayer : null;
+        if (isWinner == null) {
+            isWinner = AnswerProcessor.getBoard().isArmyDied(waitingPlayer.getId()) ? currentPlayer : null;
         }
-        return isDead;
+        return isWinner;
     }
 
     private static boolean checkCanMove(Integer id) {

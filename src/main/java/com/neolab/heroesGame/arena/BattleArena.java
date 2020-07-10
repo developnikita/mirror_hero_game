@@ -1,6 +1,6 @@
 package com.neolab.heroesGame.arena;
 
-import com.neolab.heroesGame.aditional.SomeFunction;
+import com.neolab.heroesGame.aditional.CommonFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ public class BattleArena {
         stringBuilder.append("\n");
         for (Integer key : armies.keySet()) {
             stringBuilder.append(String.format("Армия игрока <%d>: \n", key));
-            stringBuilder.append(SomeFunction.printArmy(armies.get(key)));
+            stringBuilder.append(CommonFunction.printArmy(armies.get(key)));
         }
         LOGGER.info(stringBuilder.toString());
     }
