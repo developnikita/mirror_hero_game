@@ -60,9 +60,11 @@ public class PlayerBot extends Player {
             targetUnit = chooseTargetByFootman(activeHero, enemyArmy);
             action = HeroActions.ATTACK;
         }
+
         if (targetUnit == null) {
             return new Answer(activeHero, HeroActions.DEFENCE, new SquareCoordinate(-1, -1), getId());
         }
+
         return new Answer(activeHero, action, targetUnit, getId());
     }
 

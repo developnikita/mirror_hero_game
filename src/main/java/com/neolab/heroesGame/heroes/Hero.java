@@ -106,6 +106,7 @@ public abstract class Hero {
         return enemyHeroPosDamage;
     }
 
+    //todo вылетает исключение
     protected Hero searchTarget(SquareCoordinate position, Army army) throws HeroExceptions {
         return Optional.of(army.getHeroes().get(position)).orElseThrow(
                 new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK)

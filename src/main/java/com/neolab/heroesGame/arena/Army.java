@@ -50,6 +50,14 @@ public class Army {
         availableHero.values().removeIf(value -> value.equals(hero));
     }
 
+    public boolean removeHero(Hero hero) {
+        if (hero.getHp() <= 0) {
+            removeAvailableHero(hero);
+            return true;
+        }
+        return false;
+    }
+
     public boolean isWarlordAlive() {
         Optional<IWarlord> warlord = Optional.ofNullable(getWarlord());
         return warlord.isEmpty();

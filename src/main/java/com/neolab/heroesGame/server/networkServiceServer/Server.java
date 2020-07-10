@@ -25,8 +25,7 @@ public class Server {
         super();
         clients.put(1, new Client(1));
         clients.put(2, new Client(2));
-        AnswerProcessor.setActivePlayer(clients.get(1).getPlayer());
-        AnswerProcessor.setPlayer(clients.get(2).getPlayer());
+        AnswerProcessor.setPlayerId(2);
         AnswerProcessor.setBoard(new BattleArena(FabricArmies.generateArmies(1, 2)));
     }
 
@@ -37,25 +36,31 @@ public class Server {
      * другой ходит подряд до конца текущего раунда
      */
     public void playingProcess() throws JsonProcessingException, HeroExceptions {
+        LOGGER.info("|-------------------------------------- START GAME ---------------------------------------------------|");
+
         Client[] arrClients = clients.values().toArray(new Client[2]);
         int endRes;
 
-        for (int i = 1; i <= arrClients.length; i++) {
-            if (i == 2) {
-                if (checkAvailableHero(arrClients[i].getPlayer().getId())) {
-                    askNextPlayer(i, arrClients);
+        for (int i = 0; i < arrClients.length;) {
+            if (i == 1) {
+                i = 0;
+                if (checkAvailableHero(arrClients[i + 1].getPlayer().getId())) {
+                    askNextPlayer(i + 1, arrClients);
                     // перед тем как спросить другого игрока проверям жив ли его лорд
-                    checkDeathWarlord(arrClients[i - 1].getPlayer().getId());
+                    checkDeathWarlord(arrClients[i].getPlayer().getId());
                 }
+            }
+            else {
                 i = 1;
-            } else if (checkAvailableHero(arrClients[i].getPlayer().getId())) {
-                askNextPlayer(i, arrClients);
-                checkDeathWarlord(arrClients[i + 1].getPlayer().getId());
+                if(checkAvailableHero(arrClients[i - 1].getPlayer().getId())) {
+                    askNextPlayer(i - 1, arrClients);
+                    checkDeathWarlord(arrClients[i].getPlayer().getId());
+                }
             }
             //проверка завершения игры
             endRes = checkEndGame();
             if (endRes > 0) {
-                LOGGER.info(String.format("Пользователь c id = [%d] победил", endRes));
+                LOGGER.info(String.format("Пользователь c id = [%d] победил", +endRes));
                 return;
             }
             //в конце раунда доступны все живые герои
@@ -80,18 +85,21 @@ public class Server {
 
         //todo пока отключил Dto
         Answer answerClient = arrClients[nextClient].getClientAnswer(AnswerProcessor.getBoard()); //AnswerProcessor.getActionEffect()
-        answerClient.toLog();
+        LOGGER.info(answerClient.toLog());
+        AnswerProcessor.setActivePlayerId(answerClient.getPlayerId());
         AnswerProcessor.handleAnswer(answerClient);
+        LOGGER.info(AnswerProcessor.getActionEffect().toLog());
+        AnswerProcessor.setPlayerId(answerClient.getPlayerId());
     }
 
     /**
      * @return id победившего игрока
      */
     private int checkEndGame() {
-        int playerId = AnswerProcessor.getPlayer().getId();
+        int playerId = AnswerProcessor.getPlayerId();
 
         if (AnswerProcessor.getBoard().isArmyDied(playerId)) {
-            return AnswerProcessor.getActivePlayer().getId();
+            return AnswerProcessor.getPlayerId();
         }
         return 0;
     }
@@ -104,7 +112,7 @@ public class Server {
      */
     private boolean checkEndRound() {
         int countAvailableHero = AnswerProcessor.getBoard().getArmies().values().stream().map(
-                army -> army.getAvailableHero().size()).reduce(Integer::sum).get();
+                army -> army.getAvailableHero().size()).reduce(0, Integer::sum);
         return countAvailableHero == 0;
     }
 

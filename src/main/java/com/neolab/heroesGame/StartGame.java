@@ -46,8 +46,8 @@ public class StartGame {
                         if (!battleArena.getArmy(bot1Id).getAvailableHero().isEmpty()) {
                             System.out.println("Bot1");
                             answer = bot1.getAnswer(battleArena);
-                            AnswerProcessor.setActivePlayer(bot1);
-                            AnswerProcessor.setPlayer(bot2);
+                            AnswerProcessor.setActivePlayerId(bot1.getId());
+                            AnswerProcessor.setPlayerId(bot2.getId());
                             AnswerProcessor.setBoard(battleArena);
                             AnswerProcessor.handleAnswer(answer);
                         }
@@ -58,8 +58,8 @@ public class StartGame {
                         if (!battleArena.getArmy(bot2Id).getAvailableHero().isEmpty()) {
                             System.out.println("Bot2");
                             answer = bot2.getAnswer(battleArena);
-                            AnswerProcessor.setActivePlayer(bot2);
-                            AnswerProcessor.setPlayer(bot1);
+                            AnswerProcessor.setActivePlayerId(bot1.getId());
+                            AnswerProcessor.setPlayerId(bot2.getId());
                             AnswerProcessor.setBoard(battleArena);
                             AnswerProcessor.handleAnswer(answer);
                         }

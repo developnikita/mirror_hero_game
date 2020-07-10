@@ -47,14 +47,15 @@ public class ActionEffect {
             String effectName = (action == HeroActions.HEAL) ? "" : " урона";
             for (SquareCoordinate key : targetUnitsMap.keySet()) {
                 if (targetUnitsMap.get(key) <= 0) {
-                    stringBuilder.append("промахнулся по юниту на позиции (%d, %d)", key.getX(), key.getY());
+
+                    stringBuilder.append("промахнулся по юниту на позиции ")
+                            .append("(").append(key.getX()).append(", ").append(key.getY()).append(") ");
                 } else {
                     stringBuilder.append(String.format("%s юниту на позиции (%d, %d) %d HP%s ",
                             stringAction, key.getX(), key.getY(), targetUnitsMap.get(key), effectName));
                 }
             }
         }
-        stringBuilder.append("/n");
         return stringBuilder.toString();
     }
 }

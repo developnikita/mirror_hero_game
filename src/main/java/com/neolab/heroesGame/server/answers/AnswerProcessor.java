@@ -2,41 +2,41 @@ package com.neolab.heroesGame.server.answers;
 
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
-import com.neolab.heroesGame.client.ai.ActionEffect;
 import com.neolab.heroesGame.client.ai.Player;
 import com.neolab.heroesGame.enumerations.HeroActions;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Healer;
 import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.server.ActionEffect;
 
 import java.util.Map;
 
 public final class AnswerProcessor {
 
-    private static Player player;
-    private static Player activePlayer;
+    private static int playerId;
+    private static int activePlayerId;
     private static BattleArena board;
-    private static final ActionEffect actionEffect = new ActionEffect();
+    private static ActionEffect actionEffect;
 
     public static ActionEffect getActionEffect() {
         return actionEffect;
     }
 
-    public static Player getPlayer() {
-        return player;
+    public static int getPlayerId() {
+        return playerId;
     }
 
-    public static void setPlayer(Player player) {
-        AnswerProcessor.player = player;
+    public static void setPlayerId(int playerId) {
+        AnswerProcessor.playerId = playerId;
     }
 
-    public static Player getActivePlayer() {
-        return activePlayer;
+    public static int getActivePlayerId() {
+        return activePlayerId;
     }
 
-    public static void setActivePlayer(Player activePlayer) {
-        AnswerProcessor.activePlayer = activePlayer;
+    public static void setActivePlayerId(int activePlayerId) {
+        AnswerProcessor.activePlayerId = activePlayerId;
     }
 
     public static BattleArena getBoard() {
@@ -53,13 +53,13 @@ public final class AnswerProcessor {
                 Hero activeHero = getActiveHero(board, answer);
                 //если маг или арчер то первый аргумент не используется
                 Map<SquareCoordinate, Integer> enemyHeroPosDamage = activeHero
-                        .toAttack(answer.getTargetUnit(), board.getArmy(player.getId()));
+                        .toAttack(answer.getTargetUnit(), board.getArmy(playerId));
                 removeUsedHero(board, activeHero);
                 setActionEffect(answer, enemyHeroPosDamage);
             } else if (answer.getAction() == HeroActions.HEAL) {
                 Healer activeHero = (Healer) getActiveHero(board, answer);
                 Map<SquareCoordinate, Integer> allyHeroPosHeal = activeHero
-                        .toHeal(answer.getTargetUnit(), board.getArmy(activePlayer.getId()));
+                        .toHeal(answer.getTargetUnit(), board.getArmy(activePlayerId));
                 removeUsedHero(board, activeHero);
                 setActionEffect(answer, allyHeroPosHeal);
             } else {
@@ -74,16 +74,17 @@ public final class AnswerProcessor {
     }
 
     private static Hero getActiveHero(BattleArena board, Answer answer) throws HeroExceptions {
-        return board.getArmy(activePlayer.getId())
+        return board.getArmy(activePlayerId)
                 .getHero(answer.getActiveHero())
                 .orElseThrow(new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT));
     }
 
     private static void removeUsedHero(BattleArena board, Hero hero) {
-        board.getArmy(activePlayer.getId()).removeAvailableHero(hero);
+        board.getArmy(activePlayerId).removeAvailableHero(hero);
     }
 
     private static void setActionEffect(Answer answer, Map<SquareCoordinate, Integer> enemyHeroPosDamage) {
+        actionEffect = new ActionEffect();
         actionEffect.setAction(answer.getAction());
         actionEffect.setSourceUnit(answer.getActiveHero());
         if (answer.getAction() != HeroActions.DEFENCE) {

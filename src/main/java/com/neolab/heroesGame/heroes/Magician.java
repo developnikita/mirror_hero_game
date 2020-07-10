@@ -3,8 +3,7 @@ package com.neolab.heroesGame.heroes;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Magician extends Hero {
 
@@ -16,15 +15,17 @@ public class Magician extends Hero {
     public Map<SquareCoordinate, Integer> toAttack(SquareCoordinate position, Army army) {
         Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
 
-        army.getHeroes().forEach((key, value) -> {
+        army.getHeroes().keySet().removeIf(coord -> {
+            Hero hero = army.getHero(coord).orElseThrow();
             int damageDone = 0;
             if (isHit(this.getPrecision())) {
-                damageDone = calculateDamage(value);
-                value.setHp(value.getHp() - damageDone);
-                removeTarget(value, army);
+                damageDone = calculateDamage(hero);
+                hero.setHp(hero.getHp() - damageDone);
             }
-            enemyHeroPosDamage.put(key, damageDone);
+            enemyHeroPosDamage.put(coord, damageDone);
+            return army.removeHero(hero);
         });
+
         return enemyHeroPosDamage;
     }
 }

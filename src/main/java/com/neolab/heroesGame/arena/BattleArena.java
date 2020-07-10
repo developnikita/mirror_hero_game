@@ -14,6 +14,9 @@ public class BattleArena {
     }
 
     public boolean isArmyDied(int playerId) {
+        int count = armies.get(playerId).getHeroes().size();
+        //todo удалить
+        System.out.println("В армии игрока с id = " + playerId + " осталось " + count);
         return armies.get(playerId).getHeroes().size() == 0;
     }
 
