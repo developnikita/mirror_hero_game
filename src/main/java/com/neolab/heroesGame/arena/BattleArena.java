@@ -1,6 +1,5 @@
 package com.neolab.heroesGame.arena;
 
-import com.neolab.heroesGame.TemplateServer;
 import com.neolab.heroesGame.aditional.SomeFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +19,6 @@ public class BattleArena {
     }
 
     public boolean isArmyDied(int playerId) {
-        int countAliveHero = armies.get(playerId).getHeroes().size();
-        LOGGER.info(String.format("В армии игрока <%d>: осталось <%d> героев", playerId, countAliveHero ));
         return armies.get(playerId).getHeroes().size() == 0;
     }
 
@@ -29,7 +26,7 @@ public class BattleArena {
         return armies.get(playerId);
     }
 
-    public String toLog() {
+    public void toLog() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n");
         for (Integer key : armies.keySet()) {
@@ -37,6 +34,5 @@ public class BattleArena {
             stringBuilder.append(SomeFunction.printArmy(armies.get(key)));
         }
         LOGGER.info(stringBuilder.toString());
-        return stringBuilder.toString();
     }
 }

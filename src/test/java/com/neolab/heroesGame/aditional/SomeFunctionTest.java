@@ -4,15 +4,16 @@ import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.heroes.Footman;
 import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.heroes.IWarlord;
+import com.neolab.heroesGame.heroes.WarlordFootman;
 import org.junit.Test;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.HashMap;
 import java.util.Set;
+
+import static org.junit.Assert.*;
 
 public class SomeFunctionTest {
 
@@ -124,6 +125,17 @@ public class SomeFunctionTest {
         Set<SquareCoordinate> legalTarget = SomeFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(0, 0)));
         assertEquals(1, legalTarget.size());
+    }
+
+    @Test
+    public void testGetCorrectRemoveWarlord() {
+        Map<SquareCoordinate, Hero> heroes = new HashMap<>();
+        IWarlord warlord = new WarlordFootman(0,0,0,0);
+        heroes.put(new SquareCoordinate(0, 0), getFootman());
+        heroes.put(new SquareCoordinate(2, 0), getFootman());
+        Army army = new Army(heroes, warlord, new SquareCoordinate(1, 1));
+        army.killHero((Hero) warlord);
+        assertFalse(army.getHeroes().containsValue(warlord));
     }
 
     public static Footman getFootman() {

@@ -23,7 +23,7 @@ public class Magician extends Hero {
                 hero.setHp(hero.getHp() - damageDone);
             }
             enemyHeroPosDamage.put(coord, damageDone);
-            return army.removeHero(hero);
+            return army.removeHero(hero, army);
         });
 
         return enemyHeroPosDamage;

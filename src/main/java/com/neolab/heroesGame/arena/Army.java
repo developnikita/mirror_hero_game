@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class Army {
     private final Map<SquareCoordinate, Hero> heroes;
-    private final IWarlord warlord;
+    private IWarlord warlord;
     private Map<SquareCoordinate, Hero> availableHero;
 
     public Army(Map<SquareCoordinate, Hero> heroes, IWarlord warlord, SquareCoordinate warlordPos) {
@@ -48,11 +48,18 @@ public class Army {
         heroes.values().removeIf(value -> value.equals(hero));
     }
 
+    public void setWarlord(IWarlord warlord) {
+        this.warlord = warlord;
+    }
+
     public void removeAvailableHero(Hero hero) {
         availableHero.values().removeIf(value -> value.equals(hero));
     }
 
-    public boolean removeHero(Hero hero) {
+    public boolean removeHero(Hero hero, Army army) {
+        if(hero instanceof  IWarlord){
+            army.setWarlord(null);
+        }
         if (hero.getHp() <= 0) {
             removeAvailableHero(hero);
             return true;

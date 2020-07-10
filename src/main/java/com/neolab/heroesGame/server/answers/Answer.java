@@ -49,7 +49,7 @@ public class Answer {
         return playerId;
     }
 
-    public String toLog() {
+    public void toLog() {
         StringBuilder log = new StringBuilder();
         log.append(String.format("Игрок <%d> запросил действие %s юнитом на позиции (%d, %d)",
                 playerId, action, activeHero.getX(), activeHero.getY()));
@@ -58,6 +58,5 @@ public class Answer {
         }
         log.append("\n");
         LOGGER.info(log.toString());
-        return log.toString();
     }
 }
