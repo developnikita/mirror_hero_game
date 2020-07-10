@@ -20,6 +20,8 @@ public class BattleArena {
     }
 
     public boolean isArmyDied(int playerId) {
+        int countAliveHero = armies.get(playerId).getHeroes().size();
+        LOGGER.info(String.format("В армии игрока <%d>: осталось <%d> героев", playerId, countAliveHero ));
         return armies.get(playerId).getHeroes().size() == 0;
     }
 

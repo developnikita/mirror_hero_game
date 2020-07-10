@@ -62,7 +62,7 @@ public class Army {
 
     public boolean isWarlordAlive() {
         Optional<IWarlord> warlord = Optional.ofNullable(getWarlord());
-        return warlord.isEmpty();
+        return warlord.isPresent();
     }
 
     public void improveAllies() {
