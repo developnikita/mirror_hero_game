@@ -1,12 +1,16 @@
 package com.neolab.heroesGame.server;
 
+import com.neolab.heroesGame.TemplateServer;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroActions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ActionEffect {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateServer.class);
     private HeroActions action;
     private Map<SquareCoordinate, Integer> targetUnitsMap;
     private SquareCoordinate sourceUnit;
@@ -54,7 +58,8 @@ public class ActionEffect {
                 }
             }
         }
-        stringBuilder.append("/n");
+        stringBuilder.append("\n");
+        LOGGER.info(stringBuilder.toString());
         return stringBuilder.toString();
     }
 }
