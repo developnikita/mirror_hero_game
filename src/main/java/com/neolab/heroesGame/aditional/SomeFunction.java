@@ -60,4 +60,77 @@ public class SomeFunction {
         }
         return validateTarget;
     }
+
+    public static String printArmy(Army army) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int y = 0; y < 2; y++) {
+            stringBuilder.append(getLineUnit(army, y));
+            stringBuilder.append("____________|____________|____________|\n");
+        }
+        stringBuilder.append("\n");
+        return stringBuilder.toString();
+    }
+
+    public static String printInvertArmy(Army army) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int y = 1; y >= 0; y--) {
+            stringBuilder.append(getLineUnit(army, y));
+            stringBuilder.append("____________|____________|____________|\n");
+        }
+        stringBuilder.append("\n");
+        return stringBuilder.toString();
+    }
+
+    private static String getLineUnit(Army army, int y) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int x = 0; x < 3; x++) {
+            Hero hero = getHero(army, new SquareCoordinate(x, y));
+            stringBuilder.append(classToString(hero));
+        }
+        stringBuilder.append("\n");
+        for (int x = 0; x < 3; x++) {
+            Hero hero = getHero(army, new SquareCoordinate(x, y));
+            stringBuilder.append(hpToString(hero));
+        }
+        stringBuilder.append("\n");
+        return stringBuilder.toString();
+    }
+
+    private static String hpToString(Hero hero) {
+        String result;
+        if (hero == null) {
+            result = String.format("%12s|", "");
+        } else {
+            result = String.format("  HP%3d/%3d |", hero.getHp(), hero.getHpMax());
+        }
+        return result;
+    }
+
+    private static String classToString(Hero hero) {
+        String result;
+        if (hero == null) {
+            result = String.format("%12s|", "");
+        } else if (hero.getClass() == Magician.class) {
+            result = String.format("%12s|", "Маг");
+        } else if (hero.getClass() == WarlordMagician.class) {
+            result = String.format("%12s|", "Архимаг");
+        } else if (hero.getClass() == WarlordVampire.class) {
+            result = String.format("%12s|", "Вампир");
+        } else if (hero.getClass() == Archer.class) {
+            result = String.format("%12s|", "Лучник");
+        } else if (hero.getClass() == Healer.class) {
+            result = String.format("%12s|", "Лекарь");
+        } else if (hero.getClass() == Footman.class) {
+            result = String.format("%12s|", "Мечник");
+        } else if (hero.getClass() == WarlordFootman.class) {
+            result = String.format("%12s|", "Генерал");
+        } else {
+            result = String.format("%12s|", "Unknown");
+        }
+        return result;
+    }
+
+    private static Hero getHero(Army army, SquareCoordinate coord) {
+        return army.getHeroes().get(coord);
+    }
 }

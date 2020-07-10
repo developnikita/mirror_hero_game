@@ -1,9 +1,14 @@
 package com.neolab.heroesGame.server.answers;
 
+import com.neolab.heroesGame.TemplateServer;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroActions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Answer {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TemplateServer.class);
     private SquareCoordinate activeHero;
     private HeroActions action;
     private SquareCoordinate targetUnit;
@@ -46,13 +51,13 @@ public class Answer {
 
     public String toLog() {
         StringBuilder log = new StringBuilder();
-        log.append(String.format("Игрок <%d> запросии действие %s юнитом на позиции (%d, %d) ",
+        log.append(String.format("Игрок <%d> запросил действие %s юнитом на позиции (%d, %d)",
                 playerId, action, activeHero.getX(), activeHero.getY()));
         if (action != HeroActions.DEFENCE) {
-            log.append(String.format(" на юнита на позиции (%d, %d)",
-                    targetUnit.getX(), targetUnit.getY()
-            ));
+            log.append(String.format(" на юнита на позиции (%d, %d)", targetUnit.getX(), targetUnit.getY()));
         }
+        log.append("\n");
+        LOGGER.info(log.toString());
         return log.toString();
     }
 }

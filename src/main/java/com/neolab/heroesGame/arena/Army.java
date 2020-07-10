@@ -3,6 +3,7 @@ package com.neolab.heroesGame.arena;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.heroes.IWarlord;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class Army {
     public Army(Map<SquareCoordinate, Hero> heroes) {
         this.heroes = heroes;
         this.warlord = null;
+        availableHero = Collections.EMPTY_MAP;
     }
 
     public Map<SquareCoordinate, Hero> getHeroes() {
