@@ -1,5 +1,6 @@
 package com.neolab.heroesGame.heroes;
 
+import com.fasterxml.jackson.annotation.*;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
@@ -7,6 +8,18 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 
 import java.util.*;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Archer.class, name = "Archer"),
+        @JsonSubTypes.Type(value = Footman.class, name = "Footman"),
+        @JsonSubTypes.Type(value = Healer.class, name = "Healer"),
+        @JsonSubTypes.Type(value = Magician.class, name = "Magician"),
+        @JsonSubTypes.Type(value = WarlordFootman.class, name = "WarlordFootman"),
+        @JsonSubTypes.Type(value = WarlordMagician.class, name = "WarlordMagician"),
+        @JsonSubTypes.Type(value = WarlordMagician.class, name = "WarlordVampire")
+}
+)
 public abstract class Hero {
     private final int unitId;
     private final int hpDefault;
@@ -41,6 +54,35 @@ public abstract class Hero {
         this.precision = precision;
         this.armor = armor;
         this.armorDefault = armor;
+    }
+
+    @JsonCreator
+    public Hero(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
+                @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
+                @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
+                @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
+                @JsonProperty("defence") final boolean defence) {
+        this.hpDefault = hpDefault;
+        this.hpMax = hpMax;
+        this.hp = hp;
+        this.damageDefault = damageDefault;
+        this.damage = damage;
+        this.precision = precision;
+        this.armor = armor;
+        this.armorDefault = armorDefault;
+        this.defence = defence;
+    }
+
+    public void setHpMax(int hpMax) {
+        this.hpMax = hpMax;
+    }
+
+    public int getDamageDefault() {
+        return damageDefault;
+    }
+
+    public float getArmorDefault() {
+        return armorDefault;
     }
 
     public int getHp() {

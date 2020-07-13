@@ -1,5 +1,7 @@
 package com.neolab.heroesGame.arena;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.aditional.CommonFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +12,8 @@ public class BattleArena {
     private static final Logger LOGGER = LoggerFactory.getLogger(BattleArena.class);
     private final Map<Integer, Army> armies;
 
-    public BattleArena(Map<Integer, Army> armies) {
+    @JsonCreator
+    public BattleArena(@JsonProperty("armies") final Map<Integer, Army> armies) {
         this.armies = armies;
     }
 
@@ -22,14 +25,14 @@ public class BattleArena {
         return armies.get(playerId).getHeroes().isEmpty();
     }
 
-    public Army getArmy(int playerId) {
+    public Army getArmy(final int playerId) {
         return armies.get(playerId);
     }
 
     public void toLog() {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n");
-        for (Integer key : armies.keySet()) {
+        for (final Integer key : armies.keySet()) {
             stringBuilder.append(String.format("Армия игрока <%d>: \n", key));
             stringBuilder.append(CommonFunction.printArmy(armies.get(key)));
         }

@@ -1,5 +1,7 @@
 package com.neolab.heroesGame.heroes;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.errors.HeroExceptions;
@@ -12,6 +14,15 @@ public class Healer extends Hero {
 
     public Healer(int hp, int healing, float precision, float armor, int unitId) {
         super(hp, healing, precision, armor, unitId);
+    }
+
+    @JsonCreator
+    public Healer(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
+                @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
+                @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
+                @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
+                @JsonProperty("defence") final boolean defence) {
+        super(hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
     }
 
     /**

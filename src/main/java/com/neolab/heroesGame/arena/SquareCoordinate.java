@@ -1,5 +1,8 @@
 package com.neolab.heroesGame.arena;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 public class SquareCoordinate {
@@ -9,6 +12,10 @@ public class SquareCoordinate {
     public SquareCoordinate(int xCoord, int yCoord) {
         x = xCoord;
         y = yCoord;
+    @JsonCreator
+    public SquareCoordinate(@JsonProperty("x") final int x, @JsonProperty("y") final int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public int getX() {
