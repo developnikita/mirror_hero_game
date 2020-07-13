@@ -36,7 +36,7 @@ public class Army {
     }
 
     public Optional<Hero> getHero(SquareCoordinate coord) {
-        return Optional.of(heroes.get(coord));
+        return Optional.ofNullable(heroes.get(coord));
     }
 
     public void setAvailableHeroes() {
