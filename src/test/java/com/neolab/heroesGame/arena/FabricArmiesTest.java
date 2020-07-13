@@ -1,5 +1,6 @@
 package com.neolab.heroesGame.arena;
 
+import com.neolab.heroesGame.errors.HeroExceptions;
 import org.junit.Test;
 
 import java.util.Map;
@@ -11,7 +12,7 @@ import static org.junit.Assert.assertNotNull;
 public class FabricArmiesTest {
 
     @Test
-    public void testCreateBattleArena() {
+    public void testCreateBattleArena() throws HeroExceptions {
         Map<Integer, Army> armies = FabricArmies.generateArmies(1, 2);
         assertEquals(6, armies.get(1).getHeroes().size());
         assertEquals(6, armies.get(2).getHeroes().size());

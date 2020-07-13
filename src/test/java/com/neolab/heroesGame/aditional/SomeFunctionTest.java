@@ -1,7 +1,9 @@
 package com.neolab.heroesGame.aditional;
 
 import com.neolab.heroesGame.arena.Army;
+import com.neolab.heroesGame.arena.FabricArmies;
 import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Footman;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.heroes.IWarlord;
@@ -18,13 +20,13 @@ import static org.junit.Assert.*;
 public class SomeFunctionTest {
 
     @Test
-    public void testGetCorrectTargetForFootman1() {
+    public void testGetCorrectTargetForFootman1() throws HeroExceptions {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(0, 1), getFootman());
-        heroes.put(new SquareCoordinate(1, 1), getFootman());
-        heroes.put(new SquareCoordinate(2, 1), getFootman());
+        heroes.put(new SquareCoordinate(0, 1), FabricArmies.createDefaultFootman());
+        heroes.put(new SquareCoordinate(1, 1), FabricArmies.createDefaultFootman());
+        heroes.put(new SquareCoordinate(2, 1), FabricArmies.createDefaultWarlordFootman());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(0, 1)));
@@ -33,25 +35,24 @@ public class SomeFunctionTest {
     }
 
     @Test
-    public void testGetCorrectTargetForFootman2() {
+    public void testGetCorrectTargetForFootman2() throws HeroExceptions {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
         heroes.put(new SquareCoordinate(1, 1), getFootman());
-        heroes.put(new SquareCoordinate(2, 1), getFootman());
+        heroes.put(new SquareCoordinate(2, 1), FabricArmies.createDefaultWarlordFootman());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(1, 1)));
         assertEquals(1, legalTarget.size());
     }
 
-
     @Test
-    public void testGetCorrectTargetForFootman3() {
+    public void testGetCorrectTargetForFootman3() throws HeroExceptions {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(2, 1), getFootman());
+        heroes.put(new SquareCoordinate(2, 1), FabricArmies.createDefaultWarlordFootman());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(2, 1)));
@@ -60,11 +61,11 @@ public class SomeFunctionTest {
 
 
     @Test
-    public void testGetCorrectTargetForFootman4() {
+    public void testGetCorrectTargetForFootman4() throws HeroExceptions {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(0, 1), getFootman());
+        heroes.put(new SquareCoordinate(0, 1), FabricArmies.createDefaultWarlordFootman());
         heroes.put(new SquareCoordinate(2, 1), getFootman());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
@@ -73,11 +74,11 @@ public class SomeFunctionTest {
     }
 
     @Test
-    public void testGetCorrectTargetForFootman5() {
+    public void testGetCorrectTargetForFootman5() throws HeroExceptions {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(0, 0), getFootman());
+        heroes.put(new SquareCoordinate(0, 0), FabricArmies.createDefaultWarlordFootman());
         heroes.put(new SquareCoordinate(1, 0), getFootman());
         heroes.put(new SquareCoordinate(2, 0), getFootman());
         Army enemy = new Army(heroes);
@@ -88,11 +89,11 @@ public class SomeFunctionTest {
     }
 
     @Test
-    public void testGetCorrectTargetForFootman6() {
+    public void testGetCorrectTargetForFootman6() throws HeroExceptions {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(1, 0), getFootman());
+        heroes.put(new SquareCoordinate(1, 0), FabricArmies.createDefaultWarlordFootman());
         heroes.put(new SquareCoordinate(2, 0), getFootman());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
@@ -102,11 +103,11 @@ public class SomeFunctionTest {
 
 
     @Test
-    public void testGetCorrectTargetForFootman7() {
+    public void testGetCorrectTargetForFootman7() throws HeroExceptions {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(2, 0), getFootman());
+        heroes.put(new SquareCoordinate(2, 0), FabricArmies.createDefaultWarlordFootman());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(2, 0)));
@@ -115,27 +116,16 @@ public class SomeFunctionTest {
 
 
     @Test
-    public void testGetCorrectTargetForFootman8() {
+    public void testGetCorrectTargetForFootman8() throws HeroExceptions {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(0, 0), getFootman());
+        heroes.put(new SquareCoordinate(0, 0), FabricArmies.createDefaultWarlordFootman());
         heroes.put(new SquareCoordinate(2, 0), getFootman());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(0, 0)));
         assertEquals(1, legalTarget.size());
-    }
-
-    @Test
-    public void testGetCorrectRemoveWarlord() {
-        Map<SquareCoordinate, Hero> heroes = new HashMap<>();
-        IWarlord warlord = new WarlordFootman(0,0,0,0);
-        heroes.put(new SquareCoordinate(0, 0), getFootman());
-        heroes.put(new SquareCoordinate(2, 0), getFootman());
-        Army army = new Army(heroes, warlord, new SquareCoordinate(1, 1));
-        army.killHero((Hero) warlord);
-        assertFalse(army.getHeroes().containsValue(warlord));
     }
 
     public static Footman getFootman() {

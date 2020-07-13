@@ -7,7 +7,9 @@ public enum HeroErrorCode {
     ERROR_UNIT_ATTACK("Этот юнит не может атаковать"),
     ERROR_UNIT_HEAL("Этот юнит не может лечить"),
     ERROR_ON_BATTLE_ARENA("Произошло что-то непредвиденное"),
-    ERROR_ANSWER("Невозможно установить ход");
+    ERROR_ANSWER("Невозможно установить ход"),
+    ERROR_SECOND_WARLORD_ON_ARMY("В армии два варлорда. Должен остаться только один"),
+    ERROR_EMPTY_WARLORD("Армия не может быть создана без варлорда");
 
     private final String errorString;
 

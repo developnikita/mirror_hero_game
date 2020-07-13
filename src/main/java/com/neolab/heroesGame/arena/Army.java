@@ -1,9 +1,10 @@
 package com.neolab.heroesGame.arena;
 
+import com.neolab.heroesGame.enumerations.HeroErrorCode;
+import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.heroes.IWarlord;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -13,18 +14,27 @@ public class Army {
     private IWarlord warlord;
     private Map<SquareCoordinate, Hero> availableHero;
 
-    public Army(Map<SquareCoordinate, Hero> heroes, IWarlord warlord, SquareCoordinate warlordPos) {
+    public Army(Map<SquareCoordinate, Hero> heroes) throws HeroExceptions {
         this.heroes = heroes;
-        this.warlord = warlord;
-        this.heroes.put(warlordPos, (Hero) warlord);
+        this.warlord = findWarlord();
         setAvailableHeroes();
         improveAllies();
     }
 
-    public Army(Map<SquareCoordinate, Hero> heroes) {
-        this.heroes = heroes;
-        this.warlord = null;
-        availableHero = Collections.EMPTY_MAP;
+    private IWarlord findWarlord() throws HeroExceptions {
+        IWarlord iWarlord = null;
+        for (SquareCoordinate coordinate : heroes.keySet()) {
+            if (heroes.get(coordinate) instanceof IWarlord) {
+                if (warlord != null) {
+                    throw new HeroExceptions(HeroErrorCode.ERROR_SECOND_WARLORD_ON_ARMY);
+                }
+                iWarlord = (IWarlord) heroes.get(coordinate);
+            }
+        }
+        if (iWarlord == null) {
+            throw new HeroExceptions(HeroErrorCode.ERROR_EMPTY_WARLORD);
+        }
+        return iWarlord;
     }
 
     public Map<SquareCoordinate, Hero> getHeroes() {
@@ -57,7 +67,7 @@ public class Army {
     }
 
     public boolean removeHero(Hero hero, Army army) {
-        if(hero instanceof  IWarlord){
+        if (hero instanceof IWarlord) {
             army.setWarlord(null);
         }
         if (hero.getHp() <= 0) {

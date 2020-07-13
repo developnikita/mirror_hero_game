@@ -18,7 +18,7 @@ public class Server {
     private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
     private final Map<Integer, Client> clients = new HashMap<>();
 
-    public Server() {
+    public Server() throws HeroExceptions {
         super();
         clients.put(1, new Client(1));
         clients.put(2, new Client(2));

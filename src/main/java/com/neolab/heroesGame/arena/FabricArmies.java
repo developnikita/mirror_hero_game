@@ -1,5 +1,6 @@
 package com.neolab.heroesGame.arena;
 
+import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
 
 import java.util.*;
@@ -8,7 +9,8 @@ public class FabricArmies {
     private static final long SEED = 5916;
     private static final Random RANDOM = new Random(SEED);
 
-    public static Map<Integer, Army> generateArmies(Integer firstPlayerId, Integer secondPlayerId) {
+    public static Map<Integer, Army> generateArmies(Integer firstPlayerId,
+                                                    Integer secondPlayerId) throws HeroExceptions {
         Map<Integer, Army> armies = new HashMap<>();
         armies.put(firstPlayerId, createArmy());
         armies.put(secondPlayerId, createArmy());
@@ -21,7 +23,7 @@ public class FabricArmies {
      * Вторую линию забивает Healer, Magician, Archer с равным шансом
      * Место для варлорда выбирает Set.iterator().next()
      */
-    private static Army createArmy() {
+    private static Army createArmy() throws HeroExceptions {
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         Hero warlord = createWarlord();
         SquareCoordinate warlordCoord;
@@ -33,12 +35,12 @@ public class FabricArmies {
             warlordCoord = addWarlord(heroes, secondLine, warlord);
         }
         for (SquareCoordinate key : firstLine) {
-            heroes.put(key, createFootman());
+            heroes.put(key, createDefaultFootman());
         }
         for (SquareCoordinate key : secondLine) {
             heroes.put(key, createSecondLineUnit());
         }
-        return new Army(heroes, (IWarlord) warlord, warlordCoord);
+        return new Army(heroes);
     }
 
     private static SquareCoordinate addWarlord(Map<SquareCoordinate, Hero> heroes, Set<SquareCoordinate> line, Hero warlord) {
@@ -49,29 +51,25 @@ public class FabricArmies {
     }
 
     private static Hero createWarlord() {
-        int switcher = RANDOM.nextInt(4) % 3;
+        int switcher = RANDOM.nextInt(4);
         if (switcher == 0) {
-            return new WarlordFootman(180, 60, 0.8f, 0.15f);
+            return createDefaultWarlordMagician();
         } else if (switcher == 1) {
-            return new WarlordMagician(90, 40, 0.75f, 0.05f);
+            return createDefaultWarlordVampire();
         } else {
-            return new WarlordVampire(90, 10, 0.8f, 0.05f);
+            return createDefaultWarlordFootman();
         }
     }
 
     private static Hero createSecondLineUnit() {
         int switcher = RANDOM.nextInt(3) % 3;
         if (switcher == 0) {
-            return new Archer(90, 40, 0.85f, 0);
+            return createDefaultArcher();
         } else if (switcher == 1) {
-            return new Magician(75, 30, 0.8f, 0);
+            return createDefaultMagician();
         } else {
-            return new Healer(75, 40, 1, 0);
+            return createDefaultHealer();
         }
-    }
-
-    private static Hero createFootman() {
-        return new Footman(170, 50, 0.8f, 0.1f);
     }
 
     private static Set<SquareCoordinate> makeLine(Integer y) {
@@ -80,5 +78,61 @@ public class FabricArmies {
             line.add(new SquareCoordinate(x, y));
         }
         return line;
+    }
+
+    public static Hero createDefaultFootman() {
+        int hp = 170;
+        int damage = 50;
+        float precision = 0.8f;
+        float armor = 0.1f;
+        return new Footman(hp, damage, precision, armor);
+    }
+
+    public static Hero createDefaultArcher() {
+        int hp = 90;
+        int damage = 40;
+        float precision = 0.85f;
+        float armor = 0;
+        return new Archer(hp, damage, precision, armor);
+    }
+
+    public static Hero createDefaultMagician() {
+        int hp = 75;
+        int damage = 30;
+        float precision = 0.8f;
+        float armor = 0;
+        return new Magician(hp, damage, precision, armor);
+    }
+
+    public static Hero createDefaultHealer() {
+        int hp = 75;
+        int damage = 40;
+        float precision = 1;
+        float armor = 0;
+        return new Healer(hp, damage, precision, armor);
+    }
+
+    public static Hero createDefaultWarlordFootman() {
+        int hp = 180;
+        int damage = 60;
+        float precision = 0.9f;
+        float armor = 0.15f;
+        return new WarlordFootman(hp, damage, precision, armor);
+    }
+
+    public static Hero createDefaultWarlordMagician() {
+        int hp = 90;
+        int damage = 40;
+        float precision = 0.75f;
+        float armor = 0.05f;
+        return new WarlordMagician(hp, damage, precision, armor);
+    }
+
+    public static Hero createDefaultWarlordVampire() {
+        int hp = 90;
+        int damage = 10;
+        float precision = 0.8f;
+        float armor = 0.05f;
+        return new WarlordVampire(hp, damage, precision, armor);
     }
 }

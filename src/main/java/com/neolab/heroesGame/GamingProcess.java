@@ -17,7 +17,7 @@ public class GamingProcess {
     private static Player currentPlayer;
     private static Player waitingPlayer;
 
-    public GamingProcess() {
+    public GamingProcess() throws HeroExceptions {
         currentPlayer = new PlayerBot(1);
         waitingPlayer = new PlayerBot(2);
         setAnswerProcessorPlayerId(currentPlayer, waitingPlayer);
