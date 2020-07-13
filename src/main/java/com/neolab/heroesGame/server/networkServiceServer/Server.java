@@ -3,7 +3,7 @@ package com.neolab.heroesGame.server.networkServiceServer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
-import com.neolab.heroesGame.arena.FabricArmies;
+import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.client.networkService.Client;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.answers.Answer;
@@ -23,7 +23,7 @@ public class Server {
         clients.put(1, new Client(1));
         clients.put(2, new Client(2));
         AnswerProcessor.setPlayerId(2);
-        AnswerProcessor.setBoard(new BattleArena(FabricArmies.generateArmies(1, 2)));
+        AnswerProcessor.setBoard(new BattleArena(FactoryArmies.generateArmies(1, 2)));
     }
 
     /**

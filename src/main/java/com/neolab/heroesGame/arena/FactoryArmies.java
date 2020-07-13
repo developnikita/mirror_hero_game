@@ -6,7 +6,7 @@ import com.neolab.heroesGame.heroes.*;
 
 import java.util.*;
 
-public class FabricArmies {
+public class FactoryArmies {
     private static final long SEED = 5916;
     private static final Random RANDOM = new Random(SEED);
 

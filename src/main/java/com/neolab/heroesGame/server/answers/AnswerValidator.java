@@ -9,21 +9,19 @@ import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Hero;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 public class AnswerValidator {
 
-    public static boolean validateAnswer(Answer answer, BattleArena arena) throws HeroExceptions {
+    public static boolean isAnswerValidate(Answer answer, BattleArena arena) throws HeroExceptions {
         Army thisBotArmy = CommonFunction.getCurrentPlayerArmy(arena, answer.getPlayerId());
         Army enemyArmy = CommonFunction.getEnemyArmy(arena, thisBotArmy);
         Optional<Hero> heroOptional = thisBotArmy.getHero(answer.getActiveHero());
         Hero hero;
-        if(heroOptional.isPresent()){
+        if (heroOptional.isPresent()) {
             hero = heroOptional.get();
-        }
-        else throw new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT);
+        } else throw new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT);
 
         if (isErrorActiveHero(hero, thisBotArmy)) {
             throw new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT);

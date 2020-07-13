@@ -48,7 +48,7 @@ public final class AnswerProcessor {
     }
 
     public static void handleAnswer(Answer answer) throws HeroExceptions {
-        if (AnswerValidator.validateAnswer(answer, board)) {
+        if (AnswerValidator.isAnswerValidate(answer, board)) {
             if (answer.getAction() == HeroActions.ATTACK) {
                 Hero activeHero = getActiveHero(board, answer);
                 //если маг или арчер то первый аргумент не используется

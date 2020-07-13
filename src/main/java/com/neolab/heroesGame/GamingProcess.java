@@ -2,7 +2,7 @@ package com.neolab.heroesGame;
 
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
-import com.neolab.heroesGame.arena.FabricArmies;
+import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.client.ai.Player;
 import com.neolab.heroesGame.client.ai.PlayerBot;
 import com.neolab.heroesGame.errors.HeroExceptions;
@@ -20,7 +20,7 @@ public class GamingProcess {
         currentPlayer = new PlayerBot(1);
         waitingPlayer = new PlayerBot(2);
         setAnswerProcessorPlayerId(currentPlayer, waitingPlayer);
-        AnswerProcessor.setBoard(new BattleArena(FabricArmies.generateArmies(1, 2)));
+        AnswerProcessor.setBoard(new BattleArena(FactoryArmies.generateArmies(1, 2)));
     }
 
     private static void changeCurrentAndWaitingPlayers() {
@@ -41,9 +41,9 @@ public class GamingProcess {
             while (true) {
                 AnswerProcessor.getBoard().toLog();
 
-                Player whoIsWin = isSomeOneWin();
+                Player whoIsWin = someoneWhoWin();
                 if (whoIsWin != null) {
-                    LOGGER.info(String.format("Игрок<%d> выиграл это тяжкое сражение", whoIsWin.getId()));
+                    LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", whoIsWin.getId());
                     break;
                 }
 
@@ -79,7 +79,7 @@ public class GamingProcess {
         }
     }
 
-    private static Player isSomeOneWin() {
+    private static Player someoneWhoWin() {
         Player isWinner = AnswerProcessor.getBoard().isArmyDied(currentPlayer.getId()) ? waitingPlayer : null;
         if (isWinner == null) {
             isWinner = AnswerProcessor.getBoard().isArmyDied(waitingPlayer.getId()) ? currentPlayer : null;
