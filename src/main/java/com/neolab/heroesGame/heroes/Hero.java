@@ -32,17 +32,6 @@ public abstract class Hero {
     private final float armorDefault;
     private boolean defence = false;
 
-    public void setHpMax(int hpMax) {
-        this.hpMax = hpMax;
-    }
-
-    public int getDamageDefault() {
-        return damageDefault;
-    }
-
-    public float getArmorDefault() {
-        return armorDefault;
-    }
 
     public Hero(final int hp, final int damage, final float precision, final float armor, final int unitId) {
         this.unitId = unitId;
@@ -61,7 +50,8 @@ public abstract class Hero {
                 @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
                 @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
                 @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
-                @JsonProperty("defence") final boolean defence) {
+                @JsonProperty("defence") final boolean defence, @JsonProperty("unitId") final int unitId) {
+        this.unitId = unitId;
         this.hpDefault = hpDefault;
         this.hpMax = hpMax;
         this.hp = hp;

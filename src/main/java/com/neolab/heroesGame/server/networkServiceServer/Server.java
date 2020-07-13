@@ -114,7 +114,7 @@ public class Server {
 
     private void checkDeathWarlord(int playerId) {
         Army army = AnswerProcessor.getBoard().getArmy(playerId);
-        if (army.isDeadWarlord()) {
+        if (army.isWarlordAlive()) {
             army.cancelImprove();
         }
     }
