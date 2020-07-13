@@ -43,8 +43,7 @@ public class PlayerBot extends Player {
         Army enemyArmy = CommonFunction.getEnemyArmy(board, thisBotArmy);
 
         SquareCoordinate activeHero = chooseUnit(thisBotArmy);
-        Hero hero = Optional.of(thisBotArmy.getHeroes().get(activeHero)).orElseThrow(
-                new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA));
+        Hero hero = thisBotArmy.getHeroes().get(activeHero);
 
         if (CommonFunction.isUnitMagician(hero)) {
             return new Answer(activeHero, HeroActions.ATTACK, new SquareCoordinate(-1, -1), getId());

@@ -62,7 +62,7 @@ public class Server {
             }
             //в конце раунда доступны все живые герои
             if (checkEndRound()) {
-                AnswerProcessor.getBoard().getArmies().values().forEach(Army::setAvailableHeroes);
+                AnswerProcessor.getBoard().getArmies().values().forEach(Army::roundIsOver);
             }
         }
     }
@@ -74,14 +74,8 @@ public class Server {
      * @param arrClients массив клиентов
      */
     private void askNextPlayer(int nextClient, Client[] arrClients) throws JsonProcessingException, HeroExceptions {
-//        ServerRequest serverRequest = new ServerRequest(AnswerProcessor.getBoard(), AnswerProcessor.getActionEffect());
-//        String answerJson = arrClients[nextClient].getClientAnswer(serverRequest.getBoardJson(), serverRequest.getActionEffectJson());
-//        ClientResponse clientResponse = new ClientResponse(answerJson);
-//        Answer answerClient = clientResponse.getAnswer();
-//        AnswerProcessor.handleAnswer(answerClient);
-
         //todo пока отключил Dto
-        Answer answerClient = arrClients[nextClient].getClientAnswer(AnswerProcessor.getBoard()); //AnswerProcessor.getActionEffect()
+        Answer answerClient = arrClients[nextClient].getClientAnswer(AnswerProcessor.getBoard());
         AnswerProcessor.setActivePlayerId(answerClient.getPlayerId());
         answerClient.toLog();
         AnswerProcessor.handleAnswer(answerClient);
@@ -120,7 +114,7 @@ public class Server {
 
     private void checkDeathWarlord(int playerId) {
         Army army = AnswerProcessor.getBoard().getArmy(playerId);
-        if (army.isWarlordAlive()) {
+        if (army.isDeadWarlord()) {
             army.cancelImprove();
         }
     }

@@ -1,10 +1,7 @@
 package com.neolab.heroesGame;
 
-import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.samplesSockets.TemplateServer;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 

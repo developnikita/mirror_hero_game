@@ -21,11 +21,6 @@ public class Client {
     }
 
     public Answer getClientAnswer(BattleArena board) throws JsonProcessingException, HeroExceptions {
-//        ServerResponse serverResponse = new ServerResponse(board, actionEffect);
-//        Answer answer = player.getAnswer(serverResponse.getBoard());
-//        ClientRequest clientRequest = new ClientRequest(answer);
-//        return clientRequest.getAnswerJson();
-
         //todo пока отключил Dto
         return player.getAnswer(board);
     }

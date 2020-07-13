@@ -1,5 +1,6 @@
 package com.neolab.heroesGame.arena;
 
+import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
 
@@ -85,7 +86,7 @@ public class FabricArmies {
         int damage = 50;
         float precision = 0.8f;
         float armor = 0.1f;
-        return new Footman(hp, damage, precision, armor);
+        return new Footman(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultArcher() {
@@ -93,7 +94,7 @@ public class FabricArmies {
         int damage = 40;
         float precision = 0.85f;
         float armor = 0;
-        return new Archer(hp, damage, precision, armor);
+        return new Archer(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultMagician() {
@@ -101,7 +102,7 @@ public class FabricArmies {
         int damage = 30;
         float precision = 0.8f;
         float armor = 0;
-        return new Magician(hp, damage, precision, armor);
+        return new Magician(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultHealer() {
@@ -109,7 +110,7 @@ public class FabricArmies {
         int damage = 40;
         float precision = 1;
         float armor = 0;
-        return new Healer(hp, damage, precision, armor);
+        return new Healer(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultWarlordFootman() {
@@ -117,7 +118,7 @@ public class FabricArmies {
         int damage = 60;
         float precision = 0.9f;
         float armor = 0.15f;
-        return new WarlordFootman(hp, damage, precision, armor);
+        return new WarlordFootman(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultWarlordMagician() {
@@ -125,7 +126,7 @@ public class FabricArmies {
         int damage = 40;
         float precision = 0.75f;
         float armor = 0.05f;
-        return new WarlordMagician(hp, damage, precision, armor);
+        return new WarlordMagician(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultWarlordVampire() {
@@ -133,6 +134,6 @@ public class FabricArmies {
         int damage = 10;
         float precision = 0.8f;
         float armor = 0.05f;
-        return new WarlordVampire(hp, damage, precision, armor);
+        return new WarlordVampire(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 }

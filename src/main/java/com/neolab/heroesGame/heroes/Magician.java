@@ -7,8 +7,8 @@ import java.util.*;
 
 public class Magician extends Hero {
 
-    public Magician(int hp, int damage, float precision, float armor) {
-        super(hp, damage, precision, armor);
+    public Magician(int hp, int damage, float precision, float armor, int unitId) {
+        super(hp, damage, precision, armor, unitId);
     }
 
     @Override

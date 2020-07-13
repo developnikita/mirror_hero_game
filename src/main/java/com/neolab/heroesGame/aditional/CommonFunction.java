@@ -21,10 +21,8 @@ public class CommonFunction {
     }
 
     public static Army getCurrentPlayerArmy(final BattleArena board, final Integer playerId) throws HeroExceptions {
-        return Optional.of(board.getArmy(playerId)).orElseThrow(
-                new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA));
+        return board.getArmy(playerId);
     }
-
 
     public static boolean isUnitMagician(final Hero hero) {
         return hero instanceof Magician;
@@ -189,4 +187,17 @@ public class CommonFunction {
     private static Hero getHero(final Army army, final SquareCoordinate coord) {
         return army.getHeroes().get(coord);
     }
+
+    /**
+     * Для генеариия id героев
+     */
+    private static class MyInt {
+        public static int i = 0;
+    }
+
+    public interface IdGeneration{
+        int getNextId();
+    }
+
+    public static IdGeneration idGeneration = () -> ++MyInt.i;
 }

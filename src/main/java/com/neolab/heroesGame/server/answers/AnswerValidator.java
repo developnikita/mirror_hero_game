@@ -18,8 +18,13 @@ public class AnswerValidator {
     public static boolean validateAnswer(Answer answer, BattleArena arena) throws HeroExceptions {
         Army thisBotArmy = CommonFunction.getCurrentPlayerArmy(arena, answer.getPlayerId());
         Army enemyArmy = CommonFunction.getEnemyArmy(arena, thisBotArmy);
-        Hero hero = Optional.of(thisBotArmy.getHero(answer.getActiveHero()).get()).orElseThrow(
-                new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT));
+        Optional<Hero> heroOptional = thisBotArmy.getHero(answer.getActiveHero());
+        Hero hero;
+        if(heroOptional.isPresent()){
+            hero = heroOptional.get();
+        }
+        else throw new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT);
+
         if (isErrorActiveHero(hero, thisBotArmy)) {
             throw new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT);
         }

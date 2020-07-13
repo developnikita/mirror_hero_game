@@ -19,7 +19,7 @@ public class BattleArena {
     }
 
     public boolean isArmyDied(int playerId) {
-        return armies.get(playerId).getHeroes().size() == 0;
+        return armies.get(playerId).getHeroes().isEmpty();
     }
 
     public Army getArmy(int playerId) {

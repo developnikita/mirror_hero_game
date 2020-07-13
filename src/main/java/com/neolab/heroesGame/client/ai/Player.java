@@ -11,9 +11,7 @@ public abstract class Player {
         this.id = id;
     }
 
-    public Answer getAnswer(BattleArena board) throws HeroExceptions {
-        return null;
-    }
+    public abstract Answer getAnswer(BattleArena board) throws HeroExceptions;
 
     public int getId() {
         return id;

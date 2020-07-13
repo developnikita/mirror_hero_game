@@ -8,12 +8,11 @@ import com.neolab.heroesGame.client.ai.PlayerBot;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.answers.Answer;
 import com.neolab.heroesGame.server.answers.AnswerProcessor;
-import com.neolab.heroesGame.server.networkServiceServer.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GamingProcess {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GamingProcess.class);
     private static Player currentPlayer;
     private static Player waitingPlayer;
 
@@ -50,7 +49,7 @@ public class GamingProcess {
 
                 if (isRoundEnd()) {
                     LOGGER.info("-----------------Начинается новый раунд---------------");
-                    AnswerProcessor.getBoard().getArmies().values().forEach(Army::setAvailableHeroes);
+                    AnswerProcessor.getBoard().getArmies().values().forEach(Army::roundIsOver);
                 }
 
                 if (checkCanMove(gamingProcess.currentPlayer.getId())) {

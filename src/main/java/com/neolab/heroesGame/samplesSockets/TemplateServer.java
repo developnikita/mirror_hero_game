@@ -1,4 +1,4 @@
-package com.neolab.heroesGame;
+package com.neolab.heroesGame.samplesSockets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class TemplateServer extends Thread {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TemplateServer.class);
 
-    static final int PORT = 8083;
+    static final public int PORT = 8083;
     static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
     private static final int COUNT_EVENTS_IN_HISTORY = 20;
 

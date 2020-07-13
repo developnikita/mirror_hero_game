@@ -6,14 +6,13 @@ import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Footman;
 import com.neolab.heroesGame.heroes.Hero;
-import com.neolab.heroesGame.heroes.IWarlord;
-import com.neolab.heroesGame.heroes.WarlordFootman;
 import org.junit.Test;
 
 import java.util.Map;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 
@@ -81,6 +80,7 @@ public class SomeFunctionTest {
         heroes.put(new SquareCoordinate(0, 0), FabricArmies.createDefaultWarlordFootman());
         heroes.put(new SquareCoordinate(1, 0), getFootman());
         heroes.put(new SquareCoordinate(2, 0), getFootman());
+
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(0, 0)));
@@ -129,6 +129,6 @@ public class SomeFunctionTest {
     }
 
     public static Footman getFootman() {
-        return new Footman(170, 50, (float) 0.8, (float) 0.1);
+        return new Footman(170, 50, (float) 0.8, (float) 0.1, CommonFunction.idGeneration.getNextId());
     }
 }

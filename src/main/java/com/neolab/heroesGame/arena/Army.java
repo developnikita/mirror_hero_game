@@ -17,7 +17,7 @@ public class Army {
     public Army(Map<SquareCoordinate, Hero> heroes) throws HeroExceptions {
         this.heroes = heroes;
         this.warlord = findWarlord();
-        setAvailableHeroes();
+        roundIsOver();
         improveAllies();
     }
 
@@ -49,37 +49,41 @@ public class Army {
         return Optional.ofNullable(heroes.get(coord));
     }
 
-    public void setAvailableHeroes() {
+    public void roundIsOver() {
         this.availableHero = new HashMap<>(heroes);
     }
 
-    public void killHero(Hero hero) {
-        removeAvailableHero(hero);
-        heroes.values().removeIf(value -> value.equals(hero));
+    public void killHero(int heroId) {
+        if(warlord.getUnitId() == heroId){
+            cancelImprove();
+        }
+        removeAvailableHeroById(heroId);
+        heroes.values().removeIf(value -> value.getUnitId() == heroId);
     }
 
     public void setWarlord(IWarlord warlord) {
         this.warlord = warlord;
     }
 
-    public void removeAvailableHero(Hero hero) {
-        availableHero.values().removeIf(value -> value.equals(hero));
+    public void removeAvailableHeroById(int heroId) {
+        availableHero.values().removeIf(value -> value.getUnitId() == heroId);
     }
 
     public boolean removeHero(Hero hero, Army army) {
         if (hero instanceof IWarlord) {
             army.setWarlord(null);
+            cancelImprove();
         }
         if (hero.getHp() <= 0) {
-            removeAvailableHero(hero);
+            removeAvailableHeroById(hero.getUnitId());
             return true;
         }
         return false;
     }
 
-    public boolean isWarlordAlive() {
+    public boolean isDeadWarlord() {
         Optional<IWarlord> warlord = Optional.ofNullable(getWarlord());
-        return warlord.isPresent();
+        return warlord.isEmpty();
     }
 
     public void improveAllies() {

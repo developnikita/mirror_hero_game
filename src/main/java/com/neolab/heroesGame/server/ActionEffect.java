@@ -10,10 +10,15 @@ import java.util.Map;
 
 public class ActionEffect {
     private static final Logger LOGGER = LoggerFactory.getLogger(ActionEffect.class);
-    private HeroActions action;
-    private Map<SquareCoordinate, Integer> targetUnitsMap;
-    private SquareCoordinate sourceUnit;
+    private final HeroActions action;
+    private final Map<SquareCoordinate, Integer> targetUnitsMap;
+    private final SquareCoordinate sourceUnit;
 
+    public ActionEffect(HeroActions action, SquareCoordinate sourceUnit, Map<SquareCoordinate ,Integer> targetUnitsMap){
+        this.action = action;
+        this.targetUnitsMap = new HashMap<>(targetUnitsMap);
+        this.sourceUnit = new SquareCoordinate(sourceUnit.getX(), sourceUnit.getY());
+    }
 
     public HeroActions getAction() {
         return action;
@@ -27,17 +32,8 @@ public class ActionEffect {
         return targetUnitsMap;
     }
 
-    public void setTargetUnitsMap(Map<SquareCoordinate, Integer> targetUnitsMap) {
-        this.targetUnitsMap = new HashMap<>();
-        this.targetUnitsMap.putAll(targetUnitsMap);
-    }
-
     public void setSourceUnit(SquareCoordinate sourceUnit) {
-        this.sourceUnit = new SquareCoordinate(sourceUnit.getX(), sourceUnit.getY());
-    }
 
-    public void setAction(HeroActions action) {
-        this.action = action;
     }
 
     public void toLog() {

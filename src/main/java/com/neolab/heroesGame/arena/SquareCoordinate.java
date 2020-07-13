@@ -2,31 +2,21 @@ package com.neolab.heroesGame.arena;
 
 import java.util.Objects;
 
-public class SquareCoordinate implements Comparable<SquareCoordinate> {
-    private final int X;
-    private final int Y;
+public class SquareCoordinate {
+    private final int x;
+    private final int y;
 
-    public SquareCoordinate(int x, int y) {
-        X = x;
-        Y = y;
+    public SquareCoordinate(int xCoord, int yCoord) {
+        x = xCoord;
+        y = yCoord;
     }
 
     public int getX() {
-        return X;
+        return x;
     }
 
     public int getY() {
-        return Y;
-    }
-
-    /**
-     * Compare a given SquareCoordinate with current(this) object.
-     * X compare name and than Y
-     */
-    @Override
-    public int compareTo(SquareCoordinate coordinate) {
-        int diff = X - coordinate.getX();
-        return (diff == 0) ? Y - coordinate.getY() : diff;
+        return y;
     }
 
     @Override
@@ -34,12 +24,12 @@ public class SquareCoordinate implements Comparable<SquareCoordinate> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SquareCoordinate that = (SquareCoordinate) o;
-        return X == that.X &&
-                Y == that.Y;
+        return x == that.x &&
+                y == that.y;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(X, Y);
+        return Objects.hash(x, y);
     }
 }

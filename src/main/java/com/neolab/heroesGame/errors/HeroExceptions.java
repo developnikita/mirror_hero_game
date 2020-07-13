@@ -4,7 +4,7 @@ import com.neolab.heroesGame.enumerations.HeroErrorCode;
 
 import java.util.function.Supplier;
 
-public class HeroExceptions extends Exception implements Supplier<HeroExceptions> {
+public class HeroExceptions extends Exception {
     private final HeroErrorCode heroErrorCode;
 
     public HeroExceptions(HeroErrorCode heroErrorCode) {
@@ -13,10 +13,5 @@ public class HeroExceptions extends Exception implements Supplier<HeroExceptions
 
     public HeroErrorCode getHeroErrorCode() {
         return heroErrorCode;
-    }
-
-    @Override
-    public HeroExceptions get() {
-        return null;
     }
 }

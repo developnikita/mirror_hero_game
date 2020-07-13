@@ -8,6 +8,7 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 import java.util.*;
 
 public abstract class Hero {
+    private final int unitId;
     private final int hpDefault;
     private int hpMax;
     private int hp;
@@ -30,7 +31,8 @@ public abstract class Hero {
         return armorDefault;
     }
 
-    public Hero(int hp, int damage, float precision, float armor) {
+    public Hero(final int hp, final int damage, final float precision, final float armor, final int unitId) {
+        this.unitId = unitId;
         this.hpDefault = hp;
         this.hpMax = hp;
         this.hp = hp;
@@ -43,6 +45,10 @@ public abstract class Hero {
 
     public int getHp() {
         return hp;
+    }
+
+    public int getUnitId() {
+        return unitId;
     }
 
     public int getDamage() {
@@ -81,9 +87,18 @@ public abstract class Hero {
         this.armor = armor;
     }
 
-    public void setDefence(boolean defence) {
-        this.armor = (float) (this.armor + 0.5);
-        this.defence = defence;
+    public void setDefence() {
+        if(!defence){
+            this.armor = this.armor + 0.5f;
+            this.defence = true;
+        }
+    }
+
+    public void cancelDefence() {
+        if(defence){
+            this.armor = this.armor - 0.5f;
+            this.defence = false;
+        }
     }
 
     /**
@@ -106,16 +121,17 @@ public abstract class Hero {
         return enemyHeroPosDamage;
     }
 
-    //todo вылетает исключение
     protected Hero searchTarget(SquareCoordinate position, Army army) throws HeroExceptions {
-        return Optional.of(army.getHeroes().get(position)).orElseThrow(
-                new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK)
-        );
+        Hero target = army.getHeroes().get(position);
+        if(target == null){
+            throw  new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK);
+        }
+        else return target;
     }
 
     protected void removeTarget(Hero targetAttack, Army army) {
         if (targetAttack.getHp() <= 0) {
-            army.killHero(targetAttack);
+            army.killHero(targetAttack.getUnitId());
         }
     }
 
