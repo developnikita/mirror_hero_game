@@ -9,6 +9,7 @@ public enum HeroErrorCode {
     ERROR_ON_BATTLE_ARENA("Произошло что-то непредвиденное"),
     ERROR_ANSWER("Невозможно установить ход"),
     ERROR_SECOND_WARLORD_ON_ARMY("В армии два варлорда. Должен остаться только один"),
+    ERROR_ACT("Неизвестное действие"),
     ERROR_EMPTY_WARLORD("Армия не может быть создана без варлорда");
 
     private final String errorString;

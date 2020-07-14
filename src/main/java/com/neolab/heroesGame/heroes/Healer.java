@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class Healer extends Hero {
 
-    public Healer(final int hp, final int healing, final float precision, final float armor, final int unitId) {
-        super(hp, healing, precision, armor, unitId);
+    public Healer(int hp, int healing, float precision, float armor) {
+        super(hp, healing, precision, armor);
     }
 
     @JsonCreator
@@ -20,8 +20,8 @@ public class Healer extends Hero {
                   @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
                   @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
                   @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
-                  @JsonProperty("defence") final boolean defence, @JsonProperty("unitId") final int unitId) {
-        super(hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence, unitId);
+                  @JsonProperty("defence") final boolean defence) {
+        super(hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
     }
 
     /**

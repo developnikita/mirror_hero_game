@@ -1,6 +1,7 @@
 package com.neolab.heroesGame.heroes;
 
 import com.fasterxml.jackson.annotation.*;
+import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
@@ -33,8 +34,8 @@ public abstract class Hero {
     private boolean defence = false;
 
 
-    public Hero(final int hp, final int damage, final float precision, final float armor, final int unitId) {
-        this.unitId = unitId;
+    public Hero(final int hp, final int damage, final float precision, final float armor) {
+        this.unitId = CommonFunction.idGeneration.getNextId();
         this.hpDefault = hp;
         this.hpMax = hp;
         this.hp = hp;
@@ -50,8 +51,8 @@ public abstract class Hero {
                 @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
                 @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
                 @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
-                @JsonProperty("defence") final boolean defence, @JsonProperty("unitId") final int unitId) {
-        this.unitId = unitId;
+                @JsonProperty("defence") final boolean defence) {
+        this.unitId = CommonFunction.idGeneration.getNextId();
         this.hpDefault = hpDefault;
         this.hpMax = hpMax;
         this.hp = hp;

@@ -87,7 +87,7 @@ public class FactoryArmies {
         final int damage = 50;
         final float precision = 0.8f;
         final float armor = 0.1f;
-        return new Footman(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
+        return new Footman(hp, damage, precision, armor);
     }
 
     public static Hero createDefaultArcher() {
@@ -95,7 +95,7 @@ public class FactoryArmies {
         final int damage = 40;
         final float precision = 0.85f;
         final float armor = 0;
-        return new Archer(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
+        return new Archer(hp, damage, precision, armor);
     }
 
     public static Hero createDefaultMagician() {
@@ -103,7 +103,7 @@ public class FactoryArmies {
         final int damage = 30;
         final float precision = 0.8f;
         final float armor = 0;
-        return new Magician(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
+        return new Magician(hp, damage, precision, armor);
     }
 
     public static Hero createDefaultHealer() {
@@ -111,7 +111,7 @@ public class FactoryArmies {
         final int damage = 40;
         final float precision = 1;
         final float armor = 0;
-        return new Healer(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
+        return new Healer(hp, damage, precision, armor);
     }
 
     public static Hero createDefaultWarlordFootman() {
@@ -119,7 +119,7 @@ public class FactoryArmies {
         final int damage = 60;
         final float precision = 0.9f;
         final float armor = 0.15f;
-        return new WarlordFootman(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
+        return new WarlordFootman(hp, damage, precision, armor);
     }
 
     public static Hero createDefaultWarlordMagician() {
@@ -127,7 +127,7 @@ public class FactoryArmies {
         final int damage = 40;
         final float precision = 0.75f;
         final float armor = 0.05f;
-        return new WarlordMagician(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
+        return new WarlordMagician(hp, damage, precision, armor);
     }
 
     public static Hero createDefaultWarlordVampire() {
@@ -135,6 +135,6 @@ public class FactoryArmies {
         final int damage = 10;
         final float precision = 0.8f;
         final float armor = 0.05f;
-        return new WarlordVampire(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
+        return new WarlordVampire(hp, damage, precision, armor);
     }
 }
