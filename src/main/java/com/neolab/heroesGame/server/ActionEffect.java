@@ -14,7 +14,7 @@ public class ActionEffect {
     private final Map<SquareCoordinate, Integer> targetUnitsMap;
     private final SquareCoordinate sourceUnit;
 
-    public ActionEffect(HeroActions action, SquareCoordinate sourceUnit, Map<SquareCoordinate ,Integer> targetUnitsMap){
+    public ActionEffect(final HeroActions action, final SquareCoordinate sourceUnit, final Map<SquareCoordinate, Integer> targetUnitsMap) {
         this.action = action;
         this.targetUnitsMap = new HashMap<>(targetUnitsMap);
         this.sourceUnit = new SquareCoordinate(sourceUnit.getX(), sourceUnit.getY());
@@ -32,19 +32,19 @@ public class ActionEffect {
         return targetUnitsMap;
     }
 
-    public void setSourceUnit(SquareCoordinate sourceUnit) {
+    public void setSourceUnit(final SquareCoordinate sourceUnit) {
 
     }
 
     public void toLog() {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("Юнит на позиции (%d, %d) ", sourceUnit.getX(), sourceUnit.getY()));
         if (action == HeroActions.DEFENCE) {
             stringBuilder.append("встал в защиту");
         } else {
-            String stringAction = (action == HeroActions.HEAL) ? "восстановил" : "нанес";
-            String effectName = (action == HeroActions.HEAL) ? "" : " урона";
-            for (SquareCoordinate key : targetUnitsMap.keySet()) {
+            final String stringAction = (action == HeroActions.HEAL) ? "восстановил" : "нанес";
+            final String effectName = (action == HeroActions.HEAL) ? "" : " урона";
+            for (final SquareCoordinate key : targetUnitsMap.keySet()) {
                 if (targetUnitsMap.get(key) <= 0) {
                     stringBuilder.append(String.format("промахнулся по юниту на позиции (%d, %d)", key.getX(), key.getY()));
                 } else {

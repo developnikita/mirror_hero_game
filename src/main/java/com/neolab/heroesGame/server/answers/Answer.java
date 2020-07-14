@@ -13,7 +13,7 @@ public class Answer {
     private final SquareCoordinate targetUnit;
     private final int playerId;
 
-    public Answer(SquareCoordinate activeHero, HeroActions action, SquareCoordinate targetUnit, int playerId) {
+    public Answer(final SquareCoordinate activeHero, final HeroActions action, final SquareCoordinate targetUnit, final int playerId) {
         this.playerId = playerId;
         this.action = action;
         this.activeHero = activeHero;
@@ -37,7 +37,7 @@ public class Answer {
     }
 
     public void toLog() {
-        StringBuilder log = new StringBuilder();
+        final StringBuilder log = new StringBuilder();
         log.append(String.format("Игрок <%d> запросил действие %s юнитом на позиции (%d, %d)",
                 playerId, action, activeHero.getX(), activeHero.getY()));
         if (action != HeroActions.DEFENCE) {

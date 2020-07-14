@@ -14,11 +14,11 @@ import java.util.Set;
 
 public class AnswerValidator {
 
-    public static boolean isAnswerValidate(Answer answer, BattleArena arena) throws HeroExceptions {
-        Army thisBotArmy = CommonFunction.getCurrentPlayerArmy(arena, answer.getPlayerId());
-        Army enemyArmy = CommonFunction.getEnemyArmy(arena, thisBotArmy);
-        Optional<Hero> heroOptional = thisBotArmy.getHero(answer.getActiveHero());
-        Hero hero;
+    public static boolean isAnswerValidate(final Answer answer, final BattleArena arena) throws HeroExceptions {
+        final Army thisBotArmy = CommonFunction.getCurrentPlayerArmy(arena, answer.getPlayerId());
+        final Army enemyArmy = CommonFunction.getEnemyArmy(arena, thisBotArmy);
+        final Optional<Hero> heroOptional = thisBotArmy.getHero(answer.getActiveHero());
+        final Hero hero;
         if (heroOptional.isPresent()) {
             hero = heroOptional.get();
         } else throw new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT);
@@ -51,8 +51,8 @@ public class AnswerValidator {
         return true;
     }
 
-    private static void footmanTargetCheck(SquareCoordinate activeUnit, SquareCoordinate target, Army army) throws HeroExceptions {
-        Set<SquareCoordinate> validateTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, army);
+    private static void footmanTargetCheck(final SquareCoordinate activeUnit, final SquareCoordinate target, final Army army) throws HeroExceptions {
+        final Set<SquareCoordinate> validateTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, army);
         if (validateTarget.isEmpty()) {
             throw new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA);
         }
@@ -61,11 +61,11 @@ public class AnswerValidator {
         }
     }
 
-    private static boolean isErrorActiveHero(Hero hero, Army thisBotArmy) {
+    private static boolean isErrorActiveHero(final Hero hero, final Army thisBotArmy) {
         return !thisBotArmy.getAvailableHero().containsValue(hero);
     }
 
-    private static boolean isHealerCorrect(Hero hero, Answer answer, Army thisBotArmy) throws HeroExceptions {
+    private static boolean isHealerCorrect(final Hero hero, final Answer answer, final Army thisBotArmy) throws HeroExceptions {
         if (CommonFunction.isUnitHealer(hero)) {
             if (answer.getAction() == HeroActions.ATTACK) {
                 throw new HeroExceptions(HeroErrorCode.ERROR_UNIT_ATTACK);

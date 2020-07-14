@@ -13,7 +13,7 @@ public class ServerRequest {
     private String boardJson;
     private String actionEffect;
 
-    public ServerRequest(BattleArena board, ActionEffect actionEffect) throws JsonProcessingException {
+    public ServerRequest(final BattleArena board, final ActionEffect actionEffect) throws JsonProcessingException {
         setBoard(board);
         setActionEffect(actionEffect);
     }
@@ -26,11 +26,11 @@ public class ServerRequest {
         return boardJson;
     }
 
-    public void setActionEffect(ActionEffect actionEffect) throws JsonProcessingException {
+    public void setActionEffect(final ActionEffect actionEffect) throws JsonProcessingException {
         this.actionEffect = mapper.writeValueAsString(actionEffect);
     }
 
-    public void setBoard(BattleArena board) throws JsonProcessingException {
+    public void setBoard(final BattleArena board) throws JsonProcessingException {
         this.boardJson = mapper.writeValueAsString(board);
     }
 

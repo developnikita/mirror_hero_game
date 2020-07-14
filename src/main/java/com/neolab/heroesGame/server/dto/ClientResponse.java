@@ -12,7 +12,7 @@ public class ClientResponse {
     private static final ObjectMapper mapper = new ObjectMapper();
     private Answer answer;
 
-    public ClientResponse(String jsonString) throws JsonProcessingException {
+    public ClientResponse(final String jsonString) throws JsonProcessingException {
         setAnswer(jsonString);
     }
 
@@ -20,7 +20,7 @@ public class ClientResponse {
         return answer;
     }
 
-    public void setAnswer(String jsonString) throws JsonProcessingException {
+    public void setAnswer(final String jsonString) throws JsonProcessingException {
         this.answer = mapper.readValue(jsonString, Answer.class);
     }
 
