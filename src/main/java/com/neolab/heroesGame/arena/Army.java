@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.neolab.heroesGame.aditional.SquareCoordinateKeySerializer;
 import com.neolab.heroesGame.aditional.SquareCoordinateKeyDeserializer;
+import com.neolab.heroesGame.aditional.SquareCoordinateKeySerializer;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Hero;
@@ -140,5 +140,9 @@ public class Army {
         hero.setArmor(hero.getArmor() - warlord.getImproveCoefficient());
         hero.setHpMax(hero.getHpDefault());
         hero.setDamage(hero.getDamageDefault());
+    }
+
+    public void removeAvailableHeroByCoord(final SquareCoordinate coord) {
+        availableHero.remove(coord);
     }
 }

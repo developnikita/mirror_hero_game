@@ -23,7 +23,7 @@ public class Magician extends Hero {
     }
 
     @Override
-    public Map<SquareCoordinate, Integer> toAttack(final SquareCoordinate position, final Army army) {
+    public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position, final Army army) {
         final Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
 
         army.getHeroes().keySet().removeIf(coordinate -> {
