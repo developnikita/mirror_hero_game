@@ -108,22 +108,24 @@ public class Army {
         return warlord.isPresent();
     }
 
-    public void improveAllies() {
-        final Optional<IWarlord> warlord = Optional.ofNullable(getWarlord());
+    private void improveAllies() {
+        /*final Optional<IWarlord> warlord = Optional.ofNullable(getWarlord());
         warlord.ifPresent(iWarlord -> heroes.values()
-                .forEach(h -> improve(h, iWarlord.getImproveCoefficient())));
+                .forEach(h -> improve(h, iWarlord.getImproveCoefficient())));*/
+        heroes.values().forEach(this::improve);
     }
 
     public IWarlord getWarlord() {
         return this.warlord;
     }
 
-    private void improve(final Hero hero, final float improveCoefficient) {
-        int value = hero.getHpMax() + Math.round((float) hero.getHpMax() * improveCoefficient);
+    private void improve(final Hero hero) {
+        int value = hero.getHpMax() + Math.round((float) hero.getHpMax() * warlord.getImproveCoefficient());
         hero.setHpMax(value);
-        value = hero.getDamageDefault() + Math.round((float) hero.getDamageDefault() * improveCoefficient);
+        hero.setHp(value);
+        value = hero.getDamageDefault() + Math.round((float) hero.getDamageDefault() * warlord.getImproveCoefficient());
         hero.setDamage(value);
-        final float armor = (1.0f + improveCoefficient) * hero.getArmorDefault();
+        final float armor = hero.getArmorDefault() + warlord.getImproveCoefficient();
         hero.setArmor(armor);
     }
 
@@ -132,7 +134,8 @@ public class Army {
     }
 
     private void cancel(final Hero hero) {
-        hero.setArmor(hero.getArmorDefault());
+        // hero.setArmor(hero.getArmorDefault());
+        hero.setArmor(hero.getArmor() - warlord.getImproveCoefficient());
         hero.setHpMax(hero.getHpDefault());
         hero.setDamage(hero.getDamageDefault());
     }
