@@ -5,8 +5,8 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.networkServiceServer.Server;
 
 public class ClientServerGame {
-    public static void main(String[] args) throws JsonProcessingException, HeroExceptions {
-        Server server = new Server();
+    public static void main(final String[] args) throws JsonProcessingException, HeroExceptions {
+        final Server server = new Server();
         server.playingProcess();
     }
 }

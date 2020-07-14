@@ -5,9 +5,10 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.answers.Answer;
 
 public abstract class Player {
+
     private final int id;
 
-    public Player(int id) {
+    public Player(final int id) {
         this.id = id;
     }
 

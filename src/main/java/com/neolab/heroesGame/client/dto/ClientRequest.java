@@ -11,11 +11,11 @@ public class ClientRequest {
     private static final ObjectMapper mapper = new ObjectMapper();
     private String jsonAnswer;
 
-    public ClientRequest(Answer answer) throws JsonProcessingException {
+    public ClientRequest(final Answer answer) throws JsonProcessingException {
         setAnswer(answer);
     }
 
-    public void setAnswer(Answer answer) throws JsonProcessingException {
+    public void setAnswer(final Answer answer) throws JsonProcessingException {
         jsonAnswer = mapper.writeValueAsString(answer);
     }
 

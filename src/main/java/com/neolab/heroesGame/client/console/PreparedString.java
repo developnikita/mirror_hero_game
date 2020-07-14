@@ -9,7 +9,7 @@ public enum PreparedString {
     DEFENCE("D");
     private final String display;
 
-    PreparedString(String display) {
+    PreparedString(final String display) {
         this.display = display;
     }
 

@@ -7,12 +7,13 @@ import com.neolab.heroesGame.heroes.*;
 import java.util.*;
 
 public class FactoryArmies {
+
     private static final long SEED = 5916;
     private static final Random RANDOM = new Random(SEED);
 
-    public static Map<Integer, Army> generateArmies(Integer firstPlayerId,
-                                                    Integer secondPlayerId) throws HeroExceptions {
-        Map<Integer, Army> armies = new HashMap<>();
+    public static Map<Integer, Army> generateArmies(final Integer firstPlayerId,
+                                                    final Integer secondPlayerId) throws HeroExceptions {
+        final Map<Integer, Army> armies = new HashMap<>();
         armies.put(firstPlayerId, createArmy());
         armies.put(secondPlayerId, createArmy());
         return armies;
@@ -25,34 +26,34 @@ public class FactoryArmies {
      * Место для варлорда выбирает Set.iterator().next()
      */
     private static Army createArmy() throws HeroExceptions {
-        Map<SquareCoordinate, Hero> heroes = new HashMap<>();
-        Hero warlord = createWarlord();
-        SquareCoordinate warlordCoord;
-        Set<SquareCoordinate> firstLine = makeLine(1);
-        Set<SquareCoordinate> secondLine = makeLine(0);
-        if (warlord.getClass() == WarlordFootman.class) {
+        final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
+        final Hero warlord = createWarlord();
+        final SquareCoordinate warlordCoord;
+        final Set<SquareCoordinate> firstLine = makeLine(1);
+        final Set<SquareCoordinate> secondLine = makeLine(0);
+        if (warlord instanceof WarlordFootman){
             warlordCoord = addWarlord(heroes, firstLine, warlord);
-        } else {
+        } else{
             warlordCoord = addWarlord(heroes, secondLine, warlord);
         }
-        for (SquareCoordinate key : firstLine) {
+        for (final SquareCoordinate key : firstLine) {
             heroes.put(key, createDefaultFootman());
         }
-        for (SquareCoordinate key : secondLine) {
+        for (final SquareCoordinate key : secondLine) {
             heroes.put(key, createSecondLineUnit());
         }
         return new Army(heroes);
     }
 
-    private static SquareCoordinate addWarlord(Map<SquareCoordinate, Hero> heroes, Set<SquareCoordinate> line, Hero warlord) {
-        SquareCoordinate temp = line.iterator().next();
+    private static SquareCoordinate addWarlord(final Map<SquareCoordinate, Hero> heroes, final Set<SquareCoordinate> line, final Hero warlord) {
+        final SquareCoordinate temp = line.iterator().next();
         heroes.put(temp, warlord);
         line.remove(temp);
         return temp;
     }
 
     private static Hero createWarlord() {
-        int switcher = RANDOM.nextInt(4);
+        final int switcher = RANDOM.nextInt(4);
         if (switcher == 0) {
             return createDefaultWarlordMagician();
         } else if (switcher == 1) {
@@ -63,7 +64,7 @@ public class FactoryArmies {
     }
 
     private static Hero createSecondLineUnit() {
-        int switcher = RANDOM.nextInt(3) % 3;
+        final int switcher = RANDOM.nextInt(3) % 3;
         if (switcher == 0) {
             return createDefaultArcher();
         } else if (switcher == 1) {
@@ -73,8 +74,8 @@ public class FactoryArmies {
         }
     }
 
-    private static Set<SquareCoordinate> makeLine(Integer y) {
-        Set<SquareCoordinate> line = new HashSet<>();
+    private static Set<SquareCoordinate> makeLine(final Integer y) {
+        final Set<SquareCoordinate> line = new HashSet<>();
         for (int x = 0; x <= 2; x++) {
             line.add(new SquareCoordinate(x, y));
         }
@@ -82,58 +83,58 @@ public class FactoryArmies {
     }
 
     public static Hero createDefaultFootman() {
-        int hp = 170;
-        int damage = 50;
-        float precision = 0.8f;
-        float armor = 0.1f;
+        final int hp = 170;
+        final int damage = 50;
+        final float precision = 0.8f;
+        final float armor = 0.1f;
         return new Footman(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultArcher() {
-        int hp = 90;
-        int damage = 40;
-        float precision = 0.85f;
-        float armor = 0;
+        final int hp = 90;
+        final int damage = 40;
+        final float precision = 0.85f;
+        final float armor = 0;
         return new Archer(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultMagician() {
-        int hp = 75;
-        int damage = 30;
-        float precision = 0.8f;
-        float armor = 0;
+        final int hp = 75;
+        final int damage = 30;
+        final float precision = 0.8f;
+        final float armor = 0;
         return new Magician(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultHealer() {
-        int hp = 75;
-        int damage = 40;
-        float precision = 1;
-        float armor = 0;
+        final int hp = 75;
+        final int damage = 40;
+        final float precision = 1;
+        final float armor = 0;
         return new Healer(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultWarlordFootman() {
-        int hp = 180;
-        int damage = 60;
-        float precision = 0.9f;
-        float armor = 0.15f;
+        final int hp = 180;
+        final int damage = 60;
+        final float precision = 0.9f;
+        final float armor = 0.15f;
         return new WarlordFootman(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultWarlordMagician() {
-        int hp = 90;
-        int damage = 40;
-        float precision = 0.75f;
-        float armor = 0.05f;
+        final int hp = 90;
+        final int damage = 40;
+        final float precision = 0.75f;
+        final float armor = 0.05f;
         return new WarlordMagician(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 
     public static Hero createDefaultWarlordVampire() {
-        int hp = 90;
-        int damage = 10;
-        float precision = 0.8f;
-        float armor = 0.05f;
+        final int hp = 90;
+        final int damage = 10;
+        final float precision = 0.8f;
+        final float armor = 0.05f;
         return new WarlordVampire(hp, damage, precision, armor, CommonFunction.idGeneration.getNextId());
     }
 }

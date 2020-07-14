@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 public class BattleArena {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(BattleArena.class);
     private final Map<Integer, Army> armies;
 
@@ -21,7 +22,7 @@ public class BattleArena {
         return armies;
     }
 
-    public boolean isArmyDied(int playerId) {
+    public boolean isArmyDied(final int playerId) {
         return armies.get(playerId).getHeroes().isEmpty();
     }
 

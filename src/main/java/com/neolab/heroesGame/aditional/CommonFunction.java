@@ -11,8 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class CommonFunction {
+
     public static Army getEnemyArmy(final BattleArena board, final Army thisBotArmy) throws HeroExceptions {
-        ArrayList<Army> armies = new ArrayList<>(board.getArmies().values());
+        final ArrayList<Army> armies = new ArrayList<>(board.getArmies().values());
         armies.remove(thisBotArmy);
         if (armies.size() != 1) {
             throw new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA);
@@ -20,7 +21,7 @@ public class CommonFunction {
         return armies.get(0);
     }
 
-    public static Army getCurrentPlayerArmy(final BattleArena board, final Integer playerId) throws HeroExceptions {
+    public static Army getCurrentPlayerArmy(final BattleArena board, final Integer playerId) {
         return board.getArmy(playerId);
     }
 
@@ -43,7 +44,7 @@ public class CommonFunction {
      */
     public static @NotNull Set<SquareCoordinate> getCorrectTargetForFootman(final @NotNull SquareCoordinate activeUnit,
                                                                             final @NotNull Army enemyArmy) {
-        HashSet<SquareCoordinate> validateTarget = new HashSet<>();
+        final HashSet<SquareCoordinate> validateTarget = new HashSet<>();
         for (int y = 1; y >= 0; y--) {
             if (activeUnit.getX() == 1) {
                 validateTarget.addAll(getTargetForCentralUnit(enemyArmy, y));
@@ -66,8 +67,8 @@ public class CommonFunction {
      * @param y
      * @return
      */
-    private static Set<SquareCoordinate> getTargetForFlankUnit(int activeUnitX, Army enemyArmy, int y) {
-        HashSet<SquareCoordinate> validateTarget = new HashSet<>();
+    private static Set<SquareCoordinate> getTargetForFlankUnit(final int activeUnitX, final Army enemyArmy, final int y) {
+        final HashSet<SquareCoordinate> validateTarget = new HashSet<>();
         if (enemyArmy.getHero(new SquareCoordinate(1, y)).isPresent()) {
             validateTarget.add(new SquareCoordinate(1, y));
         }
@@ -75,7 +76,7 @@ public class CommonFunction {
             validateTarget.add(new SquareCoordinate(activeUnitX, y));
         }
         if (validateTarget.isEmpty()) {
-            int x = activeUnitX == 2 ? 0 : 2;
+            final int x = activeUnitX == 2 ? 0 : 2;
             if (enemyArmy.getHero(new SquareCoordinate(x, y)).isPresent()) {
                 validateTarget.add(new SquareCoordinate(x, y));
             }
@@ -86,11 +87,11 @@ public class CommonFunction {
     /**
      * Проверяем всю линию на наличие юнитов в армии противника
      */
-    private static Set<SquareCoordinate> getTargetForCentralUnit(Army enemyArmy, Integer line) {
-        HashSet<SquareCoordinate> validateTarget = new HashSet<>();
+    private static Set<SquareCoordinate> getTargetForCentralUnit(final Army enemyArmy, final Integer line) {
+        final HashSet<SquareCoordinate> validateTarget = new HashSet<>();
         for (int x = 0; x < 3; x++) {
-            SquareCoordinate coordinate = new SquareCoordinate(x, line);
-            Optional<Hero> hero = enemyArmy.getHero(coordinate);
+            final SquareCoordinate coordinate = new SquareCoordinate(x, line);
+            final Optional<Hero> hero = enemyArmy.getHero(coordinate);
             if (hero.isPresent()) {
                 validateTarget.add(coordinate);
             }
@@ -99,7 +100,7 @@ public class CommonFunction {
     }
 
     public static String printArmy(final Army army) {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         for (int y = 0; y < 2; y++) {
             stringBuilder.append(getLineUnit(army, y));
             stringBuilder.append("____________|____________|____________|\n");
@@ -111,47 +112,47 @@ public class CommonFunction {
     /**
      * Формируем 3 строки - первая с названием класса, вторая с текущим/маскимальным хп, третья со статусом действия
      */
-    private static String getLineUnit(final Army army, int y) {
-        StringBuilder stringBuilder = new StringBuilder();
+    private static String getLineUnit(final Army army, final int y) {
+        final StringBuilder stringBuilder = new StringBuilder();
         for (int x = 0; x < 3; x++) {
-            Hero hero = getHero(army, new SquareCoordinate(x, y));
+            final Hero hero = getHero(army, new SquareCoordinate(x, y));
             stringBuilder.append(classToString(hero));
         }
         stringBuilder.append("\n");
         for (int x = 0; x < 3; x++) {
-            Hero hero = getHero(army, new SquareCoordinate(x, y));
+            final Hero hero = getHero(army, new SquareCoordinate(x, y));
             stringBuilder.append(hpToString(hero));
         }
         stringBuilder.append("\n");
         for (int x = 0; x < 3; x++) {
-            Hero hero = getHero(army, new SquareCoordinate(x, y));
+            final Hero hero = getHero(army, new SquareCoordinate(x, y));
             stringBuilder.append(statusToString(hero, army));
         }
         stringBuilder.append("\n");
         return stringBuilder.toString();
     }
 
-    private static String statusToString(final Hero hero, Army army) {
-        StringBuilder result = new StringBuilder();
+    private static String statusToString(final Hero hero, final Army army) {
+        final StringBuilder result = new StringBuilder();
         if (hero == null) {
             result.append(String.format("%12s|", ""));
         } else {
             if (hero.isDefence()) {
-                result.append(String.format("   D  "));
+                result.append("   D  ");
             } else {
-                result.append(String.format("      "));
+                result.append("      ");
             }
             if (army.getAvailableHero().containsValue(hero)) {
-                result.append(String.format("  CA  |"));
+                result.append("  CA  |");
             } else {
-                result.append(String.format("   W  |"));
+                result.append("   W  |");
             }
         }
         return result.toString();
     }
 
     private static String hpToString(final Hero hero) {
-        String result;
+        final String result;
         if (hero == null) {
             result = String.format("%12s|", "");
         } else {
@@ -161,7 +162,7 @@ public class CommonFunction {
     }
 
     private static String classToString(final Hero hero) {
-        String result;
+        final String result;
         if (hero == null) {
             result = String.format("%12s|", "");
         } else if (hero.getClass() == Magician.class) {
@@ -195,7 +196,7 @@ public class CommonFunction {
         public static int i = 0;
     }
 
-    public interface IdGeneration{
+    public interface IdGeneration {
         int getNextId();
     }
 

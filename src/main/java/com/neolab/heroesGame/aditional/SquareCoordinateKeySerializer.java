@@ -7,14 +7,13 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class SquareCoordinateKeySerializer extends JsonSerializer<SquareCoordinate> {
 
     @Override
-    public void serialize(SquareCoordinate coordinate, JsonGenerator jsonGenerator,
-                          SerializerProvider serializerProvider) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+    public void serialize(final SquareCoordinate coordinate, final JsonGenerator jsonGenerator,
+                          final SerializerProvider serializerProvider) throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
         jsonGenerator.writeFieldName(mapper.writeValueAsString(coordinate));
     }
 }

@@ -9,7 +9,7 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Archer.class, name = "Archer"),
         @JsonSubTypes.Type(value = Footman.class, name = "Footman"),
@@ -63,7 +63,7 @@ public abstract class Hero {
         this.defence = defence;
     }
 
-    public void setHpMax(int hpMax) {
+    public void setHpMax(final int hpMax) {
         this.hpMax = hpMax;
     }
 
@@ -99,7 +99,7 @@ public abstract class Hero {
         return defence;
     }
 
-    public void setHp(int hp) {
+    public void setHp(final int hp) {
         this.hp = hp;
     }
 
@@ -111,23 +111,23 @@ public abstract class Hero {
         return hpMax;
     }
 
-    public void setDamage(int damage) {
+    public void setDamage(final int damage) {
         this.damage = damage;
     }
 
-    public void setArmor(float armor) {
+    public void setArmor(final float armor) {
         this.armor = armor;
     }
 
     public void setDefence() {
-        if(!defence){
+        if (!defence) {
             this.armor = this.armor + 0.5f;
             this.defence = true;
         }
     }
 
     public void cancelDefence() {
-        if(defence){
+        if (defence) {
             this.armor = this.armor - 0.5f;
             this.defence = false;
         }
@@ -140,34 +140,33 @@ public abstract class Hero {
      * @param army     армия противника
      * @return возращается значение нанесенного урона и координата цели(ей)
      */
-    public Map<SquareCoordinate, Integer> toAttack(SquareCoordinate position, Army army) throws HeroExceptions {
-        Hero targetAttack = searchTarget(position, army);
+    public Map<SquareCoordinate, Integer> toAttack(final SquareCoordinate position, final Army army) throws HeroExceptions {
+        final Hero targetAttack = searchTarget(position, army);
         int damageDone = 0;
         if (isHit(this.getPrecision())) {
             damageDone = calculateDamage(targetAttack);
             targetAttack.setHp(targetAttack.getHp() - damageDone);
             removeTarget(targetAttack, army);
         }
-        Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
+        final Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
         enemyHeroPosDamage.put(position, damageDone);
         return enemyHeroPosDamage;
     }
 
-    protected Hero searchTarget(SquareCoordinate position, Army army) throws HeroExceptions {
-        Hero target = army.getHeroes().get(position);
-        if(target == null){
-            throw  new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK);
-        }
-        else return target;
+    protected Hero searchTarget(final SquareCoordinate position, final Army army) throws HeroExceptions {
+        final Hero target = army.getHeroes().get(position);
+        if (target == null) {
+            throw new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK);
+        } else return target;
     }
 
-    protected void removeTarget(Hero targetAttack, Army army) {
+    protected void removeTarget(final Hero targetAttack, final Army army) {
         if (targetAttack.getHp() <= 0) {
             army.killHero(targetAttack.getUnitId());
         }
     }
 
-    protected int calculateDamage(Hero targetAttack) {
+    protected int calculateDamage(final Hero targetAttack) {
         return Math.round(this.getDamage() - targetAttack.getArmor() * this.getDamage());
     }
 
@@ -177,17 +176,17 @@ public abstract class Hero {
      * @param precision точность
      * @return boolean
      */
-    protected boolean isHit(float precision) {
-        Random rnd = new Random();
-        float number = rnd.nextFloat();
+    protected boolean isHit(final float precision) {
+        final Random rnd = new Random();
+        final float number = rnd.nextFloat();
         return precision > number;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof Hero)) return false;
-        Hero hero = (Hero) o;
+        final Hero hero = (Hero) o;
         return getHpMax() == hero.getHpMax() &&
                 getHp() == hero.getHp() &&
                 getDamage() == hero.getDamage() &&

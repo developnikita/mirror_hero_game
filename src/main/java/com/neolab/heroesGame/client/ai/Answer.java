@@ -4,12 +4,13 @@ import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroActions;
 
 public class Answer {
+
     private SquareCoordinate activeHero;
     private HeroActions action;
     private SquareCoordinate targetUnit;
     private final int playerId;
 
-    public Answer(SquareCoordinate activeHero, HeroActions action, SquareCoordinate targetUnit, int playerId) {
+    public Answer(final SquareCoordinate activeHero, final HeroActions action, final SquareCoordinate targetUnit, final int playerId) {
         this.playerId = playerId;
         setAction(action);
         setActiveHero(activeHero);
@@ -20,7 +21,7 @@ public class Answer {
         return activeHero;
     }
 
-    public void setActiveHero(SquareCoordinate activeHero) {
+    public void setActiveHero(final SquareCoordinate activeHero) {
         this.activeHero = activeHero;
     }
 
@@ -28,7 +29,7 @@ public class Answer {
         return action;
     }
 
-    public void setAction(HeroActions action) {
+    public void setAction(final HeroActions action) {
         this.action = action;
     }
 
@@ -36,7 +37,7 @@ public class Answer {
         return targetUnit;
     }
 
-    public void setTargetUnit(SquareCoordinate targetUnit) {
+    public void setTargetUnit(final SquareCoordinate targetUnit) {
         this.targetUnit = targetUnit;
     }
 

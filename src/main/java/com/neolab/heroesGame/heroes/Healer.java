@@ -9,19 +9,18 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class Healer extends Hero {
 
-    public Healer(int hp, int healing, float precision, float armor, int unitId) {
+    public Healer(final int hp, final int healing, final float precision, final float armor, final int unitId) {
         super(hp, healing, precision, armor, unitId);
     }
 
     @JsonCreator
     public Healer(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
-                @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
-                @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
-                @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
-                @JsonProperty("defence") final boolean defence, @JsonProperty("unitId") final int unitId) {
+                  @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
+                  @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
+                  @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
+                  @JsonProperty("defence") final boolean defence, @JsonProperty("unitId") final int unitId) {
         super(hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence, unitId);
     }
 

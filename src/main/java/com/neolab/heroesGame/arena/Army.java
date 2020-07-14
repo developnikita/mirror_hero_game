@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.neolab.heroesGame.aditional.SquareCoordinateKeySerializer;
-import com.neolab.heroesGame.aditional.SquareCoordianateKeyDeserializer;
+import com.neolab.heroesGame.aditional.SquareCoordinateKeyDeserializer;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Hero;
@@ -18,12 +18,13 @@ import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Army {
+
     @JsonSerialize(keyUsing = SquareCoordinateKeySerializer.class)
-    @JsonDeserialize(keyUsing = SquareCoordianateKeyDeserializer.class)
+    @JsonDeserialize(keyUsing = SquareCoordinateKeyDeserializer.class)
     private final Map<SquareCoordinate, Hero> heroes;
     private IWarlord warlord;
     @JsonSerialize(keyUsing = SquareCoordinateKeySerializer.class)
-    @JsonDeserialize(keyUsing = SquareCoordianateKeyDeserializer.class)
+    @JsonDeserialize(keyUsing = SquareCoordinateKeyDeserializer.class)
     private Map<SquareCoordinate, Hero> availableHero;
 
     public Army(final Map<SquareCoordinate, Hero> heroes) throws HeroExceptions {
@@ -66,16 +67,16 @@ public class Army {
         return availableHero;
     }
 
-    public Optional<Hero> getHero(final SquareCoordinate coord) {
-        return Optional.ofNullable(heroes.get(coord));
+    public Optional<Hero> getHero(final SquareCoordinate coordinate) {
+        return Optional.ofNullable(heroes.get(coordinate));
     }
 
     public void roundIsOver() {
         this.availableHero = new HashMap<>(heroes);
     }
 
-    public void killHero(int heroId) {
-        if(warlord.getUnitId() == heroId){
+    public void killHero(final int heroId) {
+        if (warlord.getUnitId() == heroId) {
             cancelImprove();
         }
         removeAvailableHeroById(heroId);
@@ -86,7 +87,7 @@ public class Army {
         this.warlord = warlord;
     }
 
-    public void removeAvailableHeroById(int heroId) {
+    public void removeAvailableHeroById(final int heroId) {
         availableHero.values().removeIf(value -> value.getUnitId() == heroId);
     }
 
@@ -117,12 +118,12 @@ public class Army {
         return this.warlord;
     }
 
-    private void improve(final Hero hero, final float improveCoeff) {
-        int value = hero.getHpMax() + Math.round((float) hero.getHpMax() * improveCoeff);
+    private void improve(final Hero hero, final float improveCoefficient) {
+        int value = hero.getHpMax() + Math.round((float) hero.getHpMax() * improveCoefficient);
         hero.setHpMax(value);
-        value = hero.getDamageDefault() + Math.round((float) hero.getDamageDefault() * improveCoeff);
+        value = hero.getDamageDefault() + Math.round((float) hero.getDamageDefault() * improveCoefficient);
         hero.setDamage(value);
-        final float armor = (1.0f + improveCoeff) * hero.getArmorDefault();
+        final float armor = (1.0f + improveCoefficient) * hero.getArmorDefault();
         hero.setArmor(armor);
     }
 

@@ -13,7 +13,7 @@ public enum HeroErrorCode {
 
     private final String errorString;
 
-    HeroErrorCode(String errorString) {
+    HeroErrorCode(final String errorString) {
         this.errorString = errorString;
     }
 

@@ -15,11 +15,12 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 public class PlayerBot extends Player {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Answer.class);
     private final long SEED = 5916;
     private final Random RANDOM = new Random(SEED);
 
-    public PlayerBot(int id) {
+    public PlayerBot(final int id) {
         super(id);
     }
 
@@ -38,12 +39,12 @@ public class PlayerBot extends Player {
      * @throws HeroExceptions текущее исключение вообще не должно выбрасываться, но кто его знает
      */
     @Override
-    public Answer getAnswer(BattleArena board) throws HeroExceptions {
-        Army thisBotArmy = CommonFunction.getCurrentPlayerArmy(board, getId());
-        Army enemyArmy = CommonFunction.getEnemyArmy(board, thisBotArmy);
+    public Answer getAnswer(final BattleArena board) throws HeroExceptions {
+        final Army thisBotArmy = CommonFunction.getCurrentPlayerArmy(board, getId());
+        final Army enemyArmy = CommonFunction.getEnemyArmy(board, thisBotArmy);
 
-        SquareCoordinate activeHero = chooseUnit(thisBotArmy);
-        Hero hero = thisBotArmy.getHeroes().get(activeHero);
+        final SquareCoordinate activeHero = chooseUnit(thisBotArmy);
+        final Hero hero = thisBotArmy.getHeroes().get(activeHero);
 
         if (CommonFunction.isUnitMagician(hero)) {
             return new Answer(activeHero, HeroActions.ATTACK, new SquareCoordinate(-1, -1), getId());
@@ -53,8 +54,8 @@ public class PlayerBot extends Player {
             return new Answer(activeHero, HeroActions.ATTACK, chooseTargetByArcher(enemyArmy), getId());
         }
 
-        SquareCoordinate targetUnit;
-        HeroActions action;
+        final SquareCoordinate targetUnit;
+        final HeroActions action;
         if (CommonFunction.isUnitHealer(hero)) {
             targetUnit = chooseTargetByHealer(thisBotArmy);
             action = HeroActions.HEAL;
@@ -70,21 +71,21 @@ public class PlayerBot extends Player {
         return new Answer(activeHero, action, targetUnit, getId());
     }
 
-    protected SquareCoordinate chooseUnit(Army army) {
-        Set<SquareCoordinate> availableHeroes = army.getAvailableHero().keySet();
+    protected SquareCoordinate chooseUnit(final Army army) {
+        final Set<SquareCoordinate> availableHeroes = army.getAvailableHero().keySet();
         return availableHeroes.iterator().next();
     }
 
-    protected SquareCoordinate chooseTargetByArcher(Army enemyArmy) {
-        Set<SquareCoordinate> availableHeroes = enemyArmy.getHeroes().keySet();
+    protected SquareCoordinate chooseTargetByArcher(final Army enemyArmy) {
+        final Set<SquareCoordinate> availableHeroes = enemyArmy.getHeroes().keySet();
         return availableHeroes.iterator().next();
     }
 
-    protected SquareCoordinate chooseTargetByHealer(Army army) {
-        Map<SquareCoordinate, Hero> heroes = army.getHeroes();
-        HashSet<SquareCoordinate> damagedHeroes = new HashSet<>();
-        for (SquareCoordinate key : heroes.keySet()) {
-            Optional<Hero> temp = army.getHero(key);
+    protected SquareCoordinate chooseTargetByHealer(final Army army) {
+        final Map<SquareCoordinate, Hero> heroes = army.getHeroes();
+        final HashSet<SquareCoordinate> damagedHeroes = new HashSet<>();
+        for (final SquareCoordinate key : heroes.keySet()) {
+            final Optional<Hero> temp = army.getHero(key);
             if (temp.isPresent() && (temp.get().getHp() < temp.get().getHpMax())) {
                 damagedHeroes.add(key);
             }
@@ -95,11 +96,11 @@ public class PlayerBot extends Player {
         return damagedHeroes.iterator().next();
     }
 
-    protected SquareCoordinate chooseTargetByFootman(SquareCoordinate activeUnit, Army enemyArmy) throws HeroExceptions {
+    protected SquareCoordinate chooseTargetByFootman(final SquareCoordinate activeUnit, final Army enemyArmy) throws HeroExceptions {
         if (RANDOM.nextInt(10) == 0) {
             return null;
         }
-        Set<SquareCoordinate> validateTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemyArmy);
+        final Set<SquareCoordinate> validateTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemyArmy);
         if (validateTarget.isEmpty()) {
             LOGGER.error(String.format("Юнит (%d,%d) не может найти цель в армии:\n%s",
                     activeUnit.getX(), activeUnit.getY(), CommonFunction.printArmy(enemyArmy)));

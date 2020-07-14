@@ -24,24 +24,24 @@ public class GamingProcess {
     }
 
     private static void changeCurrentAndWaitingPlayers() {
-        Player temp = currentPlayer;
+        final Player temp = currentPlayer;
         currentPlayer = waitingPlayer;
         waitingPlayer = temp;
         setAnswerProcessorPlayerId(currentPlayer, waitingPlayer);
     }
 
-    private static void setAnswerProcessorPlayerId(Player currentPlayer, Player waitingPlayer) {
+    private static void setAnswerProcessorPlayerId(final Player currentPlayer, final Player waitingPlayer) {
         AnswerProcessor.setActivePlayerId(currentPlayer.getId());
         AnswerProcessor.setPlayerId(waitingPlayer.getId());
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         try {
-            GamingProcess gamingProcess = new GamingProcess();
+            final GamingProcess gamingProcess = new GamingProcess();
             while (true) {
                 AnswerProcessor.getBoard().toLog();
 
-                Player whoIsWin = someoneWhoWin();
+                final Player whoIsWin = someoneWhoWin();
                 if (whoIsWin != null) {
                     LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", whoIsWin.getId());
                     break;
@@ -52,7 +52,7 @@ public class GamingProcess {
                     AnswerProcessor.getBoard().getArmies().values().forEach(Army::roundIsOver);
                 }
 
-                if (checkCanMove(gamingProcess.currentPlayer.getId())) {
+                if (checkCanMove(currentPlayer.getId())) {
                     askPlayerProcess();
                 }
                 changeCurrentAndWaitingPlayers();
@@ -70,11 +70,11 @@ public class GamingProcess {
 
     private static void askPlayerProcess() {
         try {
-            Answer answer = currentPlayer.getAnswer(AnswerProcessor.getBoard());
+            final Answer answer = currentPlayer.getAnswer(AnswerProcessor.getBoard());
             answer.toLog();
             AnswerProcessor.handleAnswer(answer);
             AnswerProcessor.getActionEffect().toLog();
-        } catch (HeroExceptions ex) {
+        } catch (final HeroExceptions ex) {
             LOGGER.error(ex.getMessage());
         }
     }
@@ -87,7 +87,7 @@ public class GamingProcess {
         return isWinner;
     }
 
-    private static boolean checkCanMove(Integer id) {
+    private static boolean checkCanMove(final Integer id) {
         return !AnswerProcessor.getBoard().getArmy(id).getAvailableHero().isEmpty();
     }
 }

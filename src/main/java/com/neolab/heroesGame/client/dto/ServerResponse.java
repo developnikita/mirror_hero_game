@@ -13,7 +13,7 @@ public class ServerResponse {
     private BattleArena board;
     private ActionEffect actionEffect;
 
-    public ServerResponse(String board, String actionEffect) throws JsonProcessingException {
+    public ServerResponse(final String board, final String actionEffect) throws JsonProcessingException {
         setBoard(board);
         setPreviousActionEffect(actionEffect);
     }
@@ -27,11 +27,11 @@ public class ServerResponse {
         return actionEffect;
     }
 
-    public void setBoard(String jsonString) throws JsonProcessingException {
+    public void setBoard(final String jsonString) throws JsonProcessingException {
         board = mapper.readValue(jsonString, BattleArena.class);
     }
 
-    public void setPreviousActionEffect(String jsonString) throws JsonProcessingException {
+    public void setPreviousActionEffect(final String jsonString) throws JsonProcessingException {
         actionEffect = mapper.readValue(jsonString, ActionEffect.class);
     }
 }
