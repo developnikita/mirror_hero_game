@@ -43,10 +43,11 @@ public final class AnswerProcessor {
             switch (answer.getAction()){
                 case ATTACK -> {
                     final Hero activeHero = getActiveHero(board, answer);
+
                     //если маг или арчер то первый аргумент не используется
                     Map<SquareCoordinate, Integer> enemyHeroPosDamage = activeHero
                             .toAttack(answer.getTargetUnit(), board.getArmy(waitingPlayerId));
-                    removeUsedHero(board, activeHero.getUnitId());
+                    removeUsedHero(activePlayerId, activeHero.getUnitId());
                     setActionEffect(answer, enemyHeroPosDamage);
                 }
                 case DEFENCE -> {
@@ -54,14 +55,14 @@ public final class AnswerProcessor {
                     final Hero activeHero = getActiveHero(board, answer);
                     activeHero.setArmor(activeHero.getArmor() * (float) 1.5);
                     activeHero.setDefence();
-                    removeUsedHero(board, activeHero.getUnitId());
+                    removeUsedHero(activePlayerId, activeHero.getUnitId());
                     setActionEffect(answer, new HashMap<>());
                 }
                 case HEAL -> {
                     final Healer activeHero = (Healer) getActiveHero(board, answer);
                     final Map<SquareCoordinate, Integer> allyHeroPosHeal = activeHero
                             .toHeal(answer.getTargetUnit(), board.getArmy(activePlayerId));
-                    removeUsedHero(board, activeHero.getUnitId());
+                    removeUsedHero(activePlayerId, activeHero.getUnitId());
                     setActionEffect(answer, allyHeroPosHeal);
                 }
                 default ->  throw new HeroExceptions(HeroErrorCode.ERROR_ACT);
@@ -78,8 +79,8 @@ public final class AnswerProcessor {
         throw new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT);
     }
 
-    private void removeUsedHero(final BattleArena board, final int heroId) {
-        board.getArmy(activePlayerId).removeAvailableHeroById(heroId);
+    private void removeUsedHero(final int activePlayerId, final int heroId) {
+        board.removeUsedHeroesById(heroId, activePlayerId);
     }
 
     private void setActionEffect(final Answer answer, final Map<SquareCoordinate, Integer> enemyHeroPosDamage) {

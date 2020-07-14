@@ -8,18 +8,11 @@ import com.neolab.heroesGame.server.answers.Answer;
  * класс который берет ответ пользоватля и преобразует в JSON
  */
 public class ClientRequest {
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private String jsonAnswer;
+    public final String jsonAnswer;
 
     public ClientRequest(final Answer answer) throws JsonProcessingException {
-        setAnswer(answer);
-    }
-
-    public void setAnswer(final Answer answer) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
         jsonAnswer = mapper.writeValueAsString(answer);
     }
 
-    public String getAnswerJson() {
-        return jsonAnswer;
-    }
 }

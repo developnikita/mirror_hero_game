@@ -6,32 +6,15 @@ import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.server.ActionEffect;
 
 /**
- * класс который берет из запроса сервера новую доску и эффефект предыдущего ответа и преобразует в JSON
+ * класс который берет из запроса сервера новую доску и эффефект предыдущего ответа и преобразует в объекты
  */
 public class ServerResponse {
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private BattleArena board;
-    private ActionEffect actionEffect;
+    public final BattleArena board;
+    public final ActionEffect actionEffect;
 
-    public ServerResponse(final String board, final String actionEffect) throws JsonProcessingException {
-        setBoard(board);
-        setPreviousActionEffect(actionEffect);
-    }
-
-
-    public BattleArena getBoard() {
-        return board;
-    }
-
-    public ActionEffect getActionEffect() {
-        return actionEffect;
-    }
-
-    public void setBoard(final String jsonString) throws JsonProcessingException {
-        board = mapper.readValue(jsonString, BattleArena.class);
-    }
-
-    public void setPreviousActionEffect(final String jsonString) throws JsonProcessingException {
-        actionEffect = mapper.readValue(jsonString, ActionEffect.class);
+    public ServerResponse(final String boardJson, final String actionEffectJson) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        board = mapper.readValue(boardJson, BattleArena.class);
+        actionEffect = mapper.readValue(actionEffectJson, ActionEffect.class);
     }
 }

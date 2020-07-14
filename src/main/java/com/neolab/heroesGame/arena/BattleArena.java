@@ -34,6 +34,10 @@ public class BattleArena {
         return armies.get(id).getAvailableHero().isEmpty();
     }
 
+    public void removeUsedHeroesById(final int heroId, final int armyId){
+        armies.get(armyId).removeAvailableHeroById(heroId);
+    }
+
     public void toLog() {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n");

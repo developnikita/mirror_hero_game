@@ -9,30 +9,15 @@ import com.neolab.heroesGame.server.ActionEffect;
  * класс который берет обновелнную доску и еффект от предыдущего ответа пользоватля и преобразует в JSON
  */
 public class ServerRequest {
-    private static final ObjectMapper mapper = new ObjectMapper();
-    private String boardJson;
-    private String actionEffect;
+    public final String boardJson;
+    public final String actionEffect;
 
     public ServerRequest(final BattleArena board, final ActionEffect actionEffect) throws JsonProcessingException {
-        setBoard(board);
-        setActionEffect(actionEffect);
-    }
-
-    public String getActionEffectJson() {
-        return actionEffect;
-    }
-
-    public String getBoardJson() {
-        return boardJson;
-    }
-
-    public void setActionEffect(final ActionEffect actionEffect) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
         this.actionEffect = mapper.writeValueAsString(actionEffect);
-    }
-
-    public void setBoard(final BattleArena board) throws JsonProcessingException {
         this.boardJson = mapper.writeValueAsString(board);
     }
+
 
 }
 
