@@ -76,8 +76,10 @@ public class Army {
     }
 
     public void killHero(final int heroId) {
-        if (warlord.getUnitId() == heroId) {
-            cancelImprove();
+        if (warlord != null) {
+            if (warlord.getUnitId() == heroId) {
+                cancelImprove();
+            }
         }
         removeAvailableHeroById(heroId);
         heroes.values().removeIf(value -> value.getUnitId() == heroId);
@@ -92,11 +94,11 @@ public class Army {
     }
 
     public boolean removeHero(final Hero hero, final Army army) {
-        if (hero instanceof IWarlord) {
-            army.setWarlord(null);
-            cancelImprove();
-        }
         if (hero.getHp() <= 0) {
+            if (hero instanceof IWarlord) {
+                cancelImprove();
+                army.setWarlord(null);
+            }
             removeAvailableHeroById(hero.getUnitId());
             return true;
         }
