@@ -25,7 +25,7 @@ public class Army {
     private IWarlord warlord;
     @JsonSerialize(keyUsing = SquareCoordinateKeySerializer.class)
     @JsonDeserialize(keyUsing = SquareCoordinateKeyDeserializer.class)
-    private Map<SquareCoordinate, Hero> availableHero;
+    private Map<SquareCoordinate, Hero> availableHeroes;
 
     public Army(final Map<SquareCoordinate, Hero> heroes) throws HeroExceptions {
         this.heroes = heroes;
@@ -40,7 +40,7 @@ public class Army {
                 @JsonProperty("availableHero") final Map<SquareCoordinate, Hero> availableHero) {
         this.heroes = heroes;
         this.warlord = warlord;
-        this.availableHero = availableHero;
+        this.availableHeroes = availableHero;
     }
 
     private IWarlord findWarlord() throws HeroExceptions {
@@ -64,7 +64,7 @@ public class Army {
     }
 
     public Map<SquareCoordinate, Hero> getAvailableHero() {
-        return availableHero;
+        return availableHeroes;
     }
 
     public Optional<Hero> getHero(final SquareCoordinate coordinate) {
@@ -72,7 +72,7 @@ public class Army {
     }
 
     public void roundIsOver() {
-        this.availableHero = new HashMap<>(heroes);
+        this.availableHeroes = new HashMap<>(heroes);
     }
 
     public void killHero(final int heroId) {
@@ -90,7 +90,7 @@ public class Army {
     }
 
     public void removeAvailableHeroById(final int heroId) {
-        availableHero.values().removeIf(value -> value.getUnitId() == heroId);
+        availableHeroes.values().removeIf(value -> value.getUnitId() == heroId);
     }
 
     public boolean removeHero(final Hero hero, final Army army) {
@@ -105,15 +105,7 @@ public class Army {
         return false;
     }
 
-    public boolean isWarlordAlive() {
-        final Optional<IWarlord> warlord = Optional.ofNullable(getWarlord());
-        return warlord.isPresent();
-    }
-
     private void improveAllies() {
-        /*final Optional<IWarlord> warlord = Optional.ofNullable(getWarlord());
-        warlord.ifPresent(iWarlord -> heroes.values()
-                .forEach(h -> improve(h, iWarlord.getImproveCoefficient())));*/
         heroes.values().forEach(this::improve);
     }
 
@@ -136,13 +128,9 @@ public class Army {
     }
 
     private void cancel(final Hero hero) {
-        // hero.setArmor(hero.getArmorDefault());
         hero.setArmor(hero.getArmor() - warlord.getImproveCoefficient());
         hero.setHpMax(hero.getHpDefault());
         hero.setDamage(hero.getDamageDefault());
     }
 
-    public void removeAvailableHeroByCoord(final SquareCoordinate coord) {
-        availableHero.remove(coord);
-    }
 }

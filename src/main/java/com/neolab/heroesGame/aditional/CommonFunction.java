@@ -12,19 +12,6 @@ import java.util.*;
 
 public class CommonFunction {
 
-    public static Army getEnemyArmy(final BattleArena board, final Army thisBotArmy) throws HeroExceptions {
-        final ArrayList<Army> armies = new ArrayList<>(board.getArmies().values());
-        armies.remove(thisBotArmy);
-        if (armies.size() != 1) {
-            throw new HeroExceptions(HeroErrorCode.ERROR_ON_BATTLE_ARENA);
-        }
-        return armies.get(0);
-    }
-
-    public static Army getCurrentPlayerArmy(final BattleArena board, final Integer playerId) {
-        return board.getArmy(playerId);
-    }
-
     public static boolean isUnitMagician(final Hero hero) {
         return hero instanceof Magician;
     }
@@ -185,6 +172,7 @@ public class CommonFunction {
         return result;
     }
 
+    //todo дублирование метода из армии
     private static Hero getHero(final Army army, final SquareCoordinate coord) {
         return army.getHeroes().get(coord);
     }

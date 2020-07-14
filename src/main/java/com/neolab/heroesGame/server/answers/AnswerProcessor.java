@@ -61,11 +61,12 @@ public final class AnswerProcessor {
                 effectActionMap = Collections.emptyMap();
                 activeHero.setDefence();
             } else {
-                effectActionMap = activeHero.toAct(answer.getTargetUnit(), answer.getAction() == HeroActions.HEAL
+                effectActionMap = activeHero.toAct(answer.getTargetUnit(),
+                        answer.getAction() == HeroActions.HEAL
                         ? board.getArmy(activePlayerId) : board.getArmy(waitingPlayerId));
             }
 
-            removeUsedHero(answer.getActiveHero());
+            removeUsedHero(activePlayerId, activeHero.getUnitId());
             setActionEffect(answer, effectActionMap);
         } else {
             throw new HeroExceptions(HeroErrorCode.ERROR_ANSWER);

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.aditional.CommonFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.Map;
 
 public class BattleArena {
@@ -36,6 +35,22 @@ public class BattleArena {
 
     public void removeUsedHeroesById(final int heroId, final int armyId){
         armies.get(armyId).removeAvailableHeroById(heroId);
+    }
+
+    public void endRound(){
+        armies.values().forEach(Army::roundIsOver);
+    }
+
+    public Army getCurrentPlayerArmy(final Integer playerId) {
+        return armies.get(playerId);
+    }
+
+    public Army getEnemyArmy(final int playerId){
+
+        Integer botArmyId = armies.keySet().stream()
+                .filter(id -> id != playerId).findFirst().get();
+
+        return armies.get(botArmyId);
     }
 
     public void toLog() {

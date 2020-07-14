@@ -15,8 +15,8 @@ import java.util.Set;
 public class AnswerValidator {
 
     public static boolean isAnswerValidate(final Answer answer, final BattleArena arena) throws HeroExceptions {
-        final Army thisBotArmy = CommonFunction.getCurrentPlayerArmy(arena, answer.getPlayerId());
-        final Army enemyArmy = CommonFunction.getEnemyArmy(arena, thisBotArmy);
+        final Army thisBotArmy = arena.getCurrentPlayerArmy(answer.getPlayerId());
+        final Army enemyArmy = arena.getEnemyArmy(answer.getPlayerId());
         final Optional<Hero> heroOptional = thisBotArmy.getHero(answer.getActiveHero());
         final Hero hero;
         if (heroOptional.isPresent()) {

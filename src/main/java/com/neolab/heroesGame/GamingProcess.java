@@ -1,6 +1,5 @@
 package com.neolab.heroesGame;
 
-import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.client.ai.Player;
@@ -51,7 +50,7 @@ public class GamingProcess {
 
                 if (gamingProcess.isRoundEnd()) {
                     LOGGER.info("-----------------Начинается новый раунд---------------");
-                    gamingProcess.battleArena.getArmies().values().forEach(Army::roundIsOver);
+                    gamingProcess.battleArena.endRound();
                 }
 
                 if (gamingProcess.checkCanMove(gamingProcess.currentPlayer.getId())) {
@@ -61,7 +60,6 @@ public class GamingProcess {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
             LOGGER.error(ex.getMessage());
         }
     }
@@ -70,27 +68,31 @@ public class GamingProcess {
         return !(checkCanMove(currentPlayer.getId()) || checkCanMove(waitingPlayer.getId()));
     }
 
-    private void askPlayerProcess() {
-        try {
-            final Answer answer = currentPlayer.getAnswer(battleArena);
-            answer.toLog();
-            answerProcessor.handleAnswer(answer);
-            answerProcessor.getActionEffect().toLog();
-        } catch (final HeroExceptions ex) {
-            LOGGER.error(ex.getMessage());
-        }
+    private void askPlayerProcess() throws HeroExceptions {
+        final Answer answer = currentPlayer.getAnswer(battleArena);
+        answer.toLog();
+        answerProcessor.handleAnswer(answer);
+        answerProcessor.getActionEffect().toLog();
     }
 
     private Player someoneWhoWin() {
-        Player isWinner = battleArena.isArmyDied(currentPlayer.getId()) ? waitingPlayer : null;
+        Player isWinner = battleArena.isArmyDied(getCurrentPlayerId()) ? waitingPlayer : null;
         if (isWinner == null) {
-            isWinner = battleArena.isArmyDied(waitingPlayer.getId()) ? currentPlayer : null;
+            isWinner = battleArena.isArmyDied(getWaitingPlayerId()) ? currentPlayer : null;
         }
         return isWinner;
     }
 
     private boolean checkCanMove(final Integer id) {
         return !battleArena.haveAvailableHeroByArmyId(id);
+    }
+
+    private int getCurrentPlayerId(){
+        return currentPlayer.getId();
+    }
+
+    private int getWaitingPlayerId(){
+        return waitingPlayer.getId();
     }
 }
 

@@ -1,6 +1,5 @@
 package com.neolab.heroesGame.arena;
 
-import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
 
