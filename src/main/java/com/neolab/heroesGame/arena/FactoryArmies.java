@@ -36,7 +36,7 @@ public class FactoryArmies {
             warlordCoord = addWarlord(heroes, secondLine, warlord);
         }
         for (final SquareCoordinate key : firstLine) {
-            heroes.put(key, createDefaultFootman());
+            heroes.put(key, Footman.createInstance());
         }
         for (final SquareCoordinate key : secondLine) {
             heroes.put(key, createSecondLineUnit());
@@ -54,22 +54,22 @@ public class FactoryArmies {
     private static Hero createWarlord() {
         final int switcher = RANDOM.nextInt(4);
         if (switcher == 0) {
-            return createDefaultWarlordMagician();
+            return WarlordMagician.createInstance();
         } else if (switcher == 1) {
-            return createDefaultWarlordVampire();
+            return WarlordVampire.createInstance();
         } else {
-            return createDefaultWarlordFootman();
+            return WarlordFootman.createInstance();
         }
     }
 
     private static Hero createSecondLineUnit() {
         final int switcher = RANDOM.nextInt(3) % 3;
         if (switcher == 0) {
-            return createDefaultArcher();
+            return Archer.createInstance();
         } else if (switcher == 1) {
-            return createDefaultMagician();
+            return Magician.createInstance();
         } else {
-            return createDefaultHealer();
+            return Healer.createInstance();
         }
     }
 
@@ -79,61 +79,5 @@ public class FactoryArmies {
             line.add(new SquareCoordinate(x, y));
         }
         return line;
-    }
-
-    public static Hero createDefaultFootman() {
-        final int hp = 170;
-        final int damage = 50;
-        final float precision = 0.8f;
-        final float armor = 0.1f;
-        return new Footman(hp, damage, precision, armor);
-    }
-
-    public static Hero createDefaultArcher() {
-        final int hp = 90;
-        final int damage = 40;
-        final float precision = 0.85f;
-        final float armor = 0;
-        return new Archer(hp, damage, precision, armor);
-    }
-
-    public static Hero createDefaultMagician() {
-        final int hp = 75;
-        final int damage = 30;
-        final float precision = 0.8f;
-        final float armor = 0;
-        return new Magician(hp, damage, precision, armor);
-    }
-
-    public static Hero createDefaultHealer() {
-        final int hp = 75;
-        final int damage = 40;
-        final float precision = 1;
-        final float armor = 0;
-        return new Healer(hp, damage, precision, armor);
-    }
-
-    public static Hero createDefaultWarlordFootman() {
-        final int hp = 180;
-        final int damage = 60;
-        final float precision = 0.9f;
-        final float armor = 0.15f;
-        return new WarlordFootman(hp, damage, precision, armor);
-    }
-
-    public static Hero createDefaultWarlordMagician() {
-        final int hp = 90;
-        final int damage = 40;
-        final float precision = 0.75f;
-        final float armor = 0.05f;
-        return new WarlordMagician(hp, damage, precision, armor);
-    }
-
-    public static Hero createDefaultWarlordVampire() {
-        final int hp = 90;
-        final int damage = 10;
-        final float precision = 0.8f;
-        final float armor = 0.05f;
-        return new WarlordVampire(hp, damage, precision, armor);
     }
 }

@@ -1,20 +1,20 @@
 package com.neolab.heroesGame.aditional;
 
 import com.neolab.heroesGame.arena.Army;
-import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.errors.HeroExceptions;
+import com.neolab.heroesGame.heroes.Footman;
 import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.heroes.WarlordFootman;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-
-import java.util.HashMap;
 import java.util.Set;
-import java.util.function.Consumer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class GetLegalTargetForFlankUnitTest {
 
@@ -23,9 +23,9 @@ public class GetLegalTargetForFlankUnitTest {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(0, 1), FactoryArmies.createDefaultFootman());
-        heroes.put(new SquareCoordinate(1, 1), FactoryArmies.createDefaultFootman());
-        heroes.put(new SquareCoordinate(2, 1), FactoryArmies.createDefaultWarlordFootman());
+        heroes.put(new SquareCoordinate(0, 1), Footman.createInstance());
+        heroes.put(new SquareCoordinate(1, 1), Footman.createInstance());
+        heroes.put(new SquareCoordinate(2, 1), Footman.createInstance());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(0, 1)));
@@ -38,8 +38,8 @@ public class GetLegalTargetForFlankUnitTest {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(1, 1), FactoryArmies.createDefaultFootman());
-        heroes.put(new SquareCoordinate(2, 1), FactoryArmies.createDefaultWarlordFootman());
+        heroes.put(new SquareCoordinate(1, 1), Footman.createInstance());
+        heroes.put(new SquareCoordinate(2, 1), WarlordFootman.createInstance());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(1, 1)));
@@ -51,7 +51,7 @@ public class GetLegalTargetForFlankUnitTest {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(2, 1), FactoryArmies.createDefaultWarlordFootman());
+        heroes.put(new SquareCoordinate(2, 1), WarlordFootman.createInstance());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(2, 1)));
@@ -64,8 +64,8 @@ public class GetLegalTargetForFlankUnitTest {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(0, 1), FactoryArmies.createDefaultWarlordFootman());
-        heroes.put(new SquareCoordinate(2, 1), FactoryArmies.createDefaultFootman());
+        heroes.put(new SquareCoordinate(0, 1), WarlordFootman.createInstance());
+        heroes.put(new SquareCoordinate(2, 1), Footman.createInstance());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(0, 1)));
@@ -77,9 +77,9 @@ public class GetLegalTargetForFlankUnitTest {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(0, 0), FactoryArmies.createDefaultWarlordFootman());
-        heroes.put(new SquareCoordinate(1, 0), FactoryArmies.createDefaultFootman());
-        heroes.put(new SquareCoordinate(2, 0), FactoryArmies.createDefaultFootman());
+        heroes.put(new SquareCoordinate(0, 0), WarlordFootman.createInstance());
+        heroes.put(new SquareCoordinate(1, 0), Footman.createInstance());
+        heroes.put(new SquareCoordinate(2, 0), Footman.createInstance());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(0, 0)));
@@ -92,8 +92,8 @@ public class GetLegalTargetForFlankUnitTest {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(1, 0), FactoryArmies.createDefaultWarlordFootman());
-        heroes.put(new SquareCoordinate(2, 0), FactoryArmies.createDefaultFootman());
+        heroes.put(new SquareCoordinate(1, 0), WarlordFootman.createInstance());
+        heroes.put(new SquareCoordinate(2, 0), Footman.createInstance());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(1, 0)));
@@ -106,7 +106,7 @@ public class GetLegalTargetForFlankUnitTest {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(2, 0), FactoryArmies.createDefaultWarlordFootman());
+        heroes.put(new SquareCoordinate(2, 0), WarlordFootman.createInstance());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(2, 0)));
@@ -119,8 +119,8 @@ public class GetLegalTargetForFlankUnitTest {
         SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
-        heroes.put(new SquareCoordinate(0, 0), FactoryArmies.createDefaultWarlordFootman());
-        heroes.put(new SquareCoordinate(2, 0), FactoryArmies.createDefaultFootman());
+        heroes.put(new SquareCoordinate(0, 0), WarlordFootman.createInstance());
+        heroes.put(new SquareCoordinate(2, 0), Footman.createInstance());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertTrue(legalTarget.contains(new SquareCoordinate(0, 0)));
@@ -132,10 +132,10 @@ public class GetLegalTargetForFlankUnitTest {
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         for (SquareCoordinate coord : coords) {
             if (isWarlordNotExist) {
-                heroes.put(coord, FactoryArmies.createDefaultWarlordFootman());
+                heroes.put(coord, WarlordFootman.createInstance());
                 isWarlordNotExist = false;
             }
-            heroes.put(coord, FactoryArmies.createDefaultFootman());
+            heroes.put(coord, Footman.createInstance());
         }
         return new Army(heroes);
     }

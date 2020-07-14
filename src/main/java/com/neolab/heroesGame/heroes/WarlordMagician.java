@@ -7,16 +7,16 @@ public class WarlordMagician extends Magician implements IWarlord {
 
     private float improveCoefficient = 0.05f;
 
-    public WarlordMagician(int hp, int damage, float precision, float armor) {
+    protected WarlordMagician(int hp, int damage, float precision, float armor) {
         super(hp, damage, precision, armor);
     }
 
     @JsonCreator
-    public WarlordMagician(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
-                          @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
-                          @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
-                          @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
-                          @JsonProperty("defence") final boolean defence, @JsonProperty("improveCoefficient") final float improveCoefficient) {
+    protected WarlordMagician(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
+                              @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
+                              @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
+                              @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
+                              @JsonProperty("defence") final boolean defence, @JsonProperty("improveCoefficient") final float improveCoefficient) {
         super(hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
         this.improveCoefficient = improveCoefficient;
     }
@@ -28,5 +28,13 @@ public class WarlordMagician extends Magician implements IWarlord {
     @Override
     public int getUnitId() {
         return super.getUnitId();
+    }
+
+    public static Hero createInstance() {
+        final int hp = 90;
+        final int damage = 40;
+        final float precision = 0.75f;
+        final float armor = 0.05f;
+        return new WarlordMagician(hp, damage, precision, armor);
     }
 }

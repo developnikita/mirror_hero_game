@@ -1,10 +1,11 @@
 package com.neolab.heroesGame.aditional;
 
 import com.neolab.heroesGame.arena.Army;
-import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.errors.HeroExceptions;
+import com.neolab.heroesGame.heroes.Footman;
 import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.heroes.WarlordFootman;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -154,11 +155,11 @@ public class GetLegalTargetTest {
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         for (SquareCoordinate coord : coords) {
             if (isWarlordNotExist) {
-                heroes.put(coord, FactoryArmies.createDefaultWarlordFootman());
+                heroes.put(coord, WarlordFootman.createInstance());
                 isWarlordNotExist = false;
                 continue;
             }
-            heroes.put(coord, FactoryArmies.createDefaultFootman());
+            heroes.put(coord, Footman.createInstance());
         }
         return new Army(heroes);
     }

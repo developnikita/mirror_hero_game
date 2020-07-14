@@ -50,11 +50,11 @@ public abstract class Hero {
     }
 
     @JsonCreator
-    public Hero(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
-                @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
-                @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
-                @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
-                @JsonProperty("defence") final boolean defence) {
+    protected Hero(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
+                   @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
+                   @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
+                   @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
+                   @JsonProperty("defence") final boolean defence) {
         this.unitId = CommonFunction.idGeneration.getNextId();
         this.hpDefault = hpDefault;
         this.hpMax = hpMax;
