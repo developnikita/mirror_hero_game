@@ -9,6 +9,7 @@ import com.neolab.heroesGame.heroes.Healer;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.server.ActionEffect;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -68,7 +69,7 @@ public final class AnswerProcessor {
                 activeHero.setArmor(activeHero.getArmor() * (float) 1.5);
                 activeHero.setDefence();
                 removeUsedHero(board, activeHero.getUnitId());
-                setActionEffect(answer, null);
+                setActionEffect(answer, new HashMap<SquareCoordinate, Integer>());
             }
         } else throw new HeroExceptions(HeroErrorCode.ERROR_ANSWER);
     }
