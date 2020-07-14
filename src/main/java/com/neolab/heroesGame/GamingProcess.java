@@ -13,49 +13,51 @@ import org.slf4j.LoggerFactory;
 
 public class GamingProcess {
     private static final Logger LOGGER = LoggerFactory.getLogger(GamingProcess.class);
-    private static Player currentPlayer;
-    private static Player waitingPlayer;
+    private Player currentPlayer;
+    private Player waitingPlayer;
+    private final AnswerProcessor answerProcessor;
+    private final BattleArena battleArena;
 
     public GamingProcess() throws HeroExceptions {
         currentPlayer = new PlayerBot(1);
         waitingPlayer = new PlayerBot(2);
-        setAnswerProcessorPlayerId(currentPlayer, waitingPlayer);
-        AnswerProcessor.setBoard(new BattleArena(FactoryArmies.generateArmies(1, 2)));
+        battleArena = new BattleArena(FactoryArmies.generateArmies(1, 2));
+        answerProcessor = new AnswerProcessor(1, 2, battleArena);
     }
 
-    private static void changeCurrentAndWaitingPlayers() {
+    private void changeCurrentAndWaitingPlayers() {
         final Player temp = currentPlayer;
         currentPlayer = waitingPlayer;
         waitingPlayer = temp;
         setAnswerProcessorPlayerId(currentPlayer, waitingPlayer);
     }
 
-    private static void setAnswerProcessorPlayerId(final Player currentPlayer, final Player waitingPlayer) {
-        AnswerProcessor.setActivePlayerId(currentPlayer.getId());
-        AnswerProcessor.setPlayerId(waitingPlayer.getId());
+    private void setAnswerProcessorPlayerId(final Player currentPlayer, final Player waitingPlayer) {
+        answerProcessor.setActivePlayerId(currentPlayer.getId());
+        answerProcessor.setWaitingPlayerId(waitingPlayer.getId());
     }
 
     public static void main(final String[] args) {
         try {
             final GamingProcess gamingProcess = new GamingProcess();
             while (true) {
-                AnswerProcessor.getBoard().toLog();
+                gamingProcess.battleArena.toLog();
 
-                final Player whoIsWin = someoneWhoWin();
+                final Player whoIsWin = gamingProcess.someoneWhoWin();
                 if (whoIsWin != null) {
                     LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", whoIsWin.getId());
                     break;
                 }
 
-                if (isRoundEnd()) {
+                if (gamingProcess.isRoundEnd()) {
                     LOGGER.info("-----------------Начинается новый раунд---------------");
-                    AnswerProcessor.getBoard().getArmies().values().forEach(Army::roundIsOver);
+                    gamingProcess.battleArena.getArmies().values().forEach(Army::roundIsOver);
                 }
 
-                if (checkCanMove(currentPlayer.getId())) {
-                    askPlayerProcess();
+                if (gamingProcess.checkCanMove(gamingProcess.currentPlayer.getId())) {
+                    gamingProcess.askPlayerProcess();
                 }
-                changeCurrentAndWaitingPlayers();
+                gamingProcess.changeCurrentAndWaitingPlayers();
             }
 
         } catch (Exception ex) {
@@ -64,31 +66,31 @@ public class GamingProcess {
         }
     }
 
-    private static boolean isRoundEnd() {
+    private boolean isRoundEnd() {
         return !(checkCanMove(currentPlayer.getId()) || checkCanMove(waitingPlayer.getId()));
     }
 
-    private static void askPlayerProcess() {
+    private void askPlayerProcess() {
         try {
-            final Answer answer = currentPlayer.getAnswer(AnswerProcessor.getBoard());
+            final Answer answer = currentPlayer.getAnswer(battleArena);
             answer.toLog();
-            AnswerProcessor.handleAnswer(answer);
-            AnswerProcessor.getActionEffect().toLog();
+            answerProcessor.handleAnswer(answer);
+            answerProcessor.getActionEffect().toLog();
         } catch (final HeroExceptions ex) {
             LOGGER.error(ex.getMessage());
         }
     }
 
-    private static Player someoneWhoWin() {
-        Player isWinner = AnswerProcessor.getBoard().isArmyDied(currentPlayer.getId()) ? waitingPlayer : null;
+    private Player someoneWhoWin() {
+        Player isWinner = battleArena.isArmyDied(currentPlayer.getId()) ? waitingPlayer : null;
         if (isWinner == null) {
-            isWinner = AnswerProcessor.getBoard().isArmyDied(waitingPlayer.getId()) ? currentPlayer : null;
+            isWinner = battleArena.isArmyDied(waitingPlayer.getId()) ? currentPlayer : null;
         }
         return isWinner;
     }
 
-    private static boolean checkCanMove(final Integer id) {
-        return !AnswerProcessor.getBoard().getArmy(id).getAvailableHero().isEmpty();
+    private boolean checkCanMove(final Integer id) {
+        return !battleArena.getArmy(id).getAvailableHero().isEmpty();
     }
 }
 
