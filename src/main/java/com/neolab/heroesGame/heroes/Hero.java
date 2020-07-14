@@ -184,20 +184,24 @@ public abstract class Hero {
     }
 
     @Override
-    public boolean equals(final Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Hero)) return false;
-        final Hero hero = (Hero) o;
-        return getHpMax() == hero.getHpMax() &&
+        Hero hero = (Hero) o;
+        return getUnitId() == hero.getUnitId() &&
+                getHpDefault() == hero.getHpDefault() &&
+                getHpMax() == hero.getHpMax() &&
                 getHp() == hero.getHp() &&
+                getDamageDefault() == hero.getDamageDefault() &&
                 getDamage() == hero.getDamage() &&
                 Float.compare(hero.getPrecision(), getPrecision()) == 0 &&
                 Float.compare(hero.getArmor(), getArmor()) == 0 &&
+                Float.compare(hero.getArmorDefault(), getArmorDefault()) == 0 &&
                 isDefence() == hero.isDefence();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getHpMax(), getHp(), getDamage(), getPrecision(), getArmor(), isDefence());
+        return Objects.hash(getUnitId(), getHpDefault(), getHpMax(), getHp(), getDamageDefault(), getDamage(), getPrecision(), getArmor(), getArmorDefault(), isDefence());
     }
 }

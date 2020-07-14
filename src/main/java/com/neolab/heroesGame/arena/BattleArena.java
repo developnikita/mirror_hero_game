@@ -30,6 +30,10 @@ public class BattleArena {
         return armies.get(playerId);
     }
 
+    public boolean haveAvailableHeroByArmyId(final Integer id){
+        return armies.get(id).getAvailableHero().isEmpty();
+    }
+
     public void toLog() {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\n");

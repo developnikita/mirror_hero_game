@@ -90,7 +90,7 @@ public class GamingProcess {
     }
 
     private boolean checkCanMove(final Integer id) {
-        return !battleArena.getArmy(id).getAvailableHero().isEmpty();
+        return !battleArena.haveAvailableHeroByArmyId(id);
     }
 }
 

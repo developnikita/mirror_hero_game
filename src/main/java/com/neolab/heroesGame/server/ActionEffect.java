@@ -20,22 +20,6 @@ public class ActionEffect {
         this.sourceUnit = new SquareCoordinate(sourceUnit.getX(), sourceUnit.getY());
     }
 
-    public HeroActions getAction() {
-        return action;
-    }
-
-    public SquareCoordinate getSourceUnit() {
-        return sourceUnit;
-    }
-
-    public Map<SquareCoordinate, Integer> getTargetUnitsMap() {
-        return targetUnitsMap;
-    }
-
-    public void setSourceUnit(final SquareCoordinate sourceUnit) {
-
-    }
-
     public void toLog() {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("Юнит на позиции (%d, %d) ", sourceUnit.getX(), sourceUnit.getY()));
