@@ -133,4 +133,7 @@ public class Army {
         hero.setDamage(hero.getDamageDefault());
     }
 
+    public boolean canSomeOneAct() {
+        return !availableHeroes.isEmpty();
+    }
 }

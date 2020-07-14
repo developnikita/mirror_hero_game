@@ -18,6 +18,12 @@ public class ServerRequest {
         this.boardJson = mapper.writeValueAsString(board);
     }
 
+    public ServerRequest(final BattleArena board) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        this.actionEffect = "";
+        this.boardJson = mapper.writeValueAsString(board);
+    }
+
 
 }
 

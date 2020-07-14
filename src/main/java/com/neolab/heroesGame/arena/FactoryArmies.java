@@ -7,7 +7,7 @@ import java.util.*;
 
 public class FactoryArmies {
 
-    private static final long SEED = 5916;
+    private static final long SEED = 1523;
     private static final Random RANDOM = new Random(SEED);
 
     public static Map<Integer, Army> generateArmies(final Integer firstPlayerId,
@@ -27,13 +27,12 @@ public class FactoryArmies {
     private static Army createArmy() throws HeroExceptions {
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         final Hero warlord = createWarlord();
-        final SquareCoordinate warlordCoord;
         final Set<SquareCoordinate> firstLine = makeLine(1);
         final Set<SquareCoordinate> secondLine = makeLine(0);
         if (warlord instanceof WarlordFootman){
-            warlordCoord = addWarlord(heroes, firstLine, warlord);
+            addWarlord(heroes, firstLine, warlord);
         } else{
-            warlordCoord = addWarlord(heroes, secondLine, warlord);
+            addWarlord(heroes, secondLine, warlord);
         }
         for (final SquareCoordinate key : firstLine) {
             heroes.put(key, Footman.createInstance());
@@ -44,11 +43,11 @@ public class FactoryArmies {
         return new Army(heroes);
     }
 
-    private static SquareCoordinate addWarlord(final Map<SquareCoordinate, Hero> heroes, final Set<SquareCoordinate> line, final Hero warlord) {
+    private static void addWarlord(final Map<SquareCoordinate, Hero> heroes,
+                                   final Set<SquareCoordinate> line, final Hero warlord) {
         final SquareCoordinate temp = line.iterator().next();
         heroes.put(temp, warlord);
         line.remove(temp);
-        return temp;
     }
 
     private static Hero createWarlord() {

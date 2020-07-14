@@ -1,10 +1,7 @@
 package com.neolab.heroesGame.aditional;
 
 import com.neolab.heroesGame.arena.Army;
-import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
-import com.neolab.heroesGame.enumerations.HeroErrorCode;
-import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,10 +46,6 @@ public class CommonFunction {
      * Сперва проверяем, наличие центрального юнита в армии врага, потом юнита на том же фланге. Если юнитов в армии
      * противника все еще не встретилось, то проверяем второй фланг
      *
-     * @param activeUnitX
-     * @param enemyArmy
-     * @param y
-     * @return
      */
     private static Set<SquareCoordinate> getTargetForFlankUnit(final int activeUnitX, final Army enemyArmy, final int y) {
         final HashSet<SquareCoordinate> validateTarget = new HashSet<>();
@@ -101,29 +94,31 @@ public class CommonFunction {
      */
     private static String getLineUnit(final Army army, final int y) {
         final StringBuilder stringBuilder = new StringBuilder();
+        final Map<Integer, Optional<Hero>> heroes = new HashMap<>();
         for (int x = 0; x < 3; x++) {
-            final Hero hero = getHero(army, new SquareCoordinate(x, y));
-            stringBuilder.append(classToString(hero));
+            heroes.put(x, army.getHero(new SquareCoordinate(x, y)));
+        }
+        for (int x = 0; x < 3; x++) {
+            stringBuilder.append(classToString(heroes.get(x)));
         }
         stringBuilder.append("\n");
         for (int x = 0; x < 3; x++) {
-            final Hero hero = getHero(army, new SquareCoordinate(x, y));
-            stringBuilder.append(hpToString(hero));
+            stringBuilder.append(hpToString(heroes.get(x)));
         }
         stringBuilder.append("\n");
         for (int x = 0; x < 3; x++) {
-            final Hero hero = getHero(army, new SquareCoordinate(x, y));
-            stringBuilder.append(statusToString(hero, army));
+            stringBuilder.append(statusToString(heroes.get(x), army));
         }
         stringBuilder.append("\n");
         return stringBuilder.toString();
     }
 
-    private static String statusToString(final Hero hero, final Army army) {
+    private static String statusToString(final Optional<Hero> optionalHero, final Army army) {
         final StringBuilder result = new StringBuilder();
-        if (hero == null) {
+        if (optionalHero.isEmpty()) {
             result.append(String.format("%12s|", ""));
         } else {
+            final Hero hero = optionalHero.get();
             if (hero.isDefence()) {
                 result.append("   D  ");
             } else {
@@ -138,21 +133,24 @@ public class CommonFunction {
         return result.toString();
     }
 
-    private static String hpToString(final Hero hero) {
+    private static String hpToString(final Optional<Hero> optionalHero) {
         final String result;
-        if (hero == null) {
+        if (optionalHero.isEmpty()) {
             result = String.format("%12s|", "");
         } else {
+            final Hero hero = optionalHero.get();
             result = String.format("  HP%3d/%3d |", hero.getHp(), hero.getHpMax());
         }
         return result;
     }
 
-    public static String classToString(final Hero hero) {
+    public static String classToString(final Optional<Hero> optionalHero) {
         final String result;
-        if (hero == null) {
-            result = String.format("%12s|", "");
-        } else if (hero.getClass() == Magician.class) {
+        if (optionalHero.isEmpty()) {
+            return String.format("%12s|", "");
+        }
+        Hero hero = optionalHero.get();
+        if (hero.getClass() == Magician.class) {
             result = String.format("%12s|", "Маг");
         } else if (hero instanceof WarlordMagician) {
             result = String.format("%12s|", "Архимаг");
@@ -170,11 +168,6 @@ public class CommonFunction {
             result = String.format("%12s|", "Unknown");
         }
         return result;
-    }
-
-    //todo дублирование метода из армии
-    private static Hero getHero(final Army army, final SquareCoordinate coord) {
-        return army.getHeroes().get(coord);
     }
 
     /**

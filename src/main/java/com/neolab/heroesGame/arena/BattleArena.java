@@ -45,12 +45,21 @@ public class BattleArena {
         return armies.get(playerId);
     }
 
-    public Army getEnemyArmy(final int playerId){
+    public Army getEnemyArmy(final int playerId) {
 
         Integer botArmyId = armies.keySet().stream()
                 .filter(id -> id != playerId).findFirst().get();
 
         return armies.get(botArmyId);
+    }
+
+    public boolean canSomeoneAct() {
+        for (Army army : armies.values()) {
+            if (army.canSomeOneAct()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void toLog() {
