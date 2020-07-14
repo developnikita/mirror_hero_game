@@ -161,7 +161,7 @@ public class CommonFunction {
         return result;
     }
 
-    private static String classToString(final Hero hero) {
+    public static String classToString(final Hero hero) {
         final String result;
         if (hero == null) {
             result = String.format("%12s|", "");

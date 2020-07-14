@@ -30,7 +30,8 @@ public class Healer extends Hero {
      * @param position позиция героя
      * @param army     армия союзников
      */
-    public Map<SquareCoordinate, Integer> toHeal(SquareCoordinate position, Army army) throws HeroExceptions {
+    @Override
+    public Map<SquareCoordinate, Integer> toAct(SquareCoordinate position, Army army) throws HeroExceptions {
         Hero targetHeal = searchTarget(position, army);
         int healing = targetHeal.getHp() + this.getDamage();
         targetHeal.setHp(Math.min(healing, targetHeal.getHpMax()));

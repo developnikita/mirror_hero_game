@@ -2,6 +2,11 @@ package com.neolab.heroesGame.heroes;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.neolab.heroesGame.arena.Army;
+import com.neolab.heroesGame.arena.SquareCoordinate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class WarlordVampire extends Magician implements IWarlord {
 
@@ -29,6 +34,17 @@ public class WarlordVampire extends Magician implements IWarlord {
     @Override
     public int getUnitId() {
         return super.getUnitId();
+    }
+
+    @Override
+    public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position, final Army army) {
+        final Map<SquareCoordinate, Integer> enemyHeroPosDamage = super.toAct(position, army);
+        int heal = this.getHp();
+        for (SquareCoordinate key : enemyHeroPosDamage.keySet()) {
+            heal += enemyHeroPosDamage.get(key);
+        }
+        this.setHp(Math.min(heal, this.getHpMax()));
+        return enemyHeroPosDamage;
     }
 
 }
