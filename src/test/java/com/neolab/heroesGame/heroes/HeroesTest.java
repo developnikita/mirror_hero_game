@@ -30,7 +30,7 @@ public class HeroesTest {
         // removeTargetTest
         int oldSize = armyTarget.getHeroes().size();
         targetHero.setHp(0);
-        activeHero.removeTarget(targetHero, armyTarget);
+        armyTarget.killHero(targetHero.getUnitId());
         int newSize = armyTarget.getHeroes().size();
         assertNotEquals(oldSize, newSize);
 
@@ -58,9 +58,5 @@ public class HeroesTest {
         assertFalse(activeHero.isDefence());
         assertEquals(Math.round(armor), Math.round(activeHero.getArmor()));
 
-        // searchTargetTest
-        assertEquals(targetHero, activeHero.searchTarget(targetCoord, armyTarget));
-        //must be throw HeroException
-        assertEquals(activeHero, activeHero.searchTarget(activeCoord, armyActive));
     }
 }
