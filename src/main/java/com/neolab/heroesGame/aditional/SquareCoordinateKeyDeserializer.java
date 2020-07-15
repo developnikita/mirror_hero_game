@@ -10,7 +10,8 @@ import java.io.IOException;
 public class SquareCoordinateKeyDeserializer extends KeyDeserializer {
 
     @Override
-    public Object deserializeKey(final String s, final DeserializationContext deserializationContext) throws IOException {
+    public Object deserializeKey(final String s,
+                                 final DeserializationContext deserializationContext) throws IOException {
         final ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(s, SquareCoordinate.class);
     }

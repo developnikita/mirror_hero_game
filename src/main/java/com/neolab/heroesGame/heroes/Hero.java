@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Archer.class, name = "Archer"),
         @JsonSubTypes.Type(value = Footman.class, name = "Footman"),
@@ -50,12 +50,13 @@ public abstract class Hero {
     }
 
     @JsonCreator
-    protected Hero(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
-                   @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
-                   @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
-                   @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
+    protected Hero(@JsonProperty("unitId") final int unitId, @JsonProperty("hpDefault") final int hpDefault,
+                   @JsonProperty("hpMax") final int hpMax, @JsonProperty("hp") final int hp,
+                   @JsonProperty("damageDefault") final int damageDefault, @JsonProperty("damage") final int damage,
+                   @JsonProperty("precision") final float precision, @JsonProperty("armor") final float armor,
+                   @JsonProperty("armorDefault") final float armorDefault,
                    @JsonProperty("defence") final boolean defence) {
-        this.unitId = CommonFunction.idGeneration.getNextId();
+        this.unitId = unitId;
         this.hpDefault = hpDefault;
         this.hpMax = hpMax;
         this.hp = hp;

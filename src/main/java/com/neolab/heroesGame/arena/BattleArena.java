@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.aditional.CommonFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.Map;
+import java.util.Objects;
 
 public class BattleArena {
 
@@ -29,15 +31,15 @@ public class BattleArena {
         return armies.get(playerId);
     }
 
-    public boolean haveAvailableHeroByArmyId(final Integer id){
-        return armies.get(id).getAvailableHero().isEmpty();
+    public boolean haveAvailableHeroByArmyId(final Integer id) {
+        return armies.get(id).getAvailableHeroes().isEmpty();
     }
 
-    public void removeUsedHeroesById(final int heroId, final int armyId){
+    public void removeUsedHeroesById(final int heroId, final int armyId) {
         armies.get(armyId).removeAvailableHeroById(heroId);
     }
 
-    public void endRound(){
+    public void endRound() {
         armies.values().forEach(Army::roundIsOver);
     }
 
@@ -70,5 +72,18 @@ public class BattleArena {
             stringBuilder.append(CommonFunction.printArmy(armies.get(key)));
         }
         LOGGER.info(stringBuilder.toString());
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final BattleArena arena = (BattleArena) o;
+        return Objects.equals(armies, arena.armies);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(armies);
     }
 }

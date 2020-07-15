@@ -72,7 +72,7 @@ public class PlayerBot extends Player {
     }
 
     protected SquareCoordinate chooseUnit(final Army army) {
-        final Set<SquareCoordinate> availableHeroes = army.getAvailableHero().keySet();
+        final Set<SquareCoordinate> availableHeroes = army.getAvailableHeroes().keySet();
         return availableHeroes.iterator().next();
     }
 

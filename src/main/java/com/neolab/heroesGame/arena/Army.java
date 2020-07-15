@@ -14,6 +14,7 @@ import com.neolab.heroesGame.heroes.IWarlord;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -37,10 +38,10 @@ public class Army {
     @JsonCreator
     public Army(@JsonProperty("heroes") final Map<SquareCoordinate, Hero> heroes,
                 @JsonProperty("warlord") final IWarlord warlord,
-                @JsonProperty("availableHero") final Map<SquareCoordinate, Hero> availableHero) {
+                @JsonProperty("availableHeroes") final Map<SquareCoordinate, Hero> availableHeroes) {
         this.heroes = heroes;
         this.warlord = warlord;
-        this.availableHeroes = availableHero;
+        this.availableHeroes = availableHeroes;
     }
 
     private IWarlord findWarlord() throws HeroExceptions {
@@ -63,7 +64,7 @@ public class Army {
         return heroes;
     }
 
-    public Map<SquareCoordinate, Hero> getAvailableHero() {
+    public Map<SquareCoordinate, Hero> getAvailableHeroes() {
         return availableHeroes;
     }
 
@@ -135,5 +136,20 @@ public class Army {
 
     public boolean canSomeOneAct() {
         return !availableHeroes.isEmpty();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Army army = (Army) o;
+        return Objects.equals(heroes, army.heroes) &&
+                Objects.equals(warlord, army.warlord) &&
+                Objects.equals(availableHeroes, army.availableHeroes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(heroes, warlord, availableHeroes);
     }
 }

@@ -16,12 +16,13 @@ public class Healer extends Hero {
     }
 
     @JsonCreator
-    protected Healer(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
-                     @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
-                     @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
-                     @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
+    protected Healer(@JsonProperty("unitId") final int unitId, @JsonProperty("hpDefault") final int hpDefault,
+                     @JsonProperty("hpMax") final int hpMax, @JsonProperty("hp") final int hp,
+                     @JsonProperty("damageDefault") final int damageDefault, @JsonProperty("damage") final int damage,
+                     @JsonProperty("precision") final float precision, @JsonProperty("armor") final float armor,
+                     @JsonProperty("armorDefault") final float armorDefault,
                      @JsonProperty("defence") final boolean defence) {
-        super(hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
+        super(unitId, hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
     }
 
     /**

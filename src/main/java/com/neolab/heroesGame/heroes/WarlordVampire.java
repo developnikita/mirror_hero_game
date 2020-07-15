@@ -17,12 +17,15 @@ public class WarlordVampire extends Magician implements IWarlord {
     }
     
     @JsonCreator
-    protected WarlordVampire(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
-                             @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
+    protected WarlordVampire(@JsonProperty("unitId") final int unitId, @JsonProperty("hpDefault") final int hpDefault,
+                             @JsonProperty("hpMax") final int hpMax, @JsonProperty("hp") final int hp,
+                             @JsonProperty("damageDefault") final int damageDefault,
                              @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
-                             @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
-                             @JsonProperty("defence") final boolean defence, @JsonProperty("improveCoefficient") final float improveCoefficient) {
-        super(hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
+                             @JsonProperty("armor") final float armor,
+                             @JsonProperty("armorDefault") final float armorDefault,
+                             @JsonProperty("defence") final boolean defence,
+                             @JsonProperty("improveCoefficient") final float improveCoefficient) {
+        super(unitId, hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
         this.improveCoefficient = improveCoefficient;
     }
 

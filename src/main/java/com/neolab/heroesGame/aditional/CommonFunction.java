@@ -124,7 +124,7 @@ public class CommonFunction {
             } else {
                 result.append("      ");
             }
-            if (army.getAvailableHero().containsValue(hero)) {
+            if (army.getAvailableHeroes().containsValue(hero)) {
                 result.append("  CA  |");
             } else {
                 result.append("   W  |");
