@@ -29,6 +29,10 @@
     </appender>
 
     <root level="DEBUG">
+        <appender-ref ref="heroesGameLog"/>
+    </root>
+
+    <root level="ERROR">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="heroesGameLog"/>
     </root>

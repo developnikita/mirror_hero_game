@@ -12,17 +12,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ServerImitation {
+    public static final Integer MAX_ROUND = 100;
     private static final Logger LOGGER = LoggerFactory.getLogger(GamingProcess.class);
     private ClientPlayerImitation currentPlayer;
     private ClientPlayerImitation waitingPlayer;
     private final AnswerProcessor answerProcessor;
     private final BattleArena battleArena;
+    private int counter;
 
     public ServerImitation() throws HeroExceptions {
         currentPlayer = new ClientPlayerImitation(1);
         waitingPlayer = new ClientPlayerImitation(2);
         battleArena = new BattleArena(FactoryArmies.generateArmies(1, 2));
         answerProcessor = new AnswerProcessor(1, 2, battleArena);
+        counter = 0;
     }
 
     private void changeCurrentAndWaitingPlayers() {
@@ -39,26 +42,31 @@ public class ServerImitation {
 
     public static void main(final String[] args) {
         try {
-            final ServerImitation gamingProcess = new ServerImitation();
+            final ServerImitation serverImitation = new ServerImitation();
             LOGGER.info("-----------------Начинается великая битва---------------");
             while (true) {
-                gamingProcess.battleArena.toLog();
+                serverImitation.battleArena.toLog();
 
-                final ClientPlayerImitation whoIsWin = gamingProcess.someoneWhoWin();
+                final ClientPlayerImitation whoIsWin = serverImitation.someoneWhoWin();
                 if (whoIsWin != null) {
                     LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", whoIsWin.getPlayer().getId());
                     break;
                 }
 
-                if (!gamingProcess.battleArena.canSomeoneAct()) {
-                    LOGGER.info("-----------------Начинается новый раунд---------------");
-                    gamingProcess.battleArena.endRound();
+                if (!serverImitation.battleArena.canSomeoneAct()) {
+                    serverImitation.counter++;
+                    if (serverImitation.counter > MAX_ROUND) {
+                        LOGGER.info("Поединок закончился ничьей");
+                        break;
+                    }
+                    LOGGER.info("-----------------Начинается раунд <{}>---------------", serverImitation.counter);
+                    serverImitation.battleArena.endRound();
                 }
 
-                if (gamingProcess.checkCanMove(gamingProcess.currentPlayer.getPlayer().getId())) {
-                    gamingProcess.askPlayerProcess();
+                if (serverImitation.checkCanMove(serverImitation.currentPlayer.getPlayer().getId())) {
+                    serverImitation.askPlayerProcess();
                 }
-                gamingProcess.changeCurrentAndWaitingPlayers();
+                serverImitation.changeCurrentAndWaitingPlayers();
             }
 
         } catch (Exception ex) {
@@ -67,8 +75,8 @@ public class ServerImitation {
     }
 
     private void askPlayerProcess() throws Exception {
-        final String request = new ServerRequest(battleArena).boardJson;
-        final String response = currentPlayer.getAnswer(request);
+        final ServerRequest request = new ServerRequest(battleArena, answerProcessor.getActionEffect());
+        final String response = currentPlayer.getAnswer(request.boardJson, request.actionEffect);
         final Answer answer = new ClientResponse(response).getAnswer();
         answer.toLog();
         answerProcessor.handleAnswer(answer);
@@ -88,11 +96,11 @@ public class ServerImitation {
     }
 
     private int getCurrentPlayerId() {
-        return currentPlayer.getPlayer().getId();
+        return currentPlayer.getPlayerId();
     }
 
     private int getWaitingPlayerId() {
-        return waitingPlayer.getPlayer().getId();
+        return waitingPlayer.getPlayerId();
     }
 }
 
