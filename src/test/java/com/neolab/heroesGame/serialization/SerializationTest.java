@@ -9,8 +9,12 @@ import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroActions;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
+import com.neolab.heroesGame.server.ActionEffect;
 import com.neolab.heroesGame.server.answers.Answer;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -134,5 +138,17 @@ public class SerializationTest {
         final Answer newA = mapper.readValue(json, Answer.class);
 
         assertEquals(a, newA);
+    }
+
+    @Test
+    public void actionEffectSerializationDeserializationTest() throws JsonProcessingException {
+        final Map<SquareCoordinate, Integer> map = new HashMap<>();
+        map.put(new SquareCoordinate(2,2), 2);
+        final ActionEffect ae = new ActionEffect(HeroActions.ATTACK,  new SquareCoordinate(1, 2), map);
+        final String json = mapper.writeValueAsString(ae);
+        System.out.println(json);
+        final ActionEffect newAe = mapper.readValue(json, ActionEffect.class);
+
+        assertEquals(ae, newAe);
     }
 }
