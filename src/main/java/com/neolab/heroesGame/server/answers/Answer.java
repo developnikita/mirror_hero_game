@@ -52,7 +52,6 @@ public class Answer {
         if (action != HeroActions.DEFENCE) {
             log.append(String.format(" на юнита на позиции (%d, %d)", targetUnit.getX(), targetUnit.getY()));
         }
-        LOGGER.info(log.toString());
         return log.toString();
     }
 
@@ -70,5 +69,9 @@ public class Answer {
     @Override
     public int hashCode() {
         return Objects.hash(activeHero, action, targetUnit, playerId);
+    }
+
+    public void toLog() {
+        LOGGER.info(this.toString());
     }
 }

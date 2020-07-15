@@ -26,8 +26,8 @@ public class GetLegalTargetTest {
         });
     }
 
-    private Set<SquareCoordinate> legalCoordinates;
-    private Army enemy;
+    private final Set<SquareCoordinate> legalCoordinates;
+    private final Army enemy;
 
     public GetLegalTargetTest(Set<SquareCoordinate> legalCoordinates, Army enemy) {
         this.legalCoordinates = legalCoordinates;
@@ -150,7 +150,10 @@ public class GetLegalTargetTest {
         return getArmyByCoords(coordHeroes1);
     }
 
-    private static Army getArmyByCoords(Set<SquareCoordinate> coords) throws HeroExceptions {
+    /**
+     * Создает армию из футфайтеров с варлордом для того, чтобы не генерировать армию в каждом тесте
+     */
+    public static Army getArmyByCoords(Set<SquareCoordinate> coords) throws HeroExceptions {
         boolean isWarlordNotExist = true;
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         for (SquareCoordinate coord : coords) {

@@ -3,7 +3,6 @@ package com.neolab.heroesGame;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.client.ai.Player;
-import com.neolab.heroesGame.client.ai.PlayerBot;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.answers.Answer;
 import com.neolab.heroesGame.server.answers.AnswerProcessor;
@@ -71,7 +70,7 @@ public class ServerImitation {
         final String request = new ServerRequest(battleArena).boardJson;
         final String response = currentPlayer.getAnswer(request);
         final Answer answer = new ClientResponse(response).getAnswer();
-        answer.toString();
+        answer.toLog();
         answerProcessor.handleAnswer(answer);
         answerProcessor.getActionEffect().toLog();
     }
