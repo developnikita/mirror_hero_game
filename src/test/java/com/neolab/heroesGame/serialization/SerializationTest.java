@@ -6,8 +6,10 @@ import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.enumerations.HeroActions;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
+import com.neolab.heroesGame.server.answers.Answer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -122,5 +124,15 @@ public class SerializationTest {
         final BattleArena newArena = mapper.readValue(json, BattleArena.class);
 
         assertEquals(arena, newArena);
+    }
+
+    @Test
+    public void answerSerializationDeserializationTest() throws JsonProcessingException {
+        final Answer a = new Answer(new SquareCoordinate(1, 2), HeroActions.ATTACK,
+                new SquareCoordinate(2, 2), 1);
+        final String json = mapper.writeValueAsString(a);
+        final Answer newA = mapper.readValue(json, Answer.class);
+
+        assertEquals(a, newA);
     }
 }
