@@ -45,7 +45,6 @@ public class CommonFunction {
     /**
      * Сперва проверяем, наличие центрального юнита в армии врага, потом юнита на том же фланге. Если юнитов в армии
      * противника все еще не встретилось, то проверяем второй фланг
-     *
      */
     private static Set<SquareCoordinate> getTargetForFlankUnit(final int activeUnitX, final Army enemyArmy, final int y) {
         final HashSet<SquareCoordinate> validateTarget = new HashSet<>();
@@ -81,11 +80,24 @@ public class CommonFunction {
 
     public static String printArmy(final Army army) {
         final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("________________________________________\n");
         for (int y = 0; y < 2; y++) {
             stringBuilder.append(getLineUnit(army, y));
-            stringBuilder.append("____________|____________|____________|\n");
+            stringBuilder.append("|____________|____________|____________|\n");
         }
         stringBuilder.append("\n");
+        return stringBuilder.toString();
+    }
+
+    public static String printInvertLinesArmy(final Army army) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("________________________________________");
+        for (int y = 1; y >= 0; y--) {
+            stringBuilder.append("\n");
+            stringBuilder.append(getLineUnit(army, y));
+            stringBuilder.append("|____________|____________|____________|");
+
+        }
         return stringBuilder.toString();
     }
 
@@ -98,14 +110,15 @@ public class CommonFunction {
         for (int x = 0; x < 3; x++) {
             heroes.put(x, army.getHero(new SquareCoordinate(x, y)));
         }
+        stringBuilder.append("|");
         for (int x = 0; x < 3; x++) {
             stringBuilder.append(classToString(heroes.get(x)));
         }
-        stringBuilder.append("\n");
+        stringBuilder.append("\n|");
         for (int x = 0; x < 3; x++) {
             stringBuilder.append(hpToString(heroes.get(x)));
         }
-        stringBuilder.append("\n");
+        stringBuilder.append("\n|");
         for (int x = 0; x < 3; x++) {
             stringBuilder.append(statusToString(heroes.get(x), army));
         }
