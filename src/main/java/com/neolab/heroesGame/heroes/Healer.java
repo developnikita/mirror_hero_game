@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 
 import java.util.HashMap;
@@ -32,11 +33,11 @@ public class Healer extends Hero {
      * @param army     армия союзников
      */
     @Override
-    public Map<SquareCoordinate, Integer> toAct(SquareCoordinate position, Army army) throws HeroExceptions {
-        Hero targetHeal = searchTarget(position, army);
-        int healing = targetHeal.getHp() + this.getDamage();
+    public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position, final Army army) throws HeroExceptions {
+        final Hero targetHeal = army.getHero(position).orElseThrow(() -> new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK));
+        final int healing = targetHeal.getHp() + this.getDamage();
         targetHeal.setHp(Math.min(healing, targetHeal.getHpMax()));
-        Map<SquareCoordinate, Integer> allyHeroPosHeal = new HashMap<>();
+        final Map<SquareCoordinate, Integer> allyHeroPosHeal = new HashMap<>();
         allyHeroPosHeal.put(position, this.getDamage());
         return allyHeroPosHeal;
     }

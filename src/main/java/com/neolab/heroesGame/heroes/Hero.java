@@ -147,29 +147,16 @@ public abstract class Hero {
      */
     public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position,
                                                 final Army army) throws HeroExceptions {
-        final Hero targetAttack = searchTarget(position, army);
+        final Hero targetAttack = army.getHero(position).orElseThrow(() -> new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK));
         int damageDone = 0;
         if (isHit(this.getPrecision())) {
             damageDone = calculateDamage(targetAttack);
             targetAttack.setHp(targetAttack.getHp() - damageDone);
-            removeTarget(targetAttack, army);
+            army.killHero(targetAttack.getUnitId());
         }
         final Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
         enemyHeroPosDamage.put(position, damageDone);
         return enemyHeroPosDamage;
-    }
-
-    protected Hero searchTarget(final SquareCoordinate position, final Army army) throws HeroExceptions {
-        final Hero target = army.getHeroes().get(position);
-        if (target == null) {
-            throw new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK);
-        } else return target;
-    }
-
-    protected void removeTarget(final Hero targetAttack, final Army army) {
-        if (targetAttack.getHp() <= 0) {
-            army.killHero(targetAttack.getUnitId());
-        }
     }
 
     protected int calculateDamage(final Hero targetAttack) {

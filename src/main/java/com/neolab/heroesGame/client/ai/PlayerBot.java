@@ -41,7 +41,7 @@ public class PlayerBot extends Player {
     @Override
     public Answer getAnswer(final BattleArena board) throws HeroExceptions {
 
-        final Army thisBotArmy = board.getCurrentPlayerArmy(getId());
+        final Army thisBotArmy = board.getArmy(getId());
         final Army enemyArmy = board.getEnemyArmy(getId());
         final SquareCoordinate activeHero = chooseUnit(thisBotArmy);
         final Hero hero = thisBotArmy.getHeroes().get(activeHero);

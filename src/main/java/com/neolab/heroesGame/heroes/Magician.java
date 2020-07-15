@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.errors.HeroExceptions;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Magician extends Hero {
 
@@ -28,17 +28,17 @@ public class Magician extends Hero {
     public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position, final Army army) {
         final Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
 
-        army.getHeroes().keySet().removeIf(coordinate -> {
-            final Hero hero;
-            hero = army.getHero(coordinate).orElseThrow();
+        army.getHeroes().keySet().forEach(coordinate -> {
+            final Hero h = army.getHero(coordinate).orElseThrow();
             int damageDone = 0;
             if (isHit(this.getPrecision())) {
-                damageDone = calculateDamage(hero);
-                hero.setHp(hero.getHp() - damageDone);
+                damageDone = calculateDamage(h);
+                h.setHp(h.getHp() - damageDone);
             }
             enemyHeroPosDamage.put(coordinate, damageDone);
-            return army.removeHero(hero, army);
         });
+
+        enemyHeroPosDamage.keySet().forEach(army::killHero);
 
         return enemyHeroPosDamage;
     }

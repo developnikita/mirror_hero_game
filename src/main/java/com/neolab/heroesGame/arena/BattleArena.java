@@ -43,20 +43,15 @@ public class BattleArena {
         armies.values().forEach(Army::roundIsOver);
     }
 
-    public Army getCurrentPlayerArmy(final Integer playerId) {
-        return armies.get(playerId);
-    }
-
     public Army getEnemyArmy(final int playerId) {
-
-        Integer botArmyId = armies.keySet().stream()
+        final Integer botArmyId = armies.keySet().stream()
                 .filter(id -> id != playerId).findFirst().get();
 
         return armies.get(botArmyId);
     }
 
     public boolean canSomeoneAct() {
-        for (Army army : armies.values()) {
+        for (final Army army : armies.values()) {
             if (army.canSomeOneAct()) {
                 return true;
             }
