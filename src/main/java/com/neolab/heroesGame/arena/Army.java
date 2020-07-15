@@ -44,6 +44,22 @@ public class Army {
         this.availableHeroes = availableHeroes;
     }
 
+    private IWarlord findWarlord() throws HeroExceptions {
+        IWarlord iWarlord = null;
+        for (final Hero hero : heroes.values()) {
+            if (hero instanceof IWarlord) {
+                if (warlord != null) {
+                    throw new HeroExceptions(HeroErrorCode.ERROR_SECOND_WARLORD_ON_ARMY);
+                }
+                iWarlord = (IWarlord) hero;
+            }
+        }
+        if (iWarlord == null) {
+            throw new HeroExceptions(HeroErrorCode.ERROR_EMPTY_WARLORD);
+        }
+        return iWarlord;
+    }
+
     public Map<SquareCoordinate, Hero> getHeroes() {
         return heroes;
     }
@@ -56,76 +72,46 @@ public class Army {
         return Optional.ofNullable(heroes.get(coordinate));
     }
 
-    public IWarlord getWarlord() {
-        return this.warlord;
+    public void roundIsOver() {
+        this.availableHeroes = new HashMap<>(heroes);
+    }
+
+    public void killHero(final int heroId) {
+        if (warlord != null) {
+            if (warlord.getUnitId() == heroId) {
+                cancelImprove();
+            }
+        }
+        removeAvailableHeroById(heroId);
+        heroes.values().removeIf(value -> value.getUnitId() == heroId);
     }
 
     public void setWarlord(final IWarlord warlord) {
         this.warlord = warlord;
     }
 
-    private IWarlord findWarlord() throws HeroExceptions {
-        IWarlord iWarlord = null;
-        for (final Hero h : heroes.values()) {
-            if (h instanceof IWarlord) {
-                if (iWarlord != null) {
-                    throw new HeroExceptions(HeroErrorCode.ERROR_SECOND_WARLORD_ON_ARMY);
-                }
-                iWarlord = (IWarlord) h;
-            }
-        }
-        if (iWarlord == null) {
-            throw new HeroExceptions(HeroErrorCode.ERROR_EMPTY_WARLORD);
-        }
-        return iWarlord;
-    }
-
-    public void roundIsOver() {
-        this.availableHeroes = new HashMap<>(heroes);
-    }
-
-    public void killHero(final int heroId) {
-        final Hero h = getHeroById(heroId);
-
-        if (h.getHp() <= 0) {
-            if (warlord != null) {
-                if (warlord.getUnitId() == heroId) {
-                    cancelImprove();
-                }
-            }
-            removeAvailableHeroById(heroId);
-            heroes.values().removeIf(value -> value.getUnitId() == heroId);
-        }
-    }
-
-    public void killHero(final SquareCoordinate coordinate) {
-        final Hero h = heroes.get(coordinate);
-
-        if (h.getHp() <= 0) {
-            if (warlord != null) {
-                if (warlord.getUnitId() == h.getUnitId()) {
-                    cancelImprove();
-                }
-            }
-            removeAvailableHeroById(h.getUnitId());
-            heroes.values().removeIf(value -> value.getUnitId() == h.getUnitId());
-        }
-    }
-
     public void removeAvailableHeroById(final int heroId) {
         availableHeroes.values().removeIf(value -> value.getUnitId() == heroId);
     }
 
-    public boolean canSomeOneAct() {
-        return !availableHeroes.isEmpty();
-    }
-
-    private Hero getHeroById(final int heroId) {
-        return heroes.values().stream().filter(h -> h.getUnitId() == heroId).findFirst().orElseThrow();
+    public boolean removeHero(final Hero hero, final Army army) {
+        if (hero.getHp() <= 0) {
+            if (hero instanceof IWarlord) {
+                cancelImprove();
+                army.setWarlord(null);
+            }
+            removeAvailableHeroById(hero.getUnitId());
+            return true;
+        }
+        return false;
     }
 
     private void improveAllies() {
         heroes.values().forEach(this::improve);
+    }
+
+    public IWarlord getWarlord() {
+        return this.warlord;
     }
 
     private void improve(final Hero hero) {
@@ -147,6 +133,10 @@ public class Army {
         hero.setHpMax(hero.getHpDefault());
         hero.setHp(Math.min(hero.getHp(), hero.getHpDefault()));
         hero.setDamage(hero.getDamageDefault());
+    }
+
+    public boolean canSomeOneAct() {
+        return !availableHeroes.isEmpty();
     }
 
     @Override
