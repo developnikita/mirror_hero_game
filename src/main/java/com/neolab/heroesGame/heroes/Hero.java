@@ -145,19 +145,6 @@ public abstract class Hero {
      * @param army     армия противника
      * @return возращается значение нанесенного урона и координата цели(ей)
      */
-    public Map<SquareCoordinate, Integer> toAttack(final SquareCoordinate position, final Army army) throws HeroExceptions {
-        final Hero targetAttack = searchTarget(position, army);
-        int damageDone = 0;
-        if (isHit(this.getPrecision())) {
-            damageDone = calculateDamage(targetAttack);
-            targetAttack.setHp(targetAttack.getHp() - damageDone);
-            removeTarget(targetAttack, army);
-        }
-        final Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
-        enemyHeroPosDamage.put(position, damageDone);
-        return enemyHeroPosDamage;
-    }
-
     public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position,
                                                 final Army army) throws HeroExceptions {
         final Hero targetAttack = searchTarget(position, army);

@@ -24,7 +24,7 @@ public class GetLegalTargetForFlankUnitTest {
         Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
         heroes.put(new SquareCoordinate(0, 1), Footman.createInstance());
-        heroes.put(new SquareCoordinate(1, 1), Footman.createInstance());
+        heroes.put(new SquareCoordinate(1, 1), WarlordFootman.createInstance());
         heroes.put(new SquareCoordinate(2, 1), Footman.createInstance());
         Army enemy = new Army(heroes);
         Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
