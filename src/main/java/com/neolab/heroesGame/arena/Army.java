@@ -46,12 +46,12 @@ public class Army {
 
     private IWarlord findWarlord() throws HeroExceptions {
         IWarlord iWarlord = null;
-        for (final SquareCoordinate coordinate : heroes.keySet()) {
-            if (heroes.get(coordinate) instanceof IWarlord) {
+        for (final Hero hero : heroes.values()) {
+            if (hero instanceof IWarlord) {
                 if (warlord != null) {
                     throw new HeroExceptions(HeroErrorCode.ERROR_SECOND_WARLORD_ON_ARMY);
                 }
-                iWarlord = (IWarlord) heroes.get(coordinate);
+                iWarlord = (IWarlord) hero;
             }
         }
         if (iWarlord == null) {
@@ -131,6 +131,7 @@ public class Army {
     private void cancel(final Hero hero) {
         hero.setArmor(hero.getArmor() - warlord.getImproveCoefficient());
         hero.setHpMax(hero.getHpDefault());
+        hero.setHp(Math.min(hero.getHp(), hero.getHpDefault()));
         hero.setDamage(hero.getDamageDefault());
     }
 
