@@ -86,6 +86,22 @@ public class Army {
         heroes.values().removeIf(value -> value.getUnitId() == heroId);
     }
 
+    public void killHero(SquareCoordinate coordinate) {
+        if (warlord != null) {
+            if (heroes.get(coordinate) instanceof IWarlord) {
+                cancelImprove();
+            }
+        }
+        availableHeroes.remove(coordinate);
+        heroes.remove(coordinate);
+    }
+
+    public void tryToKill(SquareCoordinate coordinate) {
+        if (heroes.get(coordinate) != null && heroes.get(coordinate).isDead()) {
+            killHero(coordinate);
+        }
+    }
+
     public void setWarlord(final IWarlord warlord) {
         this.warlord = warlord;
     }

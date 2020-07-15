@@ -150,13 +150,24 @@ public abstract class Hero {
         final Hero targetAttack = army.getHero(position).orElseThrow(() -> new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK));
         int damageDone = 0;
         if (isHit(this.getPrecision())) {
-            damageDone = calculateDamage(targetAttack);
-            targetAttack.setHp(targetAttack.getHp() - damageDone);
-            army.killHero(targetAttack.getUnitId());
+            damageDone = makeAction(targetAttack, army);
         }
         final Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
         enemyHeroPosDamage.put(position, damageDone);
         return enemyHeroPosDamage;
+    }
+
+    private int makeAction(final Hero target, final Army army) {
+        int damage = calculateDamage(target);
+        target.setHp(target.getHp() - damage);
+        if (target.isDead()) {
+            army.killHero(target.getUnitId());
+        }
+        return damage;
+    }
+
+    public boolean isDead() {
+        return this.hp <= 0;
     }
 
     protected int calculateDamage(final Hero targetAttack) {

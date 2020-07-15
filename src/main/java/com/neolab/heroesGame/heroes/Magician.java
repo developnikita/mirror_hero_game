@@ -38,7 +38,7 @@ public class Magician extends Hero {
             enemyHeroPosDamage.put(coordinate, damageDone);
         });
 
-        enemyHeroPosDamage.keySet().forEach(army::killHero);
+        enemyHeroPosDamage.keySet().forEach(army::tryToKill);
 
         return enemyHeroPosDamage;
     }

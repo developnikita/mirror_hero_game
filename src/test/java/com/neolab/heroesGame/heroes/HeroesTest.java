@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 public class HeroesTest {
 
-    @Test(expected = HeroExceptions.class)
+    @Test
     public void heroesMethodsTest() throws HeroExceptions {
         Hero targetHero = WarlordFootman.createInstance();
         Hero activeHero = WarlordFootman.createInstance();

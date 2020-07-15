@@ -148,6 +148,7 @@ public class HeroToActTest {
         Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
         assertTrue(army.getHero(firstPosition).isPresent());
         assertTrue(army.getHero(secondPosition).isPresent());
+        assertTrue(army.getHero(thirdPosition).isPresent());
 
         effect = vampire.toAct(firstPosition, army);
         int health = 1;
