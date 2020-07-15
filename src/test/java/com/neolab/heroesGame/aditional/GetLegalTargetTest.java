@@ -26,8 +26,8 @@ public class GetLegalTargetTest {
         });
     }
 
-    private Set<SquareCoordinate> legalCoordinates;
-    private Army enemy;
+    private final Set<SquareCoordinate> legalCoordinates;
+    private final Army enemy;
 
     public GetLegalTargetTest(Set<SquareCoordinate> legalCoordinates, Army enemy) {
         this.legalCoordinates = legalCoordinates;

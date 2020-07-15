@@ -145,6 +145,7 @@ public class Army {
     private void cancel(final Hero hero) {
         hero.setArmor(hero.getArmor() - warlord.getImproveCoefficient());
         hero.setHpMax(hero.getHpDefault());
+        hero.setHp(Math.min(hero.getHp(), hero.getHpDefault()));
         hero.setDamage(hero.getDamageDefault());
     }
 
