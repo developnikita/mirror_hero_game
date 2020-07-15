@@ -44,11 +44,11 @@ public class ArmyTest {
 
         //killHeroTest
         warlord.setHp(0);
-        army.killHero(warlord.getUnitId());
+        army.killHero(warlordCoord);
         assertEquals(army.getHeroes().size(), 1);
         assertEquals(army.getAvailableHeroes().size(), 1);
         footman.setHp(0);
-        army.killHero(footman.getUnitId());
+        army.killHero(footmanCoord);
         assertEquals(army.getHeroes().size(), 0);
         assertEquals(army.getAvailableHeroes().size(), 0);
 

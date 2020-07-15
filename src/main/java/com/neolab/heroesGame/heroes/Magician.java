@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
-import com.neolab.heroesGame.errors.HeroExceptions;
 
 import java.util.*;
 
@@ -37,8 +36,6 @@ public class Magician extends Hero {
             }
             enemyHeroPosDamage.put(coordinate, damageDone);
         });
-
-        enemyHeroPosDamage.keySet().forEach(army::tryToKill);
 
         return enemyHeroPosDamage;
     }

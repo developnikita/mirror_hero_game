@@ -1,5 +1,6 @@
 package com.neolab.heroesGame.server.answers;
 
+import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroActions;
@@ -11,6 +12,7 @@ import com.neolab.heroesGame.server.ActionEffect;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public final class AnswerProcessor {
 
@@ -61,9 +63,12 @@ public final class AnswerProcessor {
                 effectActionMap = Collections.emptyMap();
                 activeHero.setDefence();
             } else {
-                effectActionMap = activeHero.toAct(answer.getTargetUnit(),
-                        answer.getAction() == HeroActions.HEAL
-                        ? board.getArmy(activePlayerId) : board.getArmy(waitingPlayerId));
+                if (answer.getAction() == HeroActions.ATTACK) {
+                    effectActionMap = activeHero.toAct(answer.getTargetUnit(), board.getArmy(waitingPlayerId));
+                    tryToKill(effectActionMap.keySet(), board.getArmy(waitingPlayerId));
+                } else {
+                    effectActionMap = activeHero.toAct(answer.getTargetUnit(), board.getArmy(activePlayerId));
+                }
             }
 
             removeUsedHero(activePlayerId, activeHero.getUnitId());
@@ -72,6 +77,10 @@ public final class AnswerProcessor {
             throw new HeroExceptions(HeroErrorCode.ERROR_ANSWER);
         }
 
+    }
+
+    private void tryToKill(Set<SquareCoordinate> coordinateSet, Army army) {
+        coordinateSet.forEach(army::tryToKill);
     }
 
     private Hero getActiveHero(final BattleArena board, final Answer answer) throws HeroExceptions {

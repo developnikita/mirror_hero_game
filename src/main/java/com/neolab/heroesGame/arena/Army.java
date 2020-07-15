@@ -76,16 +76,6 @@ public class Army {
         this.availableHeroes = new HashMap<>(heroes);
     }
 
-    public void killHero(final int heroId) {
-        if (warlord != null) {
-            if (warlord.getUnitId() == heroId) {
-                cancelImprove();
-            }
-        }
-        removeAvailableHeroById(heroId);
-        heroes.values().removeIf(value -> value.getUnitId() == heroId);
-    }
-
     public void killHero(SquareCoordinate coordinate) {
         if (warlord != null) {
             if (heroes.get(coordinate) instanceof IWarlord) {

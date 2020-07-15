@@ -30,7 +30,7 @@ public class HeroesTest {
         // removeTargetTest
         int oldSize = armyTarget.getHeroes().size();
         targetHero.setHp(0);
-        armyTarget.killHero(targetHero.getUnitId());
+        armyTarget.killHero(targetCoord);
         int newSize = armyTarget.getHeroes().size();
         assertNotEquals(oldSize, newSize);
 
