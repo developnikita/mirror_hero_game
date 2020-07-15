@@ -41,7 +41,7 @@ public class WarlordVampire extends Magician implements IWarlord {
     @Override
     public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position, final Army army) {
         final Map<SquareCoordinate, Integer> enemyHeroPosDamage = super.toAct(position, army);
-        AtomicInteger heal = new AtomicInteger(this.getHp());
+        final AtomicInteger heal = new AtomicInteger(this.getHp());
         enemyHeroPosDamage.values().forEach(heal::addAndGet);
         this.setHp(Math.min(heal.get(), this.getHpMax()));
         return enemyHeroPosDamage;
