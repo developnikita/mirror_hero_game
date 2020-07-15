@@ -43,9 +43,11 @@ public class ArmyTest {
         assertEquals(defaultHpWarlord, warlord.getHp());
 
         //killHeroTest
+        warlord.setHp(0);
         army.killHero(warlord.getUnitId());
         assertEquals(army.getHeroes().size(), 1);
         assertEquals(army.getAvailableHeroes().size(), 1);
+        footman.setHp(0);
         army.killHero(footman.getUnitId());
         assertEquals(army.getHeroes().size(), 0);
         assertEquals(army.getAvailableHeroes().size(), 0);

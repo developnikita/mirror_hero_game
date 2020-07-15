@@ -138,7 +138,7 @@ public class Army {
         hero.setArmor(armor);
     }
 
-    private void cancelImprove() {
+    protected void cancelImprove() {
         heroes.values().forEach(this::cancel);
     }
 
