@@ -21,8 +21,8 @@ public class ServerImitation {
     private int counter;
 
     public ServerImitation() throws HeroExceptions {
-        currentPlayer = new ClientPlayerImitation(1);
-        waitingPlayer = new ClientPlayerImitation(2);
+        currentPlayer = new ClientPlayerImitation(1, "Bot1");
+        waitingPlayer = new ClientPlayerImitation(2, "Bot2");
         battleArena = new BattleArena(FactoryArmies.generateArmies(1, 2));
         answerProcessor = new AnswerProcessor(1, 2, battleArena);
         counter = 0;
@@ -69,7 +69,7 @@ public class ServerImitation {
                 serverImitation.changeCurrentAndWaitingPlayers();
             }
 
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOGGER.error(ex.getMessage());
         }
     }

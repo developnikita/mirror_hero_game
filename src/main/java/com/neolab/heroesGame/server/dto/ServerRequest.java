@@ -13,13 +13,13 @@ public class ServerRequest {
     public final String actionEffect;
 
     public ServerRequest(final BattleArena board, final ActionEffect actionEffect) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         this.actionEffect = mapper.writeValueAsString(actionEffect);
         this.boardJson = mapper.writeValueAsString(board);
     }
 
     public ServerRequest(final BattleArena board) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         this.actionEffect = "";
         this.boardJson = mapper.writeValueAsString(board);
     }

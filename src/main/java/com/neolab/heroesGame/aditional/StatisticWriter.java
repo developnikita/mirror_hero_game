@@ -38,7 +38,7 @@ public class StatisticWriter {
                 line = reader.readLine();
             }
 
-            final String[] splitStr = oldLine.toString().split(",");
+            final String[] splitStr = oldLine.split(",");
             final String newLine = splitStr[0] + "," + ((float) Integer.parseInt(splitStr[1]) + action) / 2.0;
             final String newContent = oldContent.replaceAll(oldLine, newLine);
             final FileWriter writer = new FileWriter(csvOutputFile);

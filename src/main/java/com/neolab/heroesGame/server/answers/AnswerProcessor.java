@@ -53,8 +53,8 @@ public final class AnswerProcessor {
      */
     public void handleAnswer(final Answer answer) throws HeroExceptions {
         if (AnswerValidator.isAnswerValidate(answer, board)) {
-            Map<SquareCoordinate, Integer> effectActionMap;
-            Hero activeHero = getActiveHero(board, answer);
+            final Map<SquareCoordinate, Integer> effectActionMap;
+            final Hero activeHero = getActiveHero(board, answer);
 
             if (activeHero.isDefence()) {
                 activeHero.cancelDefence();
@@ -79,12 +79,12 @@ public final class AnswerProcessor {
 
     }
 
-    private void tryToKill(Set<SquareCoordinate> coordinateSet, Army army) {
+    private void tryToKill(final Set<SquareCoordinate> coordinateSet, final Army army) {
         coordinateSet.forEach(army::tryToKill);
     }
 
     private Hero getActiveHero(final BattleArena board, final Answer answer) throws HeroExceptions {
-        Optional<Hero> activeHero = board.getArmy(activePlayerId).getHero(answer.getActiveHero());
+        final Optional<Hero> activeHero = board.getArmy(activePlayerId).getHero(answer.getActiveHero());
         if (activeHero.isPresent()) {
             return activeHero.get();
         }

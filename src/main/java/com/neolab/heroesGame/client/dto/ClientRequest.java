@@ -11,7 +11,7 @@ public class ClientRequest {
     public final String jsonAnswer;
 
     public ClientRequest(final Answer answer) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         jsonAnswer = mapper.writeValueAsString(answer);
     }
 

@@ -14,8 +14,8 @@ public class Client {
         return player;
     }
 
-    public Client(final int playerId) {
-        this.player = new PlayerBot(playerId);
+    public Client(final int playerId, final String name) {
+        this.player = new PlayerBot(playerId, name);
     }
 
     public Answer getClientAnswer(final BattleArena board) throws JsonProcessingException, HeroExceptions {

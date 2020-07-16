@@ -18,8 +18,8 @@ public class GamingProcess {
     private final BattleArena battleArena;
 
     public GamingProcess() throws HeroExceptions {
-        currentPlayer = new PlayerBot(1);
-        waitingPlayer = new PlayerBot(2);
+        currentPlayer = new PlayerBot(1, "Bot1");
+        waitingPlayer = new PlayerBot(2, "Bot2");
         battleArena = new BattleArena(FactoryArmies.generateArmies(1, 2));
         answerProcessor = new AnswerProcessor(1, 2, battleArena);
     }
@@ -60,7 +60,7 @@ public class GamingProcess {
                 gamingProcess.changeCurrentAndWaitingPlayers();
             }
 
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOGGER.error(ex.getMessage());
         }
     }
@@ -88,11 +88,11 @@ public class GamingProcess {
         return !battleArena.haveAvailableHeroByArmyId(id);
     }
 
-    private int getCurrentPlayerId(){
+    private int getCurrentPlayerId() {
         return currentPlayer.getId();
     }
 
-    private int getWaitingPlayerId(){
+    private int getWaitingPlayerId() {
         return waitingPlayer.getId();
     }
 }

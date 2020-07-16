@@ -20,8 +20,8 @@ public class PlayerBot extends Player {
     private final long SEED = 5916;
     private final Random RANDOM = new Random(SEED);
 
-    public PlayerBot(final int id) {
-        super(id);
+    public PlayerBot(final int id, final String name) {
+        super(id, name);
     }
 
     /**

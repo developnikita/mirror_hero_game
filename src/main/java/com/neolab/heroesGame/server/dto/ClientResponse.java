@@ -12,7 +12,7 @@ public class ClientResponse {
     private final Answer answer;
 
     public ClientResponse(final String jsonString) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         this.answer = mapper.readValue(jsonString, Answer.class);
     }
 

@@ -162,7 +162,7 @@ public class CommonFunction {
         if (optionalHero.isEmpty()) {
             return String.format("%12s|", "");
         }
-        Hero hero = optionalHero.get();
+        final Hero hero = optionalHero.get();
         if (hero.getClass() == Magician.class) {
             result = String.format("%12s|", "Маг");
         } else if (hero instanceof WarlordMagician) {

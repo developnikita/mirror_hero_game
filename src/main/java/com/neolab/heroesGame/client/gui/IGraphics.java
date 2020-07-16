@@ -4,5 +4,5 @@ import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.server.ActionEffect;
 
 public interface IGraphics {
-    public void showPosition(BattleArena arena, ActionEffect effect, Integer playerId) throws Exception;
+    void showPosition(BattleArena arena, ActionEffect effect, Integer playerId) throws Exception;
 }

@@ -13,7 +13,7 @@ public class AsciiGraphics implements IGraphics {
     }
 
     @Override
-    public void showPosition(BattleArena arena, ActionEffect effect, Integer playerId) throws Exception {
+    public void showPosition(final BattleArena arena, final ActionEffect effect, final Integer playerId) throws Exception {
         clearConsole();
         System.out.println("------------Армия противника------------");
         System.out.println(arenaToString(arena, playerId));
@@ -25,10 +25,10 @@ public class AsciiGraphics implements IGraphics {
         System.in.read();
     }
 
-    private String arenaToString(BattleArena arena, Integer playerId) {
+    private String arenaToString(final BattleArena arena, final Integer playerId) {
         final StringBuilder stringBuilder = new StringBuilder();
-        Army yourArmy = arena.getArmy(playerId);
-        Army enemyArmy = arena.getEnemyArmy(playerId);
+        final Army yourArmy = arena.getArmy(playerId);
+        final Army enemyArmy = arena.getEnemyArmy(playerId);
         stringBuilder.append(CommonFunction.printArmy(enemyArmy));
         stringBuilder.append(CommonFunction.printInvertLinesArmy(yourArmy));
         return stringBuilder.toString();

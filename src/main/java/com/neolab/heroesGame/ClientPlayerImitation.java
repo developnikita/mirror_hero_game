@@ -11,20 +11,20 @@ import com.neolab.heroesGame.server.ActionEffect;
 import com.neolab.heroesGame.server.answers.Answer;
 
 public class ClientPlayerImitation {
-    private Player player;
+    private final Player player;
     private final IGraphics gui;
 
-    public ClientPlayerImitation(int playerId) {
-        player = new PlayerBot(playerId);
+    public ClientPlayerImitation(final int playerId, final String name) {
+        player = new PlayerBot(playerId, name);
         gui = new AsciiGraphics();
     }
 
-    public String getAnswer(String jsonBattleArena, String jsonEffect) throws Exception {
-        ServerResponse response = new ServerResponse(jsonBattleArena, jsonEffect);
-        BattleArena arena = response.board;
-        ActionEffect effect = response.actionEffect;
+    public String getAnswer(final String jsonBattleArena, final String jsonEffect) throws Exception {
+        final ServerResponse response = new ServerResponse(jsonBattleArena, jsonEffect);
+        final BattleArena arena = response.board;
+        final ActionEffect effect = response.actionEffect;
         gui.showPosition(arena, effect, player.getId());
-        Answer answer = player.getAnswer(arena);
+        final Answer answer = player.getAnswer(arena);
         return new ClientRequest(answer).jsonAnswer;
     }
 
