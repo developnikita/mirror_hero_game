@@ -48,7 +48,7 @@ public class Army {
         IWarlord iWarlord = null;
         for (final Hero hero : heroes.values()) {
             if (hero instanceof IWarlord) {
-                if (warlord != null) {
+                if (iWarlord != null) {
                     throw new HeroExceptions(HeroErrorCode.ERROR_SECOND_WARLORD_ON_ARMY);
                 }
                 iWarlord = (IWarlord) hero;
@@ -76,7 +76,7 @@ public class Army {
         this.availableHeroes = new HashMap<>(heroes);
     }
 
-    public void killHero(SquareCoordinate coordinate) {
+    public void killHero(final SquareCoordinate coordinate) {
         if (warlord != null) {
             if (heroes.get(coordinate) instanceof IWarlord) {
                 cancelImprove();
@@ -86,7 +86,7 @@ public class Army {
         heroes.remove(coordinate);
     }
 
-    public void tryToKill(SquareCoordinate coordinate) {
+    public void tryToKill(final SquareCoordinate coordinate) {
         if (heroes.get(coordinate) != null && heroes.get(coordinate).isDead()) {
             killHero(coordinate);
         }
