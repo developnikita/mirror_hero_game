@@ -1,5 +1,6 @@
 package com.neolab.heroesGame;
 
+import com.neolab.heroesGame.aditional.StatisticWriter;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.client.ai.Player;
@@ -49,6 +50,7 @@ public class ServerImitation {
 
                 final ClientPlayerImitation whoIsWin = serverImitation.someoneWhoWin();
                 if (whoIsWin != null) {
+                    StatisticWriter.writePlayerStatistic(whoIsWin.getPlayer().getName(), whoIsWin.getPlayer().equals(serverImitation.currentPlayer)?serverImitation.waitingPlayer.getPlayer().getName():serverImitation.currentPlayer.getPlayer().getName());
                     LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", whoIsWin.getPlayer().getId());
                     break;
                 }
