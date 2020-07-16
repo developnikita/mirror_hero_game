@@ -7,12 +7,12 @@ import java.io.*;
 public class StatisticWriter {
     public static String playerStatisticFilePath = "playerStatistic.csv";
     public static String unitActionStatisticFilePath = "unitActionStatistic.csv";
-    private static boolean playerStatisticFileInit = false;
-    private static boolean unitStatisticFileInit = false;
 
     public static void writePlayerStatistic(final String winnerPlayerName, final String looserPlayerName) {
-//        initPlayerStatistic();
         final File csvOutputFile = new File(playerStatisticFilePath);
+        if (!csvOutputFile.exists()) {
+            initPlayerStatistic();
+        }
         final String[] data = {winnerPlayerName, looserPlayerName, winnerPlayerName};
         try (final FileWriter fw = new FileWriter(csvOutputFile, true)) {
             fw.write(convertToCSV(data) + "\n");
@@ -22,8 +22,10 @@ public class StatisticWriter {
     }
 
     public static void writeUnitStatistic(final String unitClass, final Integer action) {
-//        initUnitStatistic();
         final File csvOutputFile = new File(unitActionStatisticFilePath);
+        if (!csvOutputFile.exists()) {
+            initUnitStatistic();
+        }
         String oldContent = "";
         String oldLine = "";
         try (final BufferedReader reader = new BufferedReader(new FileReader(csvOutputFile))) {
@@ -50,35 +52,29 @@ public class StatisticWriter {
     }
 
     private static void initPlayerStatistic() {
-        if (!playerStatisticFileInit) {
-            final File csvOutputFile = new File(playerStatisticFilePath);
-            final String[] data = {"Player 1", "Player 2", "Winner"};
-            try (final FileWriter fw = new FileWriter(csvOutputFile)) {
-                fw.write(convertToCSV(data) + "\n");
-                playerStatisticFileInit = true;
-            } catch (final IOException e) {
-                // TODO: Logger
-            }
+        final File csvOutputFile = new File(playerStatisticFilePath);
+        final String[] data = {"Player 1", "Player 2", "Winner"};
+        try (final FileWriter fw = new FileWriter(csvOutputFile)) {
+            fw.write(convertToCSV(data) + "\n");
+        } catch (final IOException e) {
+            // TODO: Logger
         }
     }
 
     private static void initUnitStatistic() {
-        if (!unitStatisticFileInit) {
-            final File csvOutputFile = new File(unitActionStatisticFilePath);
-            final String[] data = {"Unit", "Action"};
-            final String[][] unit = {{"Archer", "0"}, {"Footman", "0"}, {"Healer", "0"}, {"Magician", "0"},
-                    {"WarlordFootman", "0"}, {"WarlordMagician", "0"}, {"WarlordVampire", "0"}};
-            final String[] array = new String[unit.length];
-            for (int i = 0; i < unit.length; ++i) {
-                array[i] = String.join(",", unit[i]);
-            }
-            try (final FileWriter fw = new FileWriter(csvOutputFile)) {
-                fw.write(convertToCSV(data) + "\n");
-                fw.write(String.join("\n", array));
-                unitStatisticFileInit = true;
-            } catch (final IOException e) {
-                // TODO: Logger
-            }
+        final File csvOutputFile = new File(unitActionStatisticFilePath);
+        final String[] data = {"Unit", "Action"};
+        final String[][] unit = {{"Archer", "0"}, {"Footman", "0"}, {"Healer", "0"}, {"Magician", "0"},
+                {"WarlordFootman", "0"}, {"WarlordMagician", "0"}, {"WarlordVampire", "0"}};
+        final String[] array = new String[unit.length];
+        for (int i = 0; i < unit.length; ++i) {
+            array[i] = String.join(",", unit[i]);
+        }
+        try (final FileWriter fw = new FileWriter(csvOutputFile)) {
+            fw.write(convertToCSV(data) + "\n");
+            fw.write(String.join("\n", array));
+        } catch (final IOException e) {
+            // TODO: Logger
         }
     }
 
