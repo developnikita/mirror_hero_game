@@ -36,6 +36,18 @@ public class ActionEffect {
         this.sourceUnit = new SquareCoordinate(sourceUnit.getX(), sourceUnit.getY());
     }
 
+    public HeroActions getAction() {
+        return action;
+    }
+
+    public SquareCoordinate getSourceUnit() {
+        return sourceUnit;
+    }
+
+    public Map<SquareCoordinate, Integer> getTargetUnitsMap() {
+        return targetUnitsMap;
+    }
+
     public void toLog() {
         LOGGER.info(toString());
     }
@@ -43,7 +55,7 @@ public class ActionEffect {
     @Override
     public String toString() {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.format("Юнит на позиции (%d, %d) ", sourceUnit.getX(), sourceUnit.getY()));
+        stringBuilder.append(String.format("юнит на позиции (%d, %d) ", sourceUnit.getX() + 1, sourceUnit.getY() + 1));
         if (action == HeroActions.DEFENCE) {
             stringBuilder.append("встал в защиту");
         } else {
@@ -51,10 +63,10 @@ public class ActionEffect {
             final String effectName = (action == HeroActions.HEAL) ? "" : " урона";
             for (final SquareCoordinate key : targetUnitsMap.keySet()) {
                 if (targetUnitsMap.get(key) <= 0) {
-                    stringBuilder.append(String.format("промахнулся по юниту на позиции (%d, %d) ", key.getX(), key.getY()));
+                    stringBuilder.append(String.format("промахнулся по юниту на позиции (%d, %d) ", key.getX() + 1, key.getY() + 1));
                 } else {
                     stringBuilder.append(String.format("%s юниту на позиции (%d, %d) %d HP%s ",
-                            stringAction, key.getX(), key.getY(), targetUnitsMap.get(key), effectName));
+                            stringAction, key.getX() + 1, key.getY() + 1, targetUnitsMap.get(key), effectName));
                 }
             }
         }

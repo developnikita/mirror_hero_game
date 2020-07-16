@@ -89,18 +89,6 @@ public class CommonFunction {
         return stringBuilder.toString();
     }
 
-    public static String printInvertLinesArmy(final Army army) {
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("________________________________________");
-        for (int y = 1; y >= 0; y--) {
-            stringBuilder.append("\n");
-            stringBuilder.append(getLineUnit(army, y));
-            stringBuilder.append("|____________|____________|____________|");
-
-        }
-        return stringBuilder.toString();
-    }
-
     /**
      * Формируем 3 строки - первая с названием класса, вторая с текущим/маскимальным хп, третья со статусом действия
      */
@@ -126,7 +114,7 @@ public class CommonFunction {
         return stringBuilder.toString();
     }
 
-    private static String statusToString(final Optional<Hero> optionalHero, final Army army) {
+    public static String statusToString(final Optional<Hero> optionalHero, final Army army) {
         final StringBuilder result = new StringBuilder();
         if (optionalHero.isEmpty()) {
             result.append(String.format("%12s|", ""));
@@ -146,7 +134,7 @@ public class CommonFunction {
         return result.toString();
     }
 
-    private static String hpToString(final Optional<Hero> optionalHero) {
+    public static String hpToString(final Optional<Hero> optionalHero) {
         final String result;
         if (optionalHero.isEmpty()) {
             result = String.format("%12s|", "");

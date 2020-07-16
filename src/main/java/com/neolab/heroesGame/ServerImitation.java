@@ -4,7 +4,6 @@ import com.neolab.heroesGame.aditional.StatisticWriter;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.client.ai.Player;
-import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.answers.Answer;
 import com.neolab.heroesGame.server.answers.AnswerProcessor;
 import com.neolab.heroesGame.server.dto.ClientResponse;
@@ -21,9 +20,9 @@ public class ServerImitation {
     private final BattleArena battleArena;
     private int counter;
 
-    public ServerImitation() throws HeroExceptions {
+    public ServerImitation() throws Exception {
         currentPlayer = new ClientPlayerImitation(1, "Bot1");
-        waitingPlayer = new ClientPlayerImitation(2, "Bot2");
+        waitingPlayer = new ClientPlayerImitation(2, "Bot2", true);
         battleArena = new BattleArena(FactoryArmies.generateArmies(1, 2));
         answerProcessor = new AnswerProcessor(1, 2, battleArena);
         counter = 0;
@@ -46,12 +45,15 @@ public class ServerImitation {
             final ServerImitation serverImitation = new ServerImitation();
             LOGGER.info("-----------------Начинается великая битва---------------");
             while (true) {
-                serverImitation.battleArena.toLog();
 
                 final ClientPlayerImitation whoIsWin = serverImitation.someoneWhoWin();
                 if (whoIsWin != null) {
-                    StatisticWriter.writePlayerStatistic(whoIsWin.getPlayer().getName(), whoIsWin.getPlayer().equals(serverImitation.currentPlayer)?serverImitation.waitingPlayer.getPlayer().getName():serverImitation.currentPlayer.getPlayer().getName());
+                    StatisticWriter.writePlayerStatistic(whoIsWin.getPlayer().getName(), whoIsWin.getPlayer().equals(serverImitation.currentPlayer) ? serverImitation.waitingPlayer.getPlayer().getName() : serverImitation.currentPlayer.getPlayer().getName());
                     LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", whoIsWin.getPlayer().getId());
+                    final ServerRequest request = new ServerRequest(serverImitation.battleArena,
+                            serverImitation.answerProcessor.getActionEffect());
+                    serverImitation.waitingPlayer.sendInformation(request.boardJson, request.actionEffect);
+                    serverImitation.currentPlayer.sendInformation(request.boardJson, request.actionEffect);
                     break;
                 }
 
@@ -77,7 +79,9 @@ public class ServerImitation {
     }
 
     private void askPlayerProcess() throws Exception {
+        battleArena.toLog();
         final ServerRequest request = new ServerRequest(battleArena, answerProcessor.getActionEffect());
+        waitingPlayer.sendInformation(request.boardJson, request.actionEffect);
         final String response = currentPlayer.getAnswer(request.boardJson, request.actionEffect);
         final Answer answer = new ClientResponse(response).getAnswer();
         answer.toLog();
