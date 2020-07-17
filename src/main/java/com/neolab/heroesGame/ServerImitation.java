@@ -48,7 +48,10 @@ public class ServerImitation {
 
                 final ClientPlayerImitation whoIsWin = serverImitation.someoneWhoWin();
                 if (whoIsWin != null) {
-                    StatisticWriter.writePlayerStatistic(whoIsWin.getPlayer().getName(), whoIsWin.getPlayer().equals(serverImitation.currentPlayer) ? serverImitation.waitingPlayer.getPlayer().getName() : serverImitation.currentPlayer.getPlayer().getName());
+                    StatisticWriter.writePlayerWinStatistic(whoIsWin.getPlayer().getName(),
+                            whoIsWin.getPlayer().equals(serverImitation.currentPlayer.getPlayer()) ?
+                                    serverImitation.waitingPlayer.getPlayer().getName() :
+                                    serverImitation.currentPlayer.getPlayer().getName());
                     LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", whoIsWin.getPlayer().getId());
                     final ServerRequest request = new ServerRequest(serverImitation.battleArena,
                             serverImitation.answerProcessor.getActionEffect());
@@ -60,6 +63,8 @@ public class ServerImitation {
                 if (!serverImitation.battleArena.canSomeoneAct()) {
                     serverImitation.counter++;
                     if (serverImitation.counter > MAX_ROUND) {
+                        StatisticWriter.writePlayerDrawStatistic(serverImitation.currentPlayer.getPlayer().getName(),
+                                serverImitation.waitingPlayer.getPlayer().getName());
                         LOGGER.info("Поединок закончился ничьей");
                         break;
                     }

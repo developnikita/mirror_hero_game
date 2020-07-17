@@ -8,15 +8,28 @@ public class StatisticWriter {
     public static String playerStatisticFilePath = "playerStatistic.csv";
     public static String unitActionStatisticFilePath = "unitActionStatistic.csv";
 
-    public static void writePlayerStatistic(final String winnerPlayerName, final String looserPlayerName) {
+    public static void writePlayerWinStatistic(final String winnerPlayerName, final String looserPlayerName) {
         final File csvOutputFile = new File(playerStatisticFilePath);
         if (!csvOutputFile.exists()) {
             initPlayerStatistic();
         }
-        final String[] data = {winnerPlayerName, looserPlayerName, winnerPlayerName};
+        final String[] data = {winnerPlayerName, looserPlayerName, "1.0", "0.0"};
         try (final FileWriter fw = new FileWriter(csvOutputFile, true)) {
             fw.write(convertToCSV(data) + "\n");
         } catch (final IOException e) {
+            // TODO: Logger
+        }
+    }
+
+    public static void writePlayerDrawStatistic(final String player1, final String player2) {
+        final File csvOutputFile = new File(playerStatisticFilePath);
+        if (csvOutputFile.exists()) {
+            initPlayerStatistic();
+        }
+        final String[] data = {player1, player2, "0.5", "0.5"};
+        try (final FileWriter fw = new FileWriter(csvOutputFile)) {
+            fw.write(convertToCSV(data) + "\n");
+        } catch (IOException e) {
             // TODO: Logger
         }
     }
@@ -53,7 +66,7 @@ public class StatisticWriter {
 
     private static void initPlayerStatistic() {
         final File csvOutputFile = new File(playerStatisticFilePath);
-        final String[] data = {"Player 1", "Player 2", "Winner"};
+        final String[] data = {"Player 1", "Player 2", "Player1Point", "Player2Point"};
         try (final FileWriter fw = new FileWriter(csvOutputFile)) {
             fw.write(convertToCSV(data) + "\n");
         } catch (final IOException e) {
@@ -90,14 +103,4 @@ public class StatisticWriter {
         }
         return data;
     }
-
-    public static void main(final String[] args) {
-        writePlayerStatistic("ASD", "ddf");
-        writePlayerStatistic("432мсф", "фывфыв");
-
-        System.out.println(Archer.class.getSimpleName());
-
-        writeUnitStatistic("Archer", 12);
-    }
-
 }
