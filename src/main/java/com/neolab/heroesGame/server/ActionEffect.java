@@ -26,14 +26,18 @@ public class ActionEffect {
     private final Map<SquareCoordinate, Integer> targetUnitsMap;
     @JsonProperty
     private final SquareCoordinate sourceUnit;
+    @JsonProperty
+    private final int lastMovedPlayerId;
 
     @JsonCreator
     public ActionEffect(@JsonProperty("action") final HeroActions action,
                         @JsonProperty("sourceUnit") final SquareCoordinate sourceUnit,
-                        @JsonProperty("targetUnitsMap") final Map<SquareCoordinate, Integer> targetUnitsMap) {
+                        @JsonProperty("targetUnitsMap") final Map<SquareCoordinate, Integer> targetUnitsMap,
+                        @JsonProperty("lastMovedPlayerId") final int lastMovedPlayerId) {
         this.action = action;
         this.targetUnitsMap = new HashMap<>(targetUnitsMap);
         this.sourceUnit = new SquareCoordinate(sourceUnit.getX(), sourceUnit.getY());
+        this.lastMovedPlayerId = lastMovedPlayerId;
     }
 
     public HeroActions getAction() {
@@ -46,6 +50,10 @@ public class ActionEffect {
 
     public Map<SquareCoordinate, Integer> getTargetUnitsMap() {
         return targetUnitsMap;
+    }
+
+    public int getLastMovedPlayerId() {
+        return lastMovedPlayerId;
     }
 
     public void toLog() {

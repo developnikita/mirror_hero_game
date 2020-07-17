@@ -1,6 +1,7 @@
 package com.neolab.heroesGame.client.gui;
 
 import com.neolab.heroesGame.arena.BattleArena;
+import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
 import com.neolab.heroesGame.server.ActionEffect;
 
 public class NullGraphics implements IGraphics {
@@ -10,7 +11,17 @@ public class NullGraphics implements IGraphics {
     }
 
     @Override
-    public void showPosition(BattleArena arena, ActionEffect effect, Integer playerId, boolean isYourTurn) {
+    public void showPosition(BattleArena arena, ActionEffect effect, boolean isYourTurn) {
+
+    }
+
+    @Override
+    public void showPosition(ExtendedServerResponse response, boolean isYourTurn) {
+
+    }
+
+    @Override
+    public void endGame(ExtendedServerResponse response) {
 
     }
 }

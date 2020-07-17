@@ -1,15 +1,21 @@
 package com.neolab.heroesGame;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.client.ai.Player;
 import com.neolab.heroesGame.client.ai.PlayerBot;
 import com.neolab.heroesGame.client.dto.ClientRequest;
+import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
 import com.neolab.heroesGame.client.dto.ServerResponse;
 import com.neolab.heroesGame.client.gui.IGraphics;
 import com.neolab.heroesGame.client.gui.NullGraphics;
 import com.neolab.heroesGame.client.gui.console.AsciiGraphics;
+import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.ActionEffect;
 import com.neolab.heroesGame.server.answers.Answer;
+import com.neolab.heroesGame.server.dto.ExtendedServerRequest;
+
+import java.io.IOException;
 
 public class ClientPlayerImitation {
     private final Player player;
@@ -21,27 +27,30 @@ public class ClientPlayerImitation {
     }
 
     public ClientPlayerImitation(final int playerId, final String name,
-                                 final boolean useAsciiGraphics) throws Exception {
+                                 final boolean useAsciiGraphics) throws IOException {
         player = new PlayerBot(playerId, name);
         if (useAsciiGraphics) {
-            gui = new AsciiGraphics();
+            gui = new AsciiGraphics(playerId);
         } else {
-            gui = new AsciiGraphics();
+            gui = new NullGraphics();
         }
     }
 
-    public String getAnswer(final String jsonBattleArena, final String jsonEffect) throws Exception {
-        final ServerResponse response = new ServerResponse(jsonBattleArena, jsonEffect);
-        final BattleArena arena = response.board;
-        final ActionEffect effect = response.actionEffect;
-        gui.showPosition(arena, effect, player.getId(), true);
-        Answer answer = player.getAnswer(response.board);
+    public String getAnswer(final String jsonRequest) throws IOException, HeroExceptions {
+        ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(jsonRequest);
+        gui.showPosition(response, true);
+        Answer answer = player.getAnswer(response.arena);
         return new ClientRequest(answer).jsonAnswer;
     }
 
-    public void sendInformation(String jsonBattleArena, String jsonEffect) throws Exception {
-        ServerResponse response = new ServerResponse(jsonBattleArena, jsonEffect);
-        gui.showPosition(response.board, response.actionEffect, player.getId(), false);
+    public void sendInformation(String jsonRequest) throws IOException {
+        ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(jsonRequest);
+        gui.showPosition(response, false);
+    }
+
+    public void endGame(String jsonRequest) throws IOException {
+        ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(jsonRequest);
+        gui.endGame(response);
     }
 
     public Player getPlayer() {
@@ -50,5 +59,9 @@ public class ClientPlayerImitation {
 
     public int getPlayerId() {
         return player.getId();
+    }
+
+    public String getPlayerName() {
+        return player.getName();
     }
 }

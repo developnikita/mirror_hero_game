@@ -1,5 +1,6 @@
 package com.neolab.heroesGame.client.gui.console;
 
+import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
@@ -9,11 +10,14 @@ import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
 import com.neolab.heroesGame.client.gui.IGraphics;
+import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.enumerations.HeroActions;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.server.ActionEffect;
 
+import java.io.IOException;
 import java.util.Optional;
 
 
@@ -22,33 +26,74 @@ public class AsciiGraphics implements IGraphics {
     private final TextGraphics textGraphics;
     private final int step = 13;
     private int leftOffset;
+    private final int playerId;
+    private final int infoString = 22;
 
-    public AsciiGraphics() throws Exception {
-        term = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(70, 30)).createTerminal();
+    public AsciiGraphics(final int playerId) throws IOException {
+        term = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(70, 35)).createTerminal();
         textGraphics = term.newTextGraphics();
         leftOffset = (term.getTerminalSize().getColumns() - 40) / 2;
+        this.playerId = playerId;
     }
 
     @Override
     public void showPosition(final BattleArena arena, final ActionEffect effect,
-                             final Integer playerId, final boolean isYourTurn) throws Exception {
+                             final boolean isYourTurn) throws IOException {
         term.clearScreen();
-        leftOffset = (term.getTerminalSize().getColumns() - 40) / 2;
-
-        textGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
-        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
-        textGraphics.putString(leftOffset, 0, "------------Армия противника------------");
-        drawArena(arena, effect, playerId, isYourTurn);
-        textGraphics.putString(leftOffset, 20, "---------------Ваша армия---------------");
+        printBattleArena(arena, effect);
+        printTurn(isYourTurn);
         if (effect != null) {
-            showEffect(effect, isYourTurn);
+            printEffect(effect, isYourTurn);
         }
         term.flush();
         term.readInput();
     }
 
-    private void showEffect(final ActionEffect effect, final boolean isNowYourTurn) throws Exception {
-        final int offsetForEffect = 22;
+    @Override
+    public void showPosition(final ExtendedServerResponse response, boolean isYourTurn) throws IOException {
+        showPosition(response.arena, response.effect, isYourTurn);
+    }
+
+    @Override
+    public void endGame(final ExtendedServerResponse response) throws IOException {
+        term.clearScreen();
+        printBattleArena(response.arena, response.effect);
+        printGameResult(response.event);
+        term.flush();
+        term.readInput();
+        term.close();
+    }
+
+    private void printGameResult(final GameEvent event) {
+        if (event == GameEvent.YOU_WIN_GAME) {
+            textGraphics.putString(leftOffset, infoString, "Поздравляем, вы одержали великую победу", SGR.BOLD);
+        } else if (event == GameEvent.YOU_LOSE_GAME) {
+            textGraphics.putString(leftOffset, infoString, "Ты недостоен своей жизни, умри!", SGR.BOLD);
+        } else {
+            textGraphics.putString(leftOffset, infoString, "Никто не смог получить преимущества. Ничья", SGR.BOLD);
+        }
+    }
+
+    private void printBattleArena(final BattleArena arena, final ActionEffect effect) throws IOException {
+        leftOffset = (term.getTerminalSize().getColumns() - 40) / 2;
+        textGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
+        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
+        textGraphics.putString(leftOffset, 0, "------------Армия противника------------");
+        printArena(arena, effect, playerId);
+        textGraphics.putString(leftOffset, 20, "---------------Ваша армия---------------");
+    }
+
+    private void printTurn(boolean isYourTurn) {
+        if (isYourTurn) {
+            textGraphics.putString(leftOffset, infoString, "Сейчас ваш ход", SGR.BOLD);
+        } else {
+            textGraphics.putString(leftOffset, infoString, "Сейчас ход вашего оппонента", SGR.BOLD);
+        }
+
+    }
+
+    private void printEffect(final ActionEffect effect, final boolean isNowYourTurn) throws IOException {
+        final int offsetForEffect = 23;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Во время прошлого хода ");
         stringBuilder.append(isNowYourTurn ? "вражеский " : "ваш ");
@@ -83,23 +128,23 @@ public class AsciiGraphics implements IGraphics {
         }
     }
 
-    private void drawArena(final BattleArena arena, final ActionEffect effect,
-                           final Integer playerId, final boolean isNowYourTurn) throws Exception {
+    private void printArena(final BattleArena arena, final ActionEffect effect,
+                            final Integer playerId) {
         final Army enemy = arena.getEnemyArmy(playerId);
-        drawEnemyArmy(enemy, effect, isNowYourTurn);
+        printEnemyArmy(enemy, effect);
         final Army yours = arena.getArmy(playerId);
-        drawYourArmy(yours, effect, isNowYourTurn);
+        printYourArmy(yours, effect);
     }
 
-    private void drawEnemyArmy(final Army enemy, final ActionEffect effect,
-                               final boolean isNowYourTurn) {
+    private void printEnemyArmy(final Army enemy, final ActionEffect effect) {
         int topString = 2;
+        final boolean isLastMoveMakeEnemy = effect != null && effect.getLastMovedPlayerId() != playerId;
         for (int y = 0; y < 2; y++) {
             for (int x = 0; x < 3; x++) {
                 final SquareCoordinate coordinate = new SquareCoordinate(x, y);
                 final Optional<Hero> hero = enemy.getHero(coordinate);
-                TextColor textColor = chooseColorForEnemy(coordinate, effect, isNowYourTurn);
-                if (!isNowYourTurn && isUnitDiedRightNow(hero, effect, coordinate)) {
+                TextColor textColor = chooseColorForHero(coordinate, effect, isLastMoveMakeEnemy);
+                if (!isLastMoveMakeEnemy && isUnitDiedRightNow(hero, effect, coordinate)) {
                     printDeadUnit(topString, leftOffset + 1 + x * step);
                 } else {
                     printHero(hero, enemy, topString, leftOffset + 1 + x * step, textColor);
@@ -109,15 +154,15 @@ public class AsciiGraphics implements IGraphics {
         }
     }
 
-    private void drawYourArmy(final Army yours, final ActionEffect effect,
-                              final boolean isNowYourTurn) {
+    private void printYourArmy(final Army yours, final ActionEffect effect) {
         int topString = 12;
+        final boolean isLastMoveMakeYou = effect != null && effect.getLastMovedPlayerId() == playerId;
         for (int y = 1; y >= 0; y--) {
             for (int x = 0; x < 3; x++) {
                 final SquareCoordinate coordinate = new SquareCoordinate(x, y);
                 final Optional<Hero> hero = yours.getHero(coordinate);
-                TextColor textColor = chooseColorForYour(coordinate, effect, isNowYourTurn);
-                if (isNowYourTurn && isUnitDiedRightNow(hero, effect, coordinate)) {
+                TextColor textColor = chooseColorForHero(coordinate, effect, isLastMoveMakeYou);
+                if (!isLastMoveMakeYou && isUnitDiedRightNow(hero, effect, coordinate)) {
                     printDeadUnit(topString, leftOffset + 1 + x * step);
                 } else {
                     printHero(hero, yours, topString, leftOffset + 1 + x * step, textColor);
@@ -134,37 +179,12 @@ public class AsciiGraphics implements IGraphics {
 
     }
 
-    private TextColor chooseColorForYour(final SquareCoordinate coordinate, final ActionEffect effect,
-                                         final boolean isNowYourTurn) {
+    private TextColor chooseColorForHero(final SquareCoordinate coordinate, final ActionEffect effect,
+                                         final boolean isLastTurnMakeYou) {
         if (effect == null) {
             return TextColor.ANSI.WHITE;
         }
-        if (isNowYourTurn) {
-            if (effect.getTargetUnitsMap().containsKey(coordinate)) {
-                if (effect.getAction() == HeroActions.ATTACK) {
-                    if (effect.getTargetUnitsMap().get(coordinate) != 0) {
-                        return TextColor.ANSI.RED;
-                    }
-                    return TextColor.ANSI.YELLOW;
-                }
-            }
-        } else {
-            if (effect.getSourceUnit().equals(coordinate)) {
-                return TextColor.ANSI.CYAN;
-            }
-            if (effect.getAction() == HeroActions.HEAL && effect.getTargetUnitsMap().containsKey(coordinate)) {
-                return TextColor.ANSI.GREEN;
-            }
-        }
-        return TextColor.ANSI.WHITE;
-    }
-
-    private TextColor chooseColorForEnemy(final SquareCoordinate coordinate, final ActionEffect effect,
-                                          final boolean isNowYourTurn) {
-        if (effect == null) {
-            return TextColor.ANSI.WHITE;
-        }
-        if (isNowYourTurn) {
+        if (isLastTurnMakeYou) {
             if (effect.getSourceUnit().equals(coordinate)) {
                 return TextColor.ANSI.CYAN;
             }

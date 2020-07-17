@@ -6,11 +6,13 @@ import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.enumerations.HeroActions;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
 import com.neolab.heroesGame.server.ActionEffect;
 import com.neolab.heroesGame.server.answers.Answer;
+import com.neolab.heroesGame.server.dto.ExtendedServerRequest;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -143,12 +145,27 @@ public class SerializationTest {
     @Test
     public void actionEffectSerializationDeserializationTest() throws JsonProcessingException {
         final Map<SquareCoordinate, Integer> map = new HashMap<>();
-        map.put(new SquareCoordinate(2,2), 2);
-        final ActionEffect ae = new ActionEffect(HeroActions.ATTACK,  new SquareCoordinate(1, 2), map);
+        map.put(new SquareCoordinate(2, 2), 2);
+        final ActionEffect ae = new ActionEffect(HeroActions.ATTACK, new SquareCoordinate(1, 2), map, 1);
         final String json = mapper.writeValueAsString(ae);
         System.out.println(json);
         final ActionEffect newAe = mapper.readValue(json, ActionEffect.class);
 
         assertEquals(ae, newAe);
+    }
+
+    @Test
+    public void extendedServerRequestTest() throws Exception {
+        final BattleArena arena = new BattleArena(FactoryArmies.generateArmies(1, 2));
+        final Map<SquareCoordinate, Integer> map = new HashMap<>();
+        map.put(new SquareCoordinate(2, 2), 2);
+        final ActionEffect ae = new ActionEffect(HeroActions.ATTACK, new SquareCoordinate(1, 2), map, 1);
+
+        String request = ExtendedServerRequest.getRequestString(GameEvent.GAME_END_WITH_A_TIE, arena, ae);
+        ExtendedServerRequest extendedServerRequest = ExtendedServerRequest.getRequestFromString(request);
+
+        assertEquals(arena, extendedServerRequest.arena);
+        assertEquals(ae, extendedServerRequest.effect);
+        assertEquals(GameEvent.GAME_END_WITH_A_TIE, extendedServerRequest.event);
     }
 }
