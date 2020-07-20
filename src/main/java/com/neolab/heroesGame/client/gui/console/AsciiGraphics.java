@@ -37,21 +37,16 @@ public class AsciiGraphics implements IGraphics {
     }
 
     @Override
-    public void showPosition(final BattleArena arena, final ActionEffect effect,
-                             final boolean isYourTurn) throws IOException {
+    public void showPosition(final ExtendedServerResponse response, boolean isYourTurn) throws IOException {
+        final ActionEffect effect = Optional.ofNullable(response.effect).orElse(ActionEffect.defaultActionEffect());
         term.clearScreen();
-        printBattleArena(arena, effect);
+        printBattleArena(response.arena, effect);
         printTurn(isYourTurn);
-        if (effect != null) {
+        if (!effect.getSourceUnit().equals(new SquareCoordinate(-1, -1))) {
             printEffect(effect, isYourTurn);
         }
         term.flush();
         term.readInput();
-    }
-
-    @Override
-    public void showPosition(final ExtendedServerResponse response, boolean isYourTurn) throws IOException {
-        showPosition(response.arena, response.effect, isYourTurn);
     }
 
     @Override
@@ -79,8 +74,37 @@ public class AsciiGraphics implements IGraphics {
         textGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
         textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
         textGraphics.putString(leftOffset, 0, "------------Армия противника------------");
-        printArena(arena, effect, playerId);
+        printArmy(arena.getEnemyArmy(playerId), effect, false);
+        printArmy(arena.getArmy(playerId), effect, true);
         textGraphics.putString(leftOffset, 20, "---------------Ваша армия---------------");
+    }
+
+    /**
+     * С помощью булевой переменной определяем на какую строку выводить армию, в каком порядке выводить линии армии,
+     * эта или нет армия действовала в прошлом ходу
+     * Проходим в цикле по всем доступным координатам, выбираем для юнита цвет,
+     * если юнит только что умер, отрисовываем смерть. Иначе рисуем юнита
+     * Если юнита нет, то поле будет пустым
+     * Для определения умер ли юнит только что проверяем чей последний ход и обращаемся к функции isUnitDiedRightNow
+     * для того, чтобы определить наносился ли этому юниту в прошлом ходу урон
+     */
+    private void printArmy(final Army yours, final ActionEffect effect, final boolean isItYourArmy) {
+        int topString = isItYourArmy ? 12 : 2;
+        final boolean isLastMoveMakeThisArmy = (effect.getLastMovedPlayerId() == playerId) == isItYourArmy;
+        for (int i = 0; i < 2; i++) {
+            int y = isItYourArmy ? 1 - i : i;
+            for (int x = 0; x < 3; x++) {
+                final SquareCoordinate coordinate = new SquareCoordinate(x, y);
+                final Optional<Hero> hero = yours.getHero(coordinate);
+                TextColor textColor = chooseColorForHero(coordinate, effect, isLastMoveMakeThisArmy);
+                if (!isLastMoveMakeThisArmy && hero.isEmpty() && isUnitDiedRightNow(effect, coordinate)) {
+                    printDeadUnit(topString, leftOffset + 1 + x * step);
+                } else {
+                    printHero(hero, yours, topString, leftOffset + 1 + x * step, textColor);
+                }
+            }
+            topString += 4;
+        }
     }
 
     private void printTurn(boolean isYourTurn) {
@@ -128,62 +152,21 @@ public class AsciiGraphics implements IGraphics {
         }
     }
 
-    private void printArena(final BattleArena arena, final ActionEffect effect,
-                            final Integer playerId) {
-        final Army enemy = arena.getEnemyArmy(playerId);
-        printEnemyArmy(enemy, effect);
-        final Army yours = arena.getArmy(playerId);
-        printYourArmy(yours, effect);
-    }
-
-    private void printEnemyArmy(final Army enemy, final ActionEffect effect) {
-        int topString = 2;
-        final boolean isLastMoveMakeEnemy = effect != null && effect.getLastMovedPlayerId() != playerId;
-        for (int y = 0; y < 2; y++) {
-            for (int x = 0; x < 3; x++) {
-                final SquareCoordinate coordinate = new SquareCoordinate(x, y);
-                final Optional<Hero> hero = enemy.getHero(coordinate);
-                TextColor textColor = chooseColorForHero(coordinate, effect, isLastMoveMakeEnemy);
-                if (!isLastMoveMakeEnemy && isUnitDiedRightNow(hero, effect, coordinate)) {
-                    printDeadUnit(topString, leftOffset + 1 + x * step);
-                } else {
-                    printHero(hero, enemy, topString, leftOffset + 1 + x * step, textColor);
-                }
-            }
-            topString += 4;
-        }
-    }
-
-    private void printYourArmy(final Army yours, final ActionEffect effect) {
-        int topString = 12;
-        final boolean isLastMoveMakeYou = effect != null && effect.getLastMovedPlayerId() == playerId;
-        for (int y = 1; y >= 0; y--) {
-            for (int x = 0; x < 3; x++) {
-                final SquareCoordinate coordinate = new SquareCoordinate(x, y);
-                final Optional<Hero> hero = yours.getHero(coordinate);
-                TextColor textColor = chooseColorForHero(coordinate, effect, isLastMoveMakeYou);
-                if (!isLastMoveMakeYou && isUnitDiedRightNow(hero, effect, coordinate)) {
-                    printDeadUnit(topString, leftOffset + 1 + x * step);
-                } else {
-                    printHero(hero, yours, topString, leftOffset + 1 + x * step, textColor);
-                }
-            }
-            topString += 4;
-        }
-    }
-
-    private boolean isUnitDiedRightNow(Optional<Hero> hero, ActionEffect effect, SquareCoordinate coordinate) {
-        return hero.isEmpty()
-                && effect.getTargetUnitsMap().containsKey(coordinate)
+    private boolean isUnitDiedRightNow(ActionEffect effect, SquareCoordinate coordinate) {
+        return effect.getTargetUnitsMap().containsKey(coordinate)
                 && effect.getAction() == HeroActions.ATTACK;
 
     }
 
+    /**
+     * Если последний ход был этой армии, то юнит может быть циан (если он действовал) или зеленным (если его лечили)
+     * если лекарь лечил сам себя, то он циан; если юнит встал в защиту, то он циан
+     * Если последний ход делала вражеская армия, то юнит может быть красным (если ему нанесли урон)
+     * или желтым (если по нему не попали
+     * Если в прошлом ходу юнит никак не участвовал, то он остается белым
+     */
     private TextColor chooseColorForHero(final SquareCoordinate coordinate, final ActionEffect effect,
                                          final boolean isLastTurnMakeYou) {
-        if (effect == null) {
-            return TextColor.ANSI.WHITE;
-        }
         if (isLastTurnMakeYou) {
             if (effect.getSourceUnit().equals(coordinate)) {
                 return TextColor.ANSI.CYAN;
@@ -216,9 +199,9 @@ public class AsciiGraphics implements IGraphics {
     private void printDeadUnit(int topString, final int widthOffset) {
         textGraphics.setBackgroundColor(TextColor.ANSI.RED);
         textGraphics.setForegroundColor(TextColor.ANSI.BLACK);
-        textGraphics.putString(widthOffset, topString++, "            |");
-        textGraphics.putString(widthOffset, topString++, "    DEAD    |");
-        textGraphics.putString(widthOffset, topString, "            |");
+        textGraphics.putString(widthOffset, topString++, "            ");
+        textGraphics.putString(widthOffset, topString++, "    DEAD    ", SGR.BLINK);
+        textGraphics.putString(widthOffset, topString, "            ");
         textGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
         textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
     }

@@ -81,6 +81,9 @@ public class PlayerBot extends Player {
         return availableHeroes.iterator().next();
     }
 
+    /**
+     * Ищем раненых юнитов. Если таких нет возвразаем Null
+     */
     protected SquareCoordinate chooseTargetByHealer(final Army army) {
         final Map<SquareCoordinate, Hero> heroes = army.getHeroes();
         final HashSet<SquareCoordinate> damagedHeroes = new HashSet<>();
@@ -96,6 +99,11 @@ public class PlayerBot extends Player {
         return damagedHeroes.iterator().next();
     }
 
+    /**
+     * Ищем легальную цель для милишника
+     *
+     * @throws HeroExceptions Цель должна существовать, иначе армия противника пустая и бой должен был завершиться.
+     */
     protected SquareCoordinate chooseTargetByFootman(final SquareCoordinate activeUnit, final Army enemyArmy) throws HeroExceptions {
         if (RANDOM.nextInt(10) == 0) {
             return null;

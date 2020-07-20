@@ -11,6 +11,7 @@ import com.neolab.heroesGame.enumerations.HeroActions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -54,6 +55,15 @@ public class ActionEffect {
 
     public int getLastMovedPlayerId() {
         return lastMovedPlayerId;
+    }
+
+    public static ActionEffect defaultActionEffect() {
+        return new ActionEffect(
+                HeroActions.DEFENCE,
+                new SquareCoordinate(-1, -1),
+                Collections.emptyMap(),
+                -9999
+        );
     }
 
     public void toLog() {
