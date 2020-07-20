@@ -6,6 +6,7 @@ import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class WarlordVampire extends Magician implements IWarlord {
@@ -53,5 +54,19 @@ public class WarlordVampire extends Magician implements IWarlord {
         final float precision = 0.8f;
         final float armor = 0.05f;
         return new WarlordVampire(hp, damage, precision, armor);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        WarlordVampire that = (WarlordVampire) o;
+        return Float.compare(that.improveCoefficient, improveCoefficient) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), improveCoefficient);
     }
 }

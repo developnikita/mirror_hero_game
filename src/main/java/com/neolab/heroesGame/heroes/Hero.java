@@ -21,7 +21,7 @@ import java.util.Random;
         @JsonSubTypes.Type(value = Magician.class, name = "Magician"),
         @JsonSubTypes.Type(value = WarlordFootman.class, name = "WarlordFootman"),
         @JsonSubTypes.Type(value = WarlordMagician.class, name = "WarlordMagician"),
-        @JsonSubTypes.Type(value = WarlordMagician.class, name = "WarlordVampire")
+        @JsonSubTypes.Type(value = WarlordVampire.class, name = "WarlordVampire")
 }
 )
 public abstract class Hero {

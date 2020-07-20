@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SerializationTest {
 
@@ -37,45 +38,50 @@ public class SerializationTest {
     public void archerSerializationDeserializationTest() throws JsonProcessingException {
         final Hero archer = Archer.createInstance();
         final String json = mapper.writeValueAsString(archer);
-        final Hero newArcher = mapper.readValue(json, Archer.class);
+        final Hero newArcher = mapper.readValue(json, Hero.class);
 
         assertEquals(archer, newArcher);
+        assertTrue(newArcher instanceof Archer);
     }
 
     @Test
     public void footmanSerializationDeserializationTest() throws JsonProcessingException {
         final Hero footman = Footman.createInstance();
         final String json = mapper.writeValueAsString(footman);
-        final Hero newFootman = mapper.readValue(json, Footman.class);
+        final Hero newFootman = mapper.readValue(json, Hero.class);
 
         assertEquals(footman, newFootman);
+        assertTrue(newFootman instanceof Footman);
     }
 
     @Test
     public void healerSerializationDeserializationTest() throws JsonProcessingException {
         final Hero healer = Healer.createInstance();
         final String json = mapper.writeValueAsString(healer);
-        final Hero newHealer = mapper.readValue(json, Healer.class);
+        final Hero newHealer = mapper.readValue(json, Hero.class);
 
         assertEquals(healer, newHealer);
+        assertTrue(newHealer instanceof Healer);
     }
 
     @Test
     public void magicianSerializationDeserializationTest() throws JsonProcessingException {
         final Hero magician = Magician.createInstance();
         final String json = mapper.writeValueAsString(magician);
-        final Hero newMagician = mapper.readValue(json, Magician.class);
+        final Hero newMagician = mapper.readValue(json, Hero.class);
 
         assertEquals(magician, newMagician);
+        assertTrue(newMagician instanceof Magician);
     }
 
     @Test
     public void warlordFootmanSerializationDeserializationTest() throws JsonProcessingException {
         final Hero warlordFootman = WarlordFootman.createInstance();
         final String json = mapper.writeValueAsString(warlordFootman);
-        final Hero newWarlordFootman = mapper.readValue(json, WarlordFootman.class);
+        final Hero newWarlordFootman = mapper.readValue(json, Hero.class);
 
         assertEquals(warlordFootman, newWarlordFootman);
+        assertTrue(newWarlordFootman instanceof WarlordFootman);
 
         final IWarlord warlord = (IWarlord) WarlordFootman.createInstance();
         final String json2 = mapper.writeValueAsString(warlord);
@@ -88,9 +94,10 @@ public class SerializationTest {
     public void warlordMagicianSerializationDeserializationTest() throws JsonProcessingException {
         final Hero warlordMagician = WarlordMagician.createInstance();
         final String json = mapper.writeValueAsString(warlordMagician);
-        final Hero newWarlordMagician = mapper.readValue(json, WarlordMagician.class);
+        final Hero newWarlordMagician = mapper.readValue(json, Hero.class);
 
         assertEquals(warlordMagician, newWarlordMagician);
+        assertTrue(newWarlordMagician instanceof WarlordMagician);
 
         final IWarlord warlord = (IWarlord) WarlordMagician.createInstance();
         final String json2 = mapper.writeValueAsString(warlord);
@@ -103,9 +110,10 @@ public class SerializationTest {
     public void warlordVampireSerializationDeserializationTest() throws JsonProcessingException {
         final Hero warlordVampire = WarlordVampire.createInstance();
         final String json = mapper.writeValueAsString(warlordVampire);
-        final Hero newWarlordVampire = mapper.readValue(json, WarlordVampire.class);
+        final Hero newWarlordVampire = mapper.readValue(json, Hero.class);
 
         assertEquals(warlordVampire, newWarlordVampire);
+        assertTrue(newWarlordVampire instanceof WarlordVampire);
 
         final IWarlord warlord = (IWarlord) WarlordVampire.createInstance();
         final String json2 = mapper.writeValueAsString(warlord);
