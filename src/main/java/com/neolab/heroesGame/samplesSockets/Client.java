@@ -1,6 +1,8 @@
 package com.neolab.heroesGame.samplesSockets;
 
 import com.neolab.heroesGame.ClientPlayerImitation;
+import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
+import com.neolab.heroesGame.enumerations.GameEvent;
 
 import java.net.*;
 import java.io.*;
@@ -39,7 +41,7 @@ public class Client {
      * @param port порт соединения
      */
     private Client(final String ip, final int port, Integer playerId, String clientName) throws Exception {
-        this.player = new ClientPlayerImitation(playerId, clientName, false);
+        this.player = new ClientPlayerImitation(playerId, clientName, true);
         this.ip = ip;
         this.port = port;
     }
@@ -102,12 +104,18 @@ public class Client {
             try {
                 while (true) {
                     requestJson = in.readLine(); // ждем сообщения с сервера
-                    if(requestJson == null){
+                    if (requestJson == null) {
                         downService();
                         break;
                     }
-                    answerJson = getPlayer().getAnswer(requestJson);
-                    send(answerJson);
+                    ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(requestJson);
+                    if (response.event == GameEvent.NOW_YOUR_TURN) {
+                        answerJson = getPlayer().getAnswer(requestJson);
+                        send(answerJson);
+                    }
+                    if (response.event == GameEvent.WAIT_ITS_NOT_YOUR_TURN) {
+                        getPlayer().sendInformation(requestJson);
+                    }
                 }
             }
             catch (Exception e) {

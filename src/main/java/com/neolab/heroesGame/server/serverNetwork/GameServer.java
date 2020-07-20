@@ -84,8 +84,10 @@ public class GameServer {
 
     private void askPlayerProcess() throws HeroExceptions, IOException {
         battleArena.toLog();
+        waitingPlayer.send(ExtendedServerRequest.getRequestString(
+                GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
         currentPlayer.send(ExtendedServerRequest.getRequestString(
-                GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect()));
+                GameEvent.NOW_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
         final String response = currentPlayer.getIn().readLine();
         final Answer answer = new ClientResponse(response).getAnswer();
         answer.toLog();
