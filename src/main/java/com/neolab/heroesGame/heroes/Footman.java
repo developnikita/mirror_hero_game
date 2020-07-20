@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Footman extends Hero {
 
-    protected Footman(int hp, int damage, float precision, float armor) {
+    public Footman(int hp, int damage, float precision, float armor) {
         super(hp, damage, precision, armor);
     }
 

@@ -9,7 +9,7 @@ public class WarlordMagician extends Magician implements IWarlord {
 
     private float improveCoefficient = 0.05f;
 
-    protected WarlordMagician(int hp, int damage, float precision, float armor) {
+    public WarlordMagician(int hp, int damage, float precision, float armor) {
         super(hp, damage, precision, armor);
     }
 
