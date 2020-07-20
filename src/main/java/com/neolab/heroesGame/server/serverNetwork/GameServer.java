@@ -1,12 +1,8 @@
 package com.neolab.heroesGame.server.serverNetwork;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.neolab.heroesGame.ClientPlayerImitation;
-import com.neolab.heroesGame.GamingProcess;
 import com.neolab.heroesGame.aditional.StatisticWriter;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
-import com.neolab.heroesGame.client.ai.Player;
 import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.samplesSockets.PlayerSocket;
@@ -46,6 +42,10 @@ public class GameServer {
                 final Optional<PlayerSocket> whoIsWin = someoneWhoWin();
                 if (whoIsWin.isPresent()) {
                     someoneWin(whoIsWin.get());
+                    waitingPlayer.send(ExtendedServerRequest.getRequestString(
+                            GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
+                    currentPlayer.send(ExtendedServerRequest.getRequestString(
+                            GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
                     break;
                 }
 

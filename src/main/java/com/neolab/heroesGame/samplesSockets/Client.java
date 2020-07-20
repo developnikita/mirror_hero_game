@@ -4,8 +4,8 @@ import com.neolab.heroesGame.ClientPlayerImitation;
 import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
 import com.neolab.heroesGame.enumerations.GameEvent;
 
-import java.net.*;
 import java.io.*;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 
 /**
@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 public class Client {
 
     private static final String IP = "127.0.0.1";//"localhost";
-    private static final int PORT = Server.PORT;
+    private static final int PORT = 8081;
     private static final SimpleDateFormat DATE_FORMAT = PlayerSocket.DATE_FORMAT;
 
     private final String ip; // ip адрес клиента
@@ -28,20 +28,13 @@ public class Client {
     protected String requestJson;
     protected String answerJson;
 
-    public ClientPlayerImitation getPlayer() {
-        return player;
-    }
-
-    private final ClientPlayerImitation player;
-
     /**
      * для создания необходимо принять адрес и номер порта
      *
      * @param ip   ip адрес клиента
      * @param port порт соединения
      */
-    private Client(final String ip, final int port, Integer playerId, String clientName) throws Exception {
-        this.player = new ClientPlayerImitation(playerId, clientName, true);
+    private Client(final String ip, final int port){
         this.ip = ip;
         this.port = port;
     }
@@ -98,10 +91,17 @@ public class Client {
      * нить для чтения и записи сообщений в сокет
      */
     private class ReadWriteMsg extends Thread {
+        private ClientPlayerImitation player;
+
         @Override
         public void run() {
 
             try {
+                /*
+                 * получаем id и имя игрока от сервера и создаем нашего бота
+                 */
+                createPlayer();
+
                 while (true) {
                     requestJson = in.readLine(); // ждем сообщения с сервера
                     if (requestJson == null) {
@@ -110,11 +110,11 @@ public class Client {
                     }
                     ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(requestJson);
                     if (response.event == GameEvent.NOW_YOUR_TURN) {
-                        answerJson = getPlayer().getAnswer(requestJson);
+                        answerJson = player.getAnswer(requestJson);
                         send(answerJson);
                     }
                     if (response.event == GameEvent.WAIT_ITS_NOT_YOUR_TURN) {
-                        getPlayer().sendInformation(requestJson);
+                        player.sendInformation(requestJson);
                     }
                 }
             }
@@ -123,14 +123,20 @@ public class Client {
                 e.printStackTrace();
             }
         }
+
+        private void createPlayer() throws IOException {
+            int playerId = Integer.parseInt(in.readLine());
+            String playerName = in.readLine();
+            player = new ClientPlayerImitation(playerId, playerName, false);
+            send("OK");
+        }
     }
 
-    public static void main(final String[] args) throws Exception {
-        //todo имя и ид из должны быть из конфига
-        final Client client = new Client(IP, PORT,  1,"игрок 1");
+    public static void main(final String[] args) {
+        final Client client = new Client(IP, PORT);
         client.startClient();
 
-        final Client client_2 = new Client(IP, PORT,  2,"игрок 2");
+        final Client client_2 = new Client(IP, PORT);
         client_2.startClient();
 
     }

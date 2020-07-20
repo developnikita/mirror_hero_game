@@ -3,7 +3,6 @@ package com.neolab.heroesGame.samplesSockets;
 import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class PlayerSocket {
 
@@ -16,10 +15,6 @@ public class PlayerSocket {
 
     public BufferedReader getIn() {
         return in;
-    }
-
-    public BufferedWriter getOut() {
-        return out;
     }
 
     public int getPlayerId() {
@@ -44,23 +39,16 @@ public class PlayerSocket {
         out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
-    /**
-     * Обработать сообщение
-     *
-     * @return {@code false} окончить работу после обработки сообщения, иначе {@code true}
-     * @throws IOException ошибка ввода-вывода
-     */
-    private boolean processMessage() throws IOException {
-        final String answer = in.readLine();
-        send(answer);
-        return true;
+    public boolean isAssignIdAndNameClient() throws IOException {
+        send(String.valueOf(playerId));
+        send(playerName);
+        String response = in.readLine();
+        if(response.equals("OK")){
+            return true;
+        }
+        downService();
+        return false;
     }
-
-//    private void sendMessage(final String message) throws IOException {
-//        for (ServerThread socket : Server.serverList) {
-//            socket.send(message);
-//        }
-//    }
 
 
     /**

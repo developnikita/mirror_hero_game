@@ -1,17 +1,15 @@
 package com.neolab.heroesGame;
 
-import com.neolab.heroesGame.samplesSockets.TemplateServer;
+import com.neolab.heroesGame.samplesSockets.Server;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class SetInitialStateTest {
 
     private static final String IP = "127.0.0.1";//"localhost";
-    private static final int PORT = TemplateServer.PORT;
+    private static final int PORT = Server.PORT;
 
     @Test
-    public void startServerAndClientsTest() throws InterruptedException {
+    public void startServerAndClientsTest() {
 
 //        Thread server = new Thread(() -> {
 //            final Server server1 = new Server();
