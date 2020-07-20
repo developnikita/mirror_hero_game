@@ -5,15 +5,18 @@ import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
+import com.neolab.heroesGame.heroes.factory.*;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
 public class CloneTest {
 
     @Test
-    public void cloneArcherTest() {
-        Hero hero = Archer.createInstance();
+    public void cloneArcherTest() throws IOException {
+        Hero hero = new ArcherFactory().create();
         Hero clone = hero.clone();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
@@ -21,8 +24,8 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneFootmanTest() {
-        Hero hero = Footman.createInstance();
+    public void cloneFootmanTest() throws IOException {
+        Hero hero = new FootmanFactory().create();
         Hero clone = hero.clone();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
@@ -30,8 +33,8 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneHealerTest() {
-        Hero hero = Healer.createInstance();
+    public void cloneHealerTest() throws IOException {
+        Hero hero = new HealerFactory().create();
         Hero clone = hero.clone();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
@@ -39,8 +42,8 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneMagicianTest() {
-        Hero hero = Magician.createInstance();
+    public void cloneMagicianTest() throws IOException {
+        Hero hero = new MagicianFactory().create();
         Hero clone = hero.clone();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
@@ -48,8 +51,8 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneWarlordFootmanTest() {
-        Hero hero = WarlordFootman.createInstance();
+    public void cloneWarlordFootmanTest() throws IOException {
+        Hero hero = new WarlordFootmanFactory().create();
         Hero clone = hero.clone();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
@@ -57,8 +60,8 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneWarlordMagicianTest() {
-        Hero hero = WarlordMagician.createInstance();
+    public void cloneWarlordMagicianTest() throws IOException {
+        Hero hero = new WarlordMagicianFactory().create();
         Hero clone = hero.clone();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
@@ -66,8 +69,8 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneWarlordVampireTest() {
-        Hero hero = WarlordVampire.createInstance();
+    public void cloneWarlordVampireTest() throws IOException {
+        Hero hero = new WarlordVampireFactory().create();
         Hero clone = hero.clone();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
