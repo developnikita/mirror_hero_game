@@ -11,11 +11,6 @@ public class NullGraphics implements IGraphics {
     }
 
     @Override
-    public void showPosition(BattleArena arena, ActionEffect effect, boolean isYourTurn) {
-
-    }
-
-    @Override
     public void showPosition(ExtendedServerResponse response, boolean isYourTurn) {
 
     }

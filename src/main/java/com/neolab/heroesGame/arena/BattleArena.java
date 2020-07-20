@@ -6,6 +6,7 @@ import com.neolab.heroesGame.aditional.CommonFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -17,6 +18,12 @@ public class BattleArena {
     @JsonCreator
     public BattleArena(@JsonProperty("armies") final Map<Integer, Army> armies) {
         this.armies = armies;
+    }
+
+    public static BattleArena getCloneBattleArena(BattleArena arena) {
+        Map<Integer, Army> armies = new HashMap<>();
+        arena.getArmies().keySet().forEach(key -> armies.put(key, FactoryArmies.cloneArmy(arena.getArmy(key))));
+        return new BattleArena(armies);
     }
 
     public Map<Integer, Army> getArmies() {

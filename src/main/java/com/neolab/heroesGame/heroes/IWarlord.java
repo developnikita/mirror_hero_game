@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = WarlordFootman.class, name = "WarlordFootman"),
         @JsonSubTypes.Type(value = WarlordMagician.class, name = "WarlordMagician"),
-        @JsonSubTypes.Type(value = WarlordMagician.class, name = "WarlordVampire")
+        @JsonSubTypes.Type(value = WarlordVampire.class, name = "WarlordVampire")
 })
 public interface IWarlord {
     float getImproveCoefficient();

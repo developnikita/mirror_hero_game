@@ -3,11 +3,13 @@ package com.neolab.heroesGame.heroes;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 public class WarlordFootman extends Footman implements IWarlord {
 
     private float improveCoefficient = 0.1f;
 
-    protected WarlordFootman(int hp, int damage, float precision, float armor) {
+    public WarlordFootman(int hp, int damage, float precision, float armor) {
         super(hp, damage, precision, armor);
     }
 
@@ -39,5 +41,19 @@ public class WarlordFootman extends Footman implements IWarlord {
         final float precision = 0.9f;
         final float armor = 0.15f;
         return new WarlordFootman(hp, damage, precision, armor);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        WarlordFootman that = (WarlordFootman) o;
+        return Float.compare(that.improveCoefficient, improveCoefficient) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), improveCoefficient);
     }
 }
