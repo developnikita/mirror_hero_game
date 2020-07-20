@@ -24,7 +24,7 @@ import java.util.Random;
         @JsonSubTypes.Type(value = WarlordVampire.class, name = "WarlordVampire")
 }
 )
-public abstract class Hero {
+public abstract class Hero implements Cloneable {
     private final int unitId;
     private final int hpDefault;
     private int hpMax;
@@ -181,6 +181,15 @@ public abstract class Hero {
         final Random rnd = new Random();
         final float number = rnd.nextFloat();
         return precision > number;
+    }
+
+    @Override
+    public Hero clone() {
+        try {
+            return (Hero) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new AssertionError();
+        }
     }
 
     @Override

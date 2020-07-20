@@ -13,9 +13,17 @@ public class FactoryArmies {
     public static Map<Integer, Army> generateArmies(final Integer firstPlayerId,
                                                     final Integer secondPlayerId) throws HeroExceptions {
         final Map<Integer, Army> armies = new HashMap<>();
-        armies.put(firstPlayerId, createArmy());
-        armies.put(secondPlayerId, createArmy());
+        armies.put(firstPlayerId, createRandomArmy());
+        armies.put(secondPlayerId, createRandomArmy());
         return armies;
+    }
+
+    public static Army cloneArmy(Army army) {
+        Hero warlord = (Hero) army.getWarlord();
+        IWarlord cloneWarlord = (IWarlord) warlord.clone();
+        Map<SquareCoordinate, Hero> heroes = getCloneMap(army.getHeroes());
+        Map<SquareCoordinate, Hero> availableHeroes = getCloneMap(army.getAvailableHeroes());
+        return new Army(heroes, cloneWarlord, availableHeroes);
     }
 
     /**
@@ -24,14 +32,14 @@ public class FactoryArmies {
      * Вторую линию забивает Healer, Magician, Archer с равным шансом
      * Место для варлорда выбирает Set.iterator().next()
      */
-    private static Army createArmy() throws HeroExceptions {
+    public static Army createRandomArmy() throws HeroExceptions {
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         final Hero warlord = createWarlord();
         final Set<SquareCoordinate> firstLine = makeLine(1);
         final Set<SquareCoordinate> secondLine = makeLine(0);
-        if (warlord instanceof WarlordFootman){
+        if (warlord instanceof WarlordFootman) {
             addWarlord(heroes, firstLine, warlord);
-        } else{
+        } else {
             addWarlord(heroes, secondLine, warlord);
         }
         for (final SquareCoordinate key : firstLine) {
@@ -78,5 +86,11 @@ public class FactoryArmies {
             line.add(new SquareCoordinate(x, y));
         }
         return line;
+    }
+
+    private static Map<SquareCoordinate, Hero> getCloneMap(Map<SquareCoordinate, Hero> heroes) {
+        Map<SquareCoordinate, Hero> clone = new HashMap<>();
+        heroes.keySet().forEach((key) -> clone.put(key, heroes.get(key).clone()));
+        return clone;
     }
 }
