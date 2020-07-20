@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Magician extends Hero {
 
-    protected Magician(int hp, int damage, float precision, float armor) {
+    public Magician(int hp, int damage, float precision, float armor) {
         super(hp, damage, precision, armor);
     }
 

@@ -9,7 +9,7 @@ public class WarlordFootman extends Footman implements IWarlord {
 
     private float improveCoefficient = 0.1f;
 
-    protected WarlordFootman(int hp, int damage, float precision, float armor) {
+    public WarlordFootman(int hp, int damage, float precision, float armor) {
         super(hp, damage, precision, armor);
     }
 
