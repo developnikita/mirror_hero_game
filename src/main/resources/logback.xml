@@ -28,11 +28,8 @@
         </triggeringPolicy>
     </appender>
 
-    <root level="DEBUG">
-        <appender-ref ref="heroesGameLog"/>
-    </root>
-
     <root level="INFO">
+        <appender-ref ref="heroesGameLog"/>
         <appender-ref ref="STDOUT"/>
     </root>
 

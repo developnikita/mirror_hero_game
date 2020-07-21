@@ -139,5 +139,11 @@ public class Client {
         final Client client_2 = new Client(IP, PORT);
         client_2.startClient();
 
+        final Client client_3 = new Client(IP, PORT);
+        client_3.startClient();
+
+        final Client client_4 = new Client(IP, PORT);
+        client_4.startClient();
+
     }
 }

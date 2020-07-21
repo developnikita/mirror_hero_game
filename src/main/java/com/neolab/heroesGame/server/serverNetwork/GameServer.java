@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class GameServer {
@@ -27,11 +26,11 @@ public class GameServer {
     private final BattleArena battleArena;
     private int counter;
 
-    public GameServer(ConcurrentLinkedQueue<PlayerSocket> serverList) throws Exception {
-        currentPlayer = serverList.poll();
-        waitingPlayer = serverList.poll();
+    public GameServer(PlayerSocket playerOne, PlayerSocket playerTwo) throws Exception {
+        currentPlayer = playerOne;
+        waitingPlayer = playerTwo;
         battleArena = new BattleArena(FactoryArmies.generateArmies(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId()));
-        answerProcessor = new AnswerProcessor(1, 2, battleArena);
+        answerProcessor = new AnswerProcessor(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId(), battleArena);
         counter = 0;
     }
 
