@@ -1,6 +1,7 @@
 package com.neolab.heroesGame.arena;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.aditional.CommonFunction;
 import org.slf4j.Logger;
@@ -18,12 +19,6 @@ public class BattleArena {
     @JsonCreator
     public BattleArena(@JsonProperty("armies") final Map<Integer, Army> armies) {
         this.armies = armies;
-    }
-
-    public static BattleArena getCloneBattleArena(BattleArena arena) {
-        Map<Integer, Army> armies = new HashMap<>();
-        arena.getArmies().keySet().forEach(key -> armies.put(key, FactoryArmies.cloneArmy(arena.getArmy(key))));
-        return new BattleArena(armies);
     }
 
     public Map<Integer, Army> getArmies() {
@@ -74,6 +69,17 @@ public class BattleArena {
             stringBuilder.append(CommonFunction.printArmy(armies.get(key)));
         }
         LOGGER.info(stringBuilder.toString());
+    }
+
+    @JsonIgnore
+    public BattleArena getCopy() {
+        return getCloneBattleArena();
+    }
+
+    private BattleArena getCloneBattleArena() {
+        Map<Integer, Army> clone = new HashMap<>();
+        armies.keySet().forEach(key -> clone.put(key, armies.get(key).getCopy()));
+        return new BattleArena(clone);
     }
 
     @Override

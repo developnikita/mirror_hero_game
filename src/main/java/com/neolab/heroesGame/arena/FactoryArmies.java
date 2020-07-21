@@ -7,7 +7,7 @@ import java.util.*;
 
 public class FactoryArmies {
 
-    private static final long SEED = 1523;
+    private static final long SEED = 1700;
     private static final Random RANDOM = new Random(SEED);
 
     public static Map<Integer, Army> generateArmies(final Integer firstPlayerId,
@@ -16,14 +16,6 @@ public class FactoryArmies {
         armies.put(firstPlayerId, createRandomArmy());
         armies.put(secondPlayerId, createRandomArmy());
         return armies;
-    }
-
-    public static Army cloneArmy(Army army) {
-        Hero warlord = (Hero) army.getWarlord();
-        IWarlord cloneWarlord = (IWarlord) warlord.clone();
-        Map<SquareCoordinate, Hero> heroes = getCloneMap(army.getHeroes());
-        Map<SquareCoordinate, Hero> availableHeroes = getCloneMap(army.getAvailableHeroes());
-        return new Army(heroes, cloneWarlord, availableHeroes);
     }
 
     /**
@@ -86,11 +78,5 @@ public class FactoryArmies {
             line.add(new SquareCoordinate(x, y));
         }
         return line;
-    }
-
-    private static Map<SquareCoordinate, Hero> getCloneMap(Map<SquareCoordinate, Hero> heroes) {
-        Map<SquareCoordinate, Hero> clone = new HashMap<>();
-        heroes.keySet().forEach((key) -> clone.put(key, heroes.get(key).clone()));
-        return clone;
     }
 }

@@ -183,7 +183,11 @@ public abstract class Hero implements Cloneable {
         return precision > number;
     }
 
-    @Override
+    @JsonIgnore
+    public Hero getCopy() {
+        return clone();
+    }
+
     public Hero clone() {
         try {
             return (Hero) super.clone();
