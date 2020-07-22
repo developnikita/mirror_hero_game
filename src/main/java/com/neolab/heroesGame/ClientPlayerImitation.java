@@ -1,19 +1,14 @@
 package com.neolab.heroesGame;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.client.ai.Player;
 import com.neolab.heroesGame.client.ai.PlayerBot;
 import com.neolab.heroesGame.client.dto.ClientRequest;
 import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
-import com.neolab.heroesGame.client.dto.ServerResponse;
 import com.neolab.heroesGame.client.gui.IGraphics;
 import com.neolab.heroesGame.client.gui.NullGraphics;
 import com.neolab.heroesGame.client.gui.console.AsciiGraphics;
 import com.neolab.heroesGame.errors.HeroExceptions;
-import com.neolab.heroesGame.server.ActionEffect;
 import com.neolab.heroesGame.server.answers.Answer;
-import com.neolab.heroesGame.server.dto.ExtendedServerRequest;
 
 import java.io.IOException;
 
@@ -36,20 +31,17 @@ public class ClientPlayerImitation {
         }
     }
 
-    public String getAnswer(final String jsonRequest) throws IOException, HeroExceptions {
-        ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(jsonRequest);
+    public String getAnswer(ExtendedServerResponse response) throws IOException, HeroExceptions {
         gui.showPosition(response, true);
         Answer answer = player.getAnswer(response.arena);
         return new ClientRequest(answer).jsonAnswer;
     }
 
-    public void sendInformation(String jsonRequest) throws IOException {
-        ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(jsonRequest);
+    public void sendInformation(ExtendedServerResponse response) throws IOException {
         gui.showPosition(response, false);
     }
 
-    public void endGame(String jsonRequest) throws IOException {
-        ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(jsonRequest);
+    public void endGame(ExtendedServerResponse response) throws IOException {
         gui.endGame(response);
     }
 

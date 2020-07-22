@@ -4,6 +4,7 @@ import com.neolab.heroesGame.aditional.StatisticWriter;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.client.ai.Player;
+import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
 import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.server.answers.Answer;
 import com.neolab.heroesGame.server.answers.AnswerProcessor;
@@ -17,7 +18,7 @@ import java.util.Optional;
 
 public class ServerImitation {
     public static final Integer MAX_ROUND = 15;
-    private static final Logger LOGGER = LoggerFactory.getLogger(GamingProcess.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerImitation.class);
     private ClientPlayerImitation currentPlayer;
     private ClientPlayerImitation waitingPlayer;
     private final AnswerProcessor answerProcessor;
@@ -81,10 +82,14 @@ public class ServerImitation {
 
     private void askPlayerProcess() throws Exception {
         battleArena.toLog();
-        waitingPlayer.sendInformation(ExtendedServerRequest.getRequestString(
-                GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect()));
-        final String response = currentPlayer.getAnswer(ExtendedServerRequest.getRequestString(
-                GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect()));
+        waitingPlayer.sendInformation(ExtendedServerResponse.getResponseFromString(
+                ExtendedServerRequest.getRequestString(
+                    GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect())));
+
+        final String response = currentPlayer.getAnswer(ExtendedServerResponse.getResponseFromString(
+                ExtendedServerRequest.getRequestString(
+                 GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect())));
+
         final Answer answer = new ClientResponse(response).getAnswer();
         answer.toLog();
         answerProcessor.handleAnswer(answer);
@@ -115,10 +120,12 @@ public class ServerImitation {
         ClientPlayerImitation loser = getLoser(winner);
         StatisticWriter.writePlayerWinStatistic(winner.getPlayerName(), loser.getPlayerName());
         LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", winner.getPlayerId());
-        winner.endGame(ExtendedServerRequest.getRequestString(
-                GameEvent.YOU_WIN_GAME, battleArena, answerProcessor.getActionEffect()));
-        loser.endGame(ExtendedServerRequest.getRequestString(
-                GameEvent.YOU_LOSE_GAME, battleArena, answerProcessor.getActionEffect()));
+
+        winner.endGame(ExtendedServerResponse.getResponseFromString(ExtendedServerRequest.getRequestString(
+                GameEvent.YOU_WIN_GAME, battleArena, answerProcessor.getActionEffect())));
+
+        loser.endGame(ExtendedServerResponse.getResponseFromString(ExtendedServerRequest.getRequestString(
+                GameEvent.YOU_LOSE_GAME, battleArena, answerProcessor.getActionEffect())));
     }
 
     private ClientPlayerImitation getLoser(ClientPlayerImitation winner) {

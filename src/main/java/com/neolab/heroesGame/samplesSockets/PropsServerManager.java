@@ -31,15 +31,22 @@ public class PropsServerManager {
             final int playerTwoId = Integer.parseInt(prop.getProperty("playerTwo.id"));
             final int playerThreeId = Integer.parseInt(prop.getProperty("playerThree.id"));
             final int playerFourId = Integer.parseInt(prop.getProperty("playerFour.id"));
+            final int playerFiveId = Integer.parseInt(prop.getProperty("playerFive.id"));
+            final int playerSixId = Integer.parseInt(prop.getProperty("playerSix.id"));
             final String playerOneName = prop.getProperty("playerOne.name");
             final String playerTwoName = prop.getProperty("playerTwo.name");
             final String playerThreeName = prop.getProperty("playerThree.name");
             final String playerFourName = prop.getProperty("playerFour.name");
+            final String playerFiveName = prop.getProperty("playerFive.name");
+            final String playerSixName = prop.getProperty("playerSix.name");
 
             mapIdNamePlayers.put(playerOneId, playerOneName);
             mapIdNamePlayers.put(playerTwoId, playerTwoName);
             mapIdNamePlayers.put(playerThreeId,playerThreeName);
             mapIdNamePlayers.put(playerFourId, playerFourName);
+            mapIdNamePlayers.put(playerFiveId, playerFiveName);
+            mapIdNamePlayers.put(playerSixId, playerSixName);
+
 
         } catch (IOException e) {
             LOGGER.error("Ошибка в программе: файл " + PATH_TO_PROPERTIES + " не обнаружен");

@@ -2,7 +2,8 @@ package com.neolab.heroesGame.samplesSockets;
 
 import com.neolab.heroesGame.ClientPlayerImitation;
 import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
-import com.neolab.heroesGame.enumerations.GameEvent;
+import com.neolab.heroesGame.enumerations.HeroErrorCode;
+import com.neolab.heroesGame.errors.HeroExceptions;
 
 import java.io.*;
 import java.net.Socket;
@@ -108,13 +109,14 @@ public class Client {
                         downService();
                         break;
                     }
+
                     ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(requestJson);
-                    if (response.event == GameEvent.NOW_YOUR_TURN) {
-                        answerJson = player.getAnswer(requestJson);
-                        send(answerJson);
-                    }
-                    if (response.event == GameEvent.WAIT_ITS_NOT_YOUR_TURN) {
-                        player.sendInformation(requestJson);
+
+                    switch (response.event){
+                        case NOW_YOUR_TURN -> send(player.getAnswer(response));
+                        case WAIT_ITS_NOT_YOUR_TURN -> player.sendInformation(response);
+                        case YOU_WIN_GAME, YOU_LOSE_GAME -> player.endGame(response);
+                        default -> throw new HeroExceptions(HeroErrorCode.ERROR_EVENT);
                     }
                 }
             }
@@ -144,6 +146,12 @@ public class Client {
 
         final Client client_4 = new Client(IP, PORT);
         client_4.startClient();
+
+        final Client client_5 = new Client(IP, PORT);
+        client_5.startClient();
+
+        final Client client_6 = new Client(IP, PORT);
+        client_6.startClient();
 
     }
 }

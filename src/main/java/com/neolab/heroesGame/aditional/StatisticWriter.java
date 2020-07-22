@@ -5,8 +5,8 @@ import com.opencsv.CSVWriter;
 import java.io.*;
 
 public class StatisticWriter {
-    public static String playerStatisticFilePath = "playerStatistic.csv";
-    public static String unitActionStatisticFilePath = "unitActionStatistic.csv";
+    public static String playerStatisticFilePath = "src/main/resources/playerStatistic.csv";
+    public static String unitActionStatisticFilePath = "src/main/resources/unitActionStatistic.csv";
 
     public static void writePlayerWinStatistic(final String winnerPlayerName, final String looserPlayerName) throws IOException {
         final File csvOutputFile = new File(playerStatisticFilePath);
@@ -35,7 +35,7 @@ public class StatisticWriter {
         if (!csvOutputFile.exists()) {
             initUnitStatistic();
         }
-        String oldContent = "";
+        StringBuilder oldContent = new StringBuilder();
         String oldLine = "";
         try (final BufferedReader reader = new BufferedReader(new FileReader(csvOutputFile))) {
             String line = reader.readLine();
@@ -43,13 +43,13 @@ public class StatisticWriter {
                 if (line.startsWith(unitClass)) {
                     oldLine = line;
                 }
-                oldContent += line + "\n";
+                oldContent.append(line).append("\n");
                 line = reader.readLine();
             }
 
             final String[] splitStr = oldLine.split(",");
             final String newLine = splitStr[0] + "," + ((float) Integer.parseInt(splitStr[1]) + action) / 2.0;
-            final String newContent = oldContent.replaceAll(oldLine, newLine);
+            final String newContent = oldContent.toString().replaceAll(oldLine, newLine);
             final FileWriter writer = new FileWriter(csvOutputFile);
             writer.write(newContent);
             writer.close();

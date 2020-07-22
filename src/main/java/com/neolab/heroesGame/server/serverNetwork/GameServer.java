@@ -114,11 +114,15 @@ public class GameServer {
         return waitingPlayer.getPlayerId();
     }
 
-    private void someoneWin(PlayerSocket winner) {
+    private void someoneWin(PlayerSocket winner) throws IOException {
         PlayerSocket loser = getLoser(winner);
         StatisticWriter.writePlayerWinStatistic(winner.getPlayerName(), loser.getPlayerName());
         battleArena.toLog();
         LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", winner.getPlayerId());
+        winner.send(ExtendedServerRequest.getRequestString(
+                GameEvent.YOU_WIN_GAME, battleArena, answerProcessor.getActionEffect()));
+        loser.send(ExtendedServerRequest.getRequestString(
+                GameEvent.YOU_LOSE_GAME, battleArena, answerProcessor.getActionEffect()));
     }
 
     private PlayerSocket getLoser(PlayerSocket winner) {
