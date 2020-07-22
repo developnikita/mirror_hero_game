@@ -1,6 +1,6 @@
 package com.neolab.heroesGame.aditional;
 
-import com.neolab.heroesGame.heroes.Archer;
+import com.opencsv.CSVWriter;
 
 import java.io.*;
 
@@ -8,30 +8,26 @@ public class StatisticWriter {
     public static String playerStatisticFilePath = "playerStatistic.csv";
     public static String unitActionStatisticFilePath = "unitActionStatistic.csv";
 
-    public static void writePlayerWinStatistic(final String winnerPlayerName, final String looserPlayerName) {
+    public static void writePlayerWinStatistic(final String winnerPlayerName, final String looserPlayerName) throws IOException {
         final File csvOutputFile = new File(playerStatisticFilePath);
         if (!csvOutputFile.exists()) {
             initPlayerStatistic();
         }
         final String[] data = {winnerPlayerName, looserPlayerName, "1.0", "0.0"};
-        try (final FileWriter fw = new FileWriter(csvOutputFile, true)) {
-            fw.write(convertToCSV(data) + "\n");
-        } catch (final IOException e) {
-            // TODO: Logger
-        }
+        final CSVWriter writer = new CSVWriter(new FileWriter(playerStatisticFilePath));
+        writer.writeNext(data);
+        writer.close();
     }
 
-    public static void writePlayerDrawStatistic(final String player1, final String player2) {
+    public static void writePlayerDrawStatistic(final String player1, final String player2) throws IOException {
         final File csvOutputFile = new File(playerStatisticFilePath);
         if (csvOutputFile.exists()) {
             initPlayerStatistic();
         }
         final String[] data = {player1, player2, "0.5", "0.5"};
-        try (final FileWriter fw = new FileWriter(csvOutputFile)) {
-            fw.write(convertToCSV(data) + "\n");
-        } catch (IOException e) {
-            // TODO: Logger
-        }
+        final CSVWriter writer = new CSVWriter(new FileWriter(playerStatisticFilePath));
+        writer.writeNext(data);
+        writer.close();
     }
 
     public static void writeUnitStatistic(final String unitClass, final Integer action) {
@@ -64,14 +60,12 @@ public class StatisticWriter {
         }
     }
 
-    private static void initPlayerStatistic() {
+    private static void initPlayerStatistic() throws IOException {
         final File csvOutputFile = new File(playerStatisticFilePath);
         final String[] data = {"Player 1", "Player 2", "Player1Point", "Player2Point"};
-        try (final FileWriter fw = new FileWriter(csvOutputFile)) {
-            fw.write(convertToCSV(data) + "\n");
-        } catch (final IOException e) {
-            // TODO: Logger
-        }
+        final CSVWriter writer = new CSVWriter(new FileWriter(playerStatisticFilePath));
+        writer.writeNext(data);
+        writer.close();
     }
 
     private static void initUnitStatistic() {
