@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class HeroFactoryTest {
     private final Properties prop = new Properties();
@@ -27,127 +26,99 @@ public class HeroFactoryTest {
 
     @Test
     public void archerFactoryTest() {
-        try {
-            final HeroFactory factory = new ArcherFactory();
-            Hero h = factory.create();
-            final int hp = Integer.parseInt(prop.getProperty("hero.archer.hp"));
-            final int damage = Integer.parseInt(prop.getProperty("hero.archer.damage"));
-            final float armor = Float.parseFloat(prop.getProperty("hero.archer.armor"));
-            final float precision = Float.parseFloat(prop.getProperty("hero.archer.precision"));
-            assertEquals(hp, h.getHp());
-            assertEquals(damage, h.getDamage());
-            assertEquals(armor, h.getArmor(), 0);
-            assertEquals(precision, h.getPrecision(), 0);
-        } catch (IOException e) {
-            fail();
-        }
+        final HeroFactory factory = new ArcherFactory();
+        Hero h = factory.create();
+        final int hp = Integer.parseInt(prop.getProperty("hero.archer.hp"));
+        final int damage = Integer.parseInt(prop.getProperty("hero.archer.damage"));
+        final float armor = Float.parseFloat(prop.getProperty("hero.archer.armor"));
+        final float precision = Float.parseFloat(prop.getProperty("hero.archer.precision"));
+        assertEquals(hp, h.getHp());
+        assertEquals(damage, h.getDamage());
+        assertEquals(armor, h.getArmor(), 0);
+        assertEquals(precision, h.getPrecision(), 0);
     }
 
     @Test
     public void footmanFactoryTest() {
-        try {
-            final HeroFactory factory = new FootmanFactory();
-            Hero h = factory.create();
-            final int hp = Integer.parseInt(prop.getProperty("hero.footman.hp"));
-            final int damage = Integer.parseInt(prop.getProperty("hero.footman.damage"));
-            final float armor = Float.parseFloat(prop.getProperty("hero.footman.armor"));
-            final float precision = Float.parseFloat(prop.getProperty("hero.footman.precision"));
-            assertEquals(hp, h.getHp());
-            assertEquals(damage, h.getDamage());
-            assertEquals(armor, h.getArmor(), 0);
-            assertEquals(precision, h.getPrecision(), 0);
-        } catch (IOException e) {
-            fail();
-        }
+        final HeroFactory factory = new FootmanFactory();
+        Hero h = factory.create();
+        final int hp = Integer.parseInt(prop.getProperty("hero.footman.hp"));
+        final int damage = Integer.parseInt(prop.getProperty("hero.footman.damage"));
+        final float armor = Float.parseFloat(prop.getProperty("hero.footman.armor"));
+        final float precision = Float.parseFloat(prop.getProperty("hero.footman.precision"));
+        assertEquals(hp, h.getHp());
+        assertEquals(damage, h.getDamage());
+        assertEquals(armor, h.getArmor(), 0);
+        assertEquals(precision, h.getPrecision(), 0);
     }
 
     @Test
     public void healerFactoryTest() {
-        try {
-            final HeroFactory factory = new HealerFactory();
-            Hero h = factory.create();
-            final int hp = Integer.parseInt(prop.getProperty("hero.healer.hp"));
-            final int heal = Integer.parseInt(prop.getProperty("hero.healer.heal"));
-            final float armor = Float.parseFloat(prop.getProperty("hero.healer.armor"));
-            final float precision = Float.parseFloat(prop.getProperty("hero.healer.precision"));
-            assertEquals(hp, h.getHp());
-            assertEquals(heal, h.getDamage());
-            assertEquals(armor, h.getArmor(), 0);
-            assertEquals(precision, h.getPrecision(), 0);
-        } catch (IOException e) {
-            fail();
-        }
+        final HeroFactory factory = new HealerFactory();
+        Hero h = factory.create();
+        final int hp = Integer.parseInt(prop.getProperty("hero.healer.hp"));
+        final int heal = Integer.parseInt(prop.getProperty("hero.healer.heal"));
+        final float armor = Float.parseFloat(prop.getProperty("hero.healer.armor"));
+        final float precision = Float.parseFloat(prop.getProperty("hero.healer.precision"));
+        assertEquals(hp, h.getHp());
+        assertEquals(heal, h.getDamage());
+        assertEquals(armor, h.getArmor(), 0);
+        assertEquals(precision, h.getPrecision(), 0);
     }
 
     @Test
     public void magicianFactoryTest() {
-        try {
-            final HeroFactory factory = new MagicianFactory();
-            Hero h = factory.create();
-            final int hp = Integer.parseInt(prop.getProperty("hero.magician.hp"));
-            final int damage = Integer.parseInt(prop.getProperty("hero.magician.damage"));
-            final float armor = Float.parseFloat(prop.getProperty("hero.magician.armor"));
-            final float precision = Float.parseFloat(prop.getProperty("hero.magician.precision"));
-            assertEquals(hp, h.getHp());
-            assertEquals(damage, h.getDamage());
-            assertEquals(armor, h.getArmor(), 0);
-            assertEquals(precision, h.getPrecision(), 0);
-        } catch (IOException e) {
-            fail();
-        }
+        final HeroFactory factory = new MagicianFactory();
+        Hero h = factory.create();
+        final int hp = Integer.parseInt(prop.getProperty("hero.magician.hp"));
+        final int damage = Integer.parseInt(prop.getProperty("hero.magician.damage"));
+        final float armor = Float.parseFloat(prop.getProperty("hero.magician.armor"));
+        final float precision = Float.parseFloat(prop.getProperty("hero.magician.precision"));
+        assertEquals(hp, h.getHp());
+        assertEquals(damage, h.getDamage());
+        assertEquals(armor, h.getArmor(), 0);
+        assertEquals(precision, h.getPrecision(), 0);
     }
 
     @Test
     public void warlordFootmanFactoryTest() {
-        try {
-            final HeroFactory factory = new WarlordFootmanFactory();
-            Hero h = factory.create();
-            final int hp = Integer.parseInt(prop.getProperty("warlord.footman.hp"));
-            final int damage = Integer.parseInt(prop.getProperty("warlord.footman.damage"));
-            final float armor = Float.parseFloat(prop.getProperty("warlord.footman.armor"));
-            final float precision = Float.parseFloat(prop.getProperty("warlord.footman.precision"));
-            assertEquals(hp, h.getHp());
-            assertEquals(damage, h.getDamage());
-            assertEquals(armor, h.getArmor(), 0);
-            assertEquals(precision, h.getPrecision(), 0);
-        } catch (IOException e) {
-            fail();
-        }
+        final HeroFactory factory = new WarlordFootmanFactory();
+        Hero h = factory.create();
+        final int hp = Integer.parseInt(prop.getProperty("warlord.footman.hp"));
+        final int damage = Integer.parseInt(prop.getProperty("warlord.footman.damage"));
+        final float armor = Float.parseFloat(prop.getProperty("warlord.footman.armor"));
+        final float precision = Float.parseFloat(prop.getProperty("warlord.footman.precision"));
+        assertEquals(hp, h.getHp());
+        assertEquals(damage, h.getDamage());
+        assertEquals(armor, h.getArmor(), 0);
+        assertEquals(precision, h.getPrecision(), 0);
     }
 
     @Test
     public void warlordMagicianFactoryTest() {
-        try {
-            final HeroFactory factory = new WarlordMagicianFactory();
-            Hero h = factory.create();
-            final int hp = Integer.parseInt(prop.getProperty("warlord.magician.hp"));
-            final int damage = Integer.parseInt(prop.getProperty("warlord.magician.damage"));
-            final float armor = Float.parseFloat(prop.getProperty("warlord.magician.armor"));
-            final float precision = Float.parseFloat(prop.getProperty("warlord.magician.precision"));
-            assertEquals(hp, h.getHp());
-            assertEquals(damage, h.getDamage());
-            assertEquals(armor, h.getArmor(), 0);
-            assertEquals(precision, h.getPrecision(), 0);
-        } catch (IOException e) {
-            fail();
-        }
+        final HeroFactory factory = new WarlordMagicianFactory();
+        Hero h = factory.create();
+        final int hp = Integer.parseInt(prop.getProperty("warlord.magician.hp"));
+        final int damage = Integer.parseInt(prop.getProperty("warlord.magician.damage"));
+        final float armor = Float.parseFloat(prop.getProperty("warlord.magician.armor"));
+        final float precision = Float.parseFloat(prop.getProperty("warlord.magician.precision"));
+        assertEquals(hp, h.getHp());
+        assertEquals(damage, h.getDamage());
+        assertEquals(armor, h.getArmor(), 0);
+        assertEquals(precision, h.getPrecision(), 0);
     }
 
     @Test
     public void warlordVampireFactoryTest() {
-        try {
-            final HeroFactory factory = new WarlordVampireFactory();
-            Hero h = factory.create();
-            final int hp = Integer.parseInt(prop.getProperty("warlord.vampire.hp"));
-            final int damage = Integer.parseInt(prop.getProperty("warlord.vampire.damage"));
-            final float armor = Float.parseFloat(prop.getProperty("warlord.vampire.armor"));
-            final float precision = Float.parseFloat(prop.getProperty("warlord.vampire.precision"));
-            assertEquals(hp, h.getHp());
-            assertEquals(damage, h.getDamage());
-            assertEquals(armor, h.getArmor(), 0);
-            assertEquals(precision, h.getPrecision(), 0);
-        } catch (IOException e) {
-            fail();
-        }
+        final HeroFactory factory = new WarlordVampireFactory();
+        Hero h = factory.create();
+        final int hp = Integer.parseInt(prop.getProperty("warlord.vampire.hp"));
+        final int damage = Integer.parseInt(prop.getProperty("warlord.vampire.damage"));
+        final float armor = Float.parseFloat(prop.getProperty("warlord.vampire.armor"));
+        final float precision = Float.parseFloat(prop.getProperty("warlord.vampire.precision"));
+        assertEquals(hp, h.getHp());
+        assertEquals(damage, h.getDamage());
+        assertEquals(armor, h.getArmor(), 0);
+        assertEquals(precision, h.getPrecision(), 0);
     }
 }

@@ -1,6 +1,7 @@
 package com.neolab.heroesGame.arena;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -139,6 +140,28 @@ public class Army {
         hero.setHpMax(hero.getHpDefault());
         hero.setHp(Math.min(hero.getHp(), hero.getHpDefault()));
         hero.setDamage(hero.getDamageDefault());
+    }
+
+    @JsonIgnore
+    public Army getCopy() {
+        Hero warlord = (Hero) this.warlord;
+        IWarlord cloneWarlord = (IWarlord) warlord.getCopy();
+        Map<SquareCoordinate, Hero> heroes = getCloneMap(getHeroes());
+        Map<SquareCoordinate, Hero> availableHeroes = getCloneAvailableMap(getAvailableHeroes(), heroes);
+        return new Army(heroes, cloneWarlord, availableHeroes);
+    }
+
+    private static Map<SquareCoordinate, Hero> getCloneAvailableMap(Map<SquareCoordinate, Hero> availableHeroes,
+                                                                    Map<SquareCoordinate, Hero> heroes) {
+        Map<SquareCoordinate, Hero> clone = new HashMap<>();
+        availableHeroes.keySet().forEach((key) -> clone.put(key, heroes.get(key)));
+        return clone;
+    }
+
+    private static Map<SquareCoordinate, Hero> getCloneMap(Map<SquareCoordinate, Hero> heroes) {
+        Map<SquareCoordinate, Hero> clone = new HashMap<>();
+        heroes.keySet().forEach((key) -> clone.put(key, heroes.get(key).getCopy()));
+        return clone;
     }
 
     public boolean canSomeOneAct() {
