@@ -15,12 +15,10 @@ public class HeroFactoryTest {
     private final Properties prop = new Properties();
 
     @Before
-    public void initProp() {
+    public void initProp() throws IOException {
         final String propertyFileName = "hero.config";
         try (final InputStream is = new FileInputStream(propertyFileName)) {
             prop.load(is);
-        } catch (final IOException e) {
-            e.printStackTrace();
         }
     }
 
