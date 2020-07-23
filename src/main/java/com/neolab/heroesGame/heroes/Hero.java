@@ -158,7 +158,7 @@ public abstract class Hero implements Cloneable {
     }
 
     private int makeAction(final Hero target) {
-        int damage = calculateDamage(target);
+        final int damage = calculateDamage(target);
         target.setHp(target.getHp() - damage);
         return damage;
     }
@@ -191,16 +191,16 @@ public abstract class Hero implements Cloneable {
     public Hero clone() {
         try {
             return (Hero) super.clone();
-        } catch (CloneNotSupportedException ex) {
+        } catch (final CloneNotSupportedException ex) {
             throw new AssertionError();
         }
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof Hero)) return false;
-        Hero hero = (Hero) o;
+        final Hero hero = (Hero) o;
         return getUnitId() == hero.getUnitId() &&
                 getHpDefault() == hero.getHpDefault() &&
                 getHpMax() == hero.getHpMax() &&

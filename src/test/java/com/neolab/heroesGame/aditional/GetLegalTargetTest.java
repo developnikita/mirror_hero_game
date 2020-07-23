@@ -29,21 +29,21 @@ public class GetLegalTargetTest {
     private final Set<SquareCoordinate> legalCoordinates;
     private final Army enemy;
 
-    public GetLegalTargetTest(Set<SquareCoordinate> legalCoordinates, Army enemy) {
+    public GetLegalTargetTest(final Set<SquareCoordinate> legalCoordinates, final Army enemy) {
         this.legalCoordinates = legalCoordinates;
         this.enemy = enemy;
     }
 
     @Test
     public void getTargetTest() {
-        SquareCoordinate activeUnit = new SquareCoordinate(1, 1);
-        Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
+        final SquareCoordinate activeUnit = new SquareCoordinate(1, 1);
+        final Set<SquareCoordinate> legalTarget = CommonFunction.getCorrectTargetForFootman(activeUnit, enemy);
         assertEquals(legalCoordinates.size(), legalTarget.size());
         assertTrue(legalCoordinates.containsAll(legalTarget));
     }
 
     private static Set<SquareCoordinate> set1() {
-        Set<SquareCoordinate> legalTarget = new HashSet<>();
+        final Set<SquareCoordinate> legalTarget = new HashSet<>();
         legalTarget.add(new SquareCoordinate(0, 1));
         legalTarget.add(new SquareCoordinate(1, 1));
         legalTarget.add(new SquareCoordinate(2, 1));
@@ -51,7 +51,7 @@ public class GetLegalTargetTest {
     }
 
     private static Army army1() throws HeroExceptions {
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(0, 1));
         coordHeroes1.add(new SquareCoordinate(1, 1));
         coordHeroes1.add(new SquareCoordinate(2, 1));
@@ -59,47 +59,47 @@ public class GetLegalTargetTest {
     }
 
     private static Set<SquareCoordinate> set2() {
-        Set<SquareCoordinate> legalTarget = new HashSet<>();
+        final Set<SquareCoordinate> legalTarget = new HashSet<>();
         legalTarget.add(new SquareCoordinate(0, 1));
         legalTarget.add(new SquareCoordinate(2, 1));
         return legalTarget;
     }
 
     private static Army army2() throws HeroExceptions {
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(0, 1));
         coordHeroes1.add(new SquareCoordinate(2, 1));
         return getArmyByCoords(coordHeroes1);
     }
 
     private static Set<SquareCoordinate> set3() {
-        Set<SquareCoordinate> legalTarget = new HashSet<>();
+        final Set<SquareCoordinate> legalTarget = new HashSet<>();
         legalTarget.add(new SquareCoordinate(1, 1));
         legalTarget.add(new SquareCoordinate(2, 1));
         return legalTarget;
     }
 
     private static Army army3() throws HeroExceptions {
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(1, 1));
         coordHeroes1.add(new SquareCoordinate(2, 1));
         return getArmyByCoords(coordHeroes1);
     }
 
     private static Set<SquareCoordinate> set4() {
-        Set<SquareCoordinate> legalTarget = new HashSet<>();
+        final Set<SquareCoordinate> legalTarget = new HashSet<>();
         legalTarget.add(new SquareCoordinate(2, 1));
         return legalTarget;
     }
 
     private static Army army4() throws HeroExceptions {
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(2, 1));
         return getArmyByCoords(coordHeroes1);
     }
 
     private static Set<SquareCoordinate> set5() {
-        Set<SquareCoordinate> legalTarget = new HashSet<>();
+        final Set<SquareCoordinate> legalTarget = new HashSet<>();
         legalTarget.add(new SquareCoordinate(0, 0));
         legalTarget.add(new SquareCoordinate(1, 0));
         legalTarget.add(new SquareCoordinate(2, 0));
@@ -107,7 +107,7 @@ public class GetLegalTargetTest {
     }
 
     private static Army army5() throws HeroExceptions {
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(0, 0));
         coordHeroes1.add(new SquareCoordinate(1, 0));
         coordHeroes1.add(new SquareCoordinate(2, 0));
@@ -115,37 +115,37 @@ public class GetLegalTargetTest {
     }
 
     private static Set<SquareCoordinate> set6() {
-        Set<SquareCoordinate> legalTarget = new HashSet<>();
+        final Set<SquareCoordinate> legalTarget = new HashSet<>();
         legalTarget.add(new SquareCoordinate(0, 0));
         return legalTarget;
     }
 
     private static Army army6() throws HeroExceptions {
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(0, 0));
         return getArmyByCoords(coordHeroes1);
     }
 
     private static Set<SquareCoordinate> set7() {
-        Set<SquareCoordinate> legalTarget = new HashSet<>();
+        final Set<SquareCoordinate> legalTarget = new HashSet<>();
         legalTarget.add(new SquareCoordinate(2, 0));
         return legalTarget;
     }
 
     private static Army army7() throws HeroExceptions {
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(2, 0));
         return getArmyByCoords(coordHeroes1);
     }
 
     private static Set<SquareCoordinate> set8() {
-        Set<SquareCoordinate> legalTarget = new HashSet<>();
+        final Set<SquareCoordinate> legalTarget = new HashSet<>();
         legalTarget.add(new SquareCoordinate(1, 0));
         return legalTarget;
     }
 
     private static Army army8() throws HeroExceptions {
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(1, 0));
         return getArmyByCoords(coordHeroes1);
     }
@@ -153,10 +153,10 @@ public class GetLegalTargetTest {
     /**
      * Создает армию из футфайтеров с варлордом для того, чтобы не генерировать армию в каждом тесте
      */
-    public static Army getArmyByCoords(Set<SquareCoordinate> coords) throws HeroExceptions {
+    public static Army getArmyByCoords(final Set<SquareCoordinate> coords) throws HeroExceptions {
         boolean isWarlordNotExist = true;
-        Map<SquareCoordinate, Hero> heroes = new HashMap<>();
-        for (SquareCoordinate coord : coords) {
+        final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
+        for (final SquareCoordinate coord : coords) {
             if (isWarlordNotExist) {
                 heroes.put(coord, WarlordFootman.createInstance());
                 isWarlordNotExist = false;

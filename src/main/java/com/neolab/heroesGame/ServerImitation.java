@@ -84,11 +84,11 @@ public class ServerImitation {
         battleArena.toLog();
         waitingPlayer.sendInformation(ExtendedServerResponse.getResponseFromString(
                 ExtendedServerRequest.getRequestString(
-                    GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect())));
+                        GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect())));
 
         final String response = currentPlayer.getAnswer(ExtendedServerResponse.getResponseFromString(
                 ExtendedServerRequest.getRequestString(
-                 GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect())));
+                        GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect())));
 
         final Answer answer = new ClientResponse(response).getAnswer();
         answer.toLog();
@@ -116,8 +116,8 @@ public class ServerImitation {
         return waitingPlayer.getPlayerId();
     }
 
-    private void someoneWin(ClientPlayerImitation winner) throws IOException {
-        ClientPlayerImitation loser = getLoser(winner);
+    private void someoneWin(final ClientPlayerImitation winner) throws IOException {
+        final ClientPlayerImitation loser = getLoser(winner);
         StatisticWriter.writePlayerWinStatistic(winner.getPlayerName(), loser.getPlayerName());
         LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", winner.getPlayerId());
 
@@ -128,7 +128,7 @@ public class ServerImitation {
                 GameEvent.YOU_LOSE_GAME, battleArena, answerProcessor.getActionEffect())));
     }
 
-    private ClientPlayerImitation getLoser(ClientPlayerImitation winner) {
+    private ClientPlayerImitation getLoser(final ClientPlayerImitation winner) {
         return winner.equals(currentPlayer) ? waitingPlayer : currentPlayer;
     }
 }

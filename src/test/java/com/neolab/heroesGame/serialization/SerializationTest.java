@@ -169,8 +169,8 @@ public class SerializationTest {
         map.put(new SquareCoordinate(2, 2), 2);
         final ActionEffect ae = new ActionEffect(HeroActions.ATTACK, new SquareCoordinate(1, 2), map, 1);
 
-        String request = ExtendedServerRequest.getRequestString(GameEvent.GAME_END_WITH_A_TIE, arena, ae);
-        ExtendedServerRequest extendedServerRequest = ExtendedServerRequest.getRequestFromString(request);
+        final String request = ExtendedServerRequest.getRequestString(GameEvent.GAME_END_WITH_A_TIE, arena, ae);
+        final ExtendedServerRequest extendedServerRequest = ExtendedServerRequest.getRequestFromString(request);
 
         assertEquals(arena, extendedServerRequest.arena);
         assertEquals(ae, extendedServerRequest.effect);

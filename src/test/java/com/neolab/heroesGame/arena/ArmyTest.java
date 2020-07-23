@@ -28,7 +28,7 @@ public class ArmyTest {
 
         //someOneAct
         final Map<SquareCoordinate, Hero> map1 = new HashMap<>();
-        final SquareCoordinate sq = new SquareCoordinate(1,1);
+        final SquareCoordinate sq = new SquareCoordinate(1, 1);
         map1.put(sq, WarlordVampire.createInstance());
         final Army army1 = new Army(map1);
         final Hero h = army1.getHero(sq).orElseThrow();

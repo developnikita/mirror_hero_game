@@ -37,10 +37,10 @@ public class ExtendedServerRequest {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ExtendedServerRequest that = (ExtendedServerRequest) o;
+        final ExtendedServerRequest that = (ExtendedServerRequest) o;
         return event == that.event &&
                 Objects.equals(arena, that.arena) &&
                 Objects.equals(effect, that.effect);

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class Healer extends Hero {
 
-    public Healer(int hp, int healing, float precision, float armor) {
+    public Healer(final int hp, final int healing, final float precision, final float armor) {
         super(hp, healing, precision, armor);
     }
 

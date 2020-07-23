@@ -35,7 +35,7 @@ public class StatisticWriter {
         if (!csvOutputFile.exists()) {
             initUnitStatistic();
         }
-        StringBuilder oldContent = new StringBuilder();
+        final StringBuilder oldContent = new StringBuilder();
         String oldLine = "";
         try (final BufferedReader reader = new BufferedReader(new FileReader(csvOutputFile))) {
             String line = reader.readLine();

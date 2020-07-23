@@ -144,22 +144,22 @@ public class Army {
 
     @JsonIgnore
     public Army getCopy() {
-        Hero warlord = (Hero) this.warlord;
-        IWarlord cloneWarlord = (IWarlord) warlord.getCopy();
-        Map<SquareCoordinate, Hero> heroes = getCloneMap(getHeroes());
-        Map<SquareCoordinate, Hero> availableHeroes = getCloneAvailableMap(getAvailableHeroes(), heroes);
+        final Hero warlord = (Hero) this.warlord;
+        final IWarlord cloneWarlord = (IWarlord) warlord.getCopy();
+        final Map<SquareCoordinate, Hero> heroes = getCloneMap(getHeroes());
+        final Map<SquareCoordinate, Hero> availableHeroes = getCloneAvailableMap(getAvailableHeroes(), heroes);
         return new Army(heroes, cloneWarlord, availableHeroes);
     }
 
-    private static Map<SquareCoordinate, Hero> getCloneAvailableMap(Map<SquareCoordinate, Hero> availableHeroes,
-                                                                    Map<SquareCoordinate, Hero> heroes) {
-        Map<SquareCoordinate, Hero> clone = new HashMap<>();
+    private static Map<SquareCoordinate, Hero> getCloneAvailableMap(final Map<SquareCoordinate, Hero> availableHeroes,
+                                                                    final Map<SquareCoordinate, Hero> heroes) {
+        final Map<SquareCoordinate, Hero> clone = new HashMap<>();
         availableHeroes.keySet().forEach((key) -> clone.put(key, heroes.get(key)));
         return clone;
     }
 
-    private static Map<SquareCoordinate, Hero> getCloneMap(Map<SquareCoordinate, Hero> heroes) {
-        Map<SquareCoordinate, Hero> clone = new HashMap<>();
+    private static Map<SquareCoordinate, Hero> getCloneMap(final Map<SquareCoordinate, Hero> heroes) {
+        final Map<SquareCoordinate, Hero> clone = new HashMap<>();
         heroes.keySet().forEach((key) -> clone.put(key, heroes.get(key).getCopy()));
         return clone;
     }

@@ -4,7 +4,6 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.heroes.factory.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,13 +19,13 @@ public class StringArmyFactory implements ArmyFactory {
     private final HeroFactory warlordMagicianFactory = new WarlordMagicianFactory();
     private final HeroFactory warlordVampireFactory = new WarlordVampireFactory();
 
-    public StringArmyFactory(String army) throws IOException {
+    public StringArmyFactory(final String army) {
         this.army = army;
     }
 
     @Override
     public Army create() throws HeroExceptions {
-        Map<SquareCoordinate, Hero> armyMap = new HashMap<>();
+        final Map<SquareCoordinate, Hero> armyMap = new HashMap<>();
         int k = 0;
         for (int j = 0; j < 2; ++j) {
             for (int i = 0; i < 3; ++i) {

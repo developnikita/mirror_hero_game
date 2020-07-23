@@ -15,19 +15,17 @@ public class HeroFactoryTest {
     private final Properties prop = new Properties();
 
     @Before
-    public void initProp() {
+    public void initProp() throws IOException {
         final String propertyFileName = "hero.config";
-        try (InputStream is = new FileInputStream(propertyFileName)) {
+        try (final InputStream is = new FileInputStream(propertyFileName)) {
             prop.load(is);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
     @Test
     public void archerFactoryTest() {
         final HeroFactory factory = new ArcherFactory();
-        Hero h = factory.create();
+        final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("hero.archer.hp"));
         final int damage = Integer.parseInt(prop.getProperty("hero.archer.damage"));
         final float armor = Float.parseFloat(prop.getProperty("hero.archer.armor"));
@@ -41,7 +39,7 @@ public class HeroFactoryTest {
     @Test
     public void footmanFactoryTest() {
         final HeroFactory factory = new FootmanFactory();
-        Hero h = factory.create();
+        final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("hero.footman.hp"));
         final int damage = Integer.parseInt(prop.getProperty("hero.footman.damage"));
         final float armor = Float.parseFloat(prop.getProperty("hero.footman.armor"));
@@ -55,7 +53,7 @@ public class HeroFactoryTest {
     @Test
     public void healerFactoryTest() {
         final HeroFactory factory = new HealerFactory();
-        Hero h = factory.create();
+        final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("hero.healer.hp"));
         final int heal = Integer.parseInt(prop.getProperty("hero.healer.heal"));
         final float armor = Float.parseFloat(prop.getProperty("hero.healer.armor"));
@@ -69,7 +67,7 @@ public class HeroFactoryTest {
     @Test
     public void magicianFactoryTest() {
         final HeroFactory factory = new MagicianFactory();
-        Hero h = factory.create();
+        final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("hero.magician.hp"));
         final int damage = Integer.parseInt(prop.getProperty("hero.magician.damage"));
         final float armor = Float.parseFloat(prop.getProperty("hero.magician.armor"));
@@ -83,7 +81,7 @@ public class HeroFactoryTest {
     @Test
     public void warlordFootmanFactoryTest() {
         final HeroFactory factory = new WarlordFootmanFactory();
-        Hero h = factory.create();
+        final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("warlord.footman.hp"));
         final int damage = Integer.parseInt(prop.getProperty("warlord.footman.damage"));
         final float armor = Float.parseFloat(prop.getProperty("warlord.footman.armor"));
@@ -97,7 +95,7 @@ public class HeroFactoryTest {
     @Test
     public void warlordMagicianFactoryTest() {
         final HeroFactory factory = new WarlordMagicianFactory();
-        Hero h = factory.create();
+        final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("warlord.magician.hp"));
         final int damage = Integer.parseInt(prop.getProperty("warlord.magician.damage"));
         final float armor = Float.parseFloat(prop.getProperty("warlord.magician.armor"));
@@ -111,7 +109,7 @@ public class HeroFactoryTest {
     @Test
     public void warlordVampireFactoryTest() {
         final HeroFactory factory = new WarlordVampireFactory();
-        Hero h = factory.create();
+        final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("warlord.vampire.hp"));
         final int damage = Integer.parseInt(prop.getProperty("warlord.vampire.damage"));
         final float armor = Float.parseFloat(prop.getProperty("warlord.vampire.armor"));
