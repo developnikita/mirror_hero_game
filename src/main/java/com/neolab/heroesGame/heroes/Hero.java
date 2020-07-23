@@ -170,11 +170,10 @@ public abstract class Hero implements Cloneable {
     }
 
     protected int calculateDamage(final Hero targetAttack) {
-        final int d = randomIncreaseDamage(this.getDamage());
-        return Math.round(d - targetAttack.getArmor() * d);
+        return Math.round(randomIncreaseDamage(this.getDamage()) * (1 - targetAttack.getArmor()));
     }
 
-    private int randomIncreaseDamage(final int damage) {
+    protected int randomIncreaseDamage(final int damage) {
         final double probability = new Random().nextFloat();
         if (probability < 0.15f) {
             return damage - 5;

@@ -21,14 +21,16 @@ public class ClientPlayerImitation {
         gui = new NullGraphics();
     }
 
-    public ClientPlayerImitation(final int playerId, final String name,
-                                 final boolean useAsciiGraphics) throws IOException {
+    private ClientPlayerImitation(final int playerId, final String name,
+                                  final IGraphics gui) {
         player = new PlayerBot(playerId, name);
-        if (useAsciiGraphics) {
-            gui = new AsciiGraphics(playerId);
-        } else {
-            gui = new NullGraphics();
-        }
+        this.gui = gui;
+    }
+
+    public static ClientPlayerImitation createPlayerWithAsciiGraphics(final int playerId,
+                                                                      final String name) throws IOException {
+        IGraphics graphics = new AsciiGraphics(playerId);
+        return new ClientPlayerImitation(playerId, name, graphics);
     }
 
     public String getAnswer(final ExtendedServerResponse response) throws IOException, HeroExceptions {

@@ -52,7 +52,7 @@ public class StringArmyFactory implements ArmyFactory {
                         armyMap.put(new SquareCoordinate(i, j), warlordVampireFactory.create());
                         break;
                     default:
-                        throw new IllegalArgumentException();
+                        throw new IllegalArgumentException("Неверно сформирована строка армии");
                 }
                 ++k;
             }

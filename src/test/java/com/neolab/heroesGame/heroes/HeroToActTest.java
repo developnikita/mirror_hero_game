@@ -17,6 +17,7 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyFloat;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.spy;
 
 public class HeroToActTest {
@@ -70,11 +71,13 @@ public class HeroToActTest {
     @Test
     public void soloTargetAttackToActTest() throws HeroExceptions {
         final Hero archer = spy(new ArcherFactory().create());
+        final int archerDamage = archer.getDamage();
         Map<SquareCoordinate, Integer> effect;
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
         final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
         final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
         Mockito.when(archer.isHit(anyFloat())).thenReturn(true);
+        Mockito.when(archer.randomIncreaseDamage(anyInt())).thenReturn(archerDamage);
 
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(firstPosition);
@@ -117,11 +120,13 @@ public class HeroToActTest {
     @Test
     public void magicianTargetAttackToActTest() throws HeroExceptions {
         final Hero magician = spy(new MagicianFactory().create());
+        final int magicianDamage = magician.getDamage();
         final Map<SquareCoordinate, Integer> effect;
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
         final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
         final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
         Mockito.when(magician.isHit(anyFloat())).thenReturn(true);
+        Mockito.when(magician.randomIncreaseDamage(anyInt())).thenReturn(magicianDamage);
 
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(firstPosition);
@@ -153,11 +158,13 @@ public class HeroToActTest {
     @Test
     public void vampireTargetAttackToActTest() throws HeroExceptions {
         final Hero vampire = spy(new WarlordVampireFactory().create());
+        final int vampireDamage = vampire.getDamage();
         final Map<SquareCoordinate, Integer> effect;
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
         final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
         final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
         Mockito.when(vampire.isHit(anyFloat())).thenReturn(true);
+        Mockito.when(vampire.randomIncreaseDamage(anyInt())).thenReturn(vampireDamage);
         vampire.setHp(1);
 
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
