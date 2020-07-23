@@ -4,6 +4,7 @@ import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
+import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import com.neolab.heroesGame.aditional.CommonFunction;
@@ -18,12 +19,13 @@ import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.server.ActionEffect;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 
 public class AsciiGraphics implements IGraphics {
     private static final int TERMINAL_WIDTH = 70;
-    private static final int TERMINAL_HEIGHT = 35;
+    private static final int TERMINAL_HEIGHT = 45;
     private static final int ARMY_WIDTH = 40;
     private static final int ENEMY_ARMY_ROW_START_AT = 0;
     private static final int YOUR_ARMY_ROW_START_AT = 20;
@@ -33,6 +35,7 @@ public class AsciiGraphics implements IGraphics {
     private int leftOffset;
     private final int playerId;
     private final int infoString = 22;
+    private int lastRow = 0;
 
     public AsciiGraphics(final int playerId) throws IOException {
 
@@ -64,6 +67,31 @@ public class AsciiGraphics implements IGraphics {
         term.flush();
         term.readInput();
         term.close();
+    }
+
+    @Override
+    public int getChoose(final List<String> strings) throws IOException {
+        while (true) {
+            clearChooseSector();
+            textGraphics.putString(leftOffset, lastRow, strings.get(0), SGR.BOLD);
+            for (int i = 1; i < strings.size(); i++) {
+                textGraphics.putString(leftOffset, lastRow + i, strings.get(i));
+            }
+            term.flush();
+            final KeyStroke keyStroke = term.readInput();
+            final int result = keyStroke.getCharacter() - '0';
+            if (0 < result && result < strings.size()) {
+                return result - 1;
+            }
+        }
+    }
+
+    private void clearChooseSector() throws IOException {
+        for (int i = lastRow; i < TERMINAL_HEIGHT; i++) {
+            textGraphics.putString(0, i,
+                    "                                                                     ");
+        }
+        term.flush();
     }
 
     private void printGameResult(final GameEvent event) {
@@ -104,7 +132,7 @@ public class AsciiGraphics implements IGraphics {
                 final SquareCoordinate coordinate = new SquareCoordinate(x, y);
                 final Optional<Hero> hero = yours.getHero(coordinate);
                 final TextColor textColor = chooseColorForHero(coordinate, effect, isLastMoveMakeThisArmy);
-                int step = 13;
+                final int step = 13;
                 if (!isLastMoveMakeThisArmy && hero.isEmpty() && isUnitDiedRightNow(effect, coordinate)) {
                     printDeadUnit(topString, leftOffset + 1 + x * step);
                 } else {
@@ -136,6 +164,7 @@ public class AsciiGraphics implements IGraphics {
         } else if (effect.getAction() == HeroActions.DEFENCE) {
             final int offset = (term.getTerminalSize().getColumns() - stringBuilder.length()) / 2;
             textGraphics.putString(offset, offsetForEffect, stringBuilder.toString());
+            lastRow = offsetForEffect + 2;
         } else {
             printHealEffect(stringBuilder, offsetForEffect);
         }
@@ -148,6 +177,7 @@ public class AsciiGraphics implements IGraphics {
         for (int i = 1; i < strings.length; i++) {
             textGraphics.putString(offset, currentStringNumber++, "восстановил" + strings[i]);
         }
+        lastRow = currentStringNumber + 1;
     }
 
     private void printAttackEffect(final StringBuilder stringBuilder, int currentStringNumber) {
@@ -158,6 +188,7 @@ public class AsciiGraphics implements IGraphics {
             final String additional = strings[i].contains("урона") ? "-нанес" : "-промахнулся";
             textGraphics.putString(offset, currentStringNumber++, additional + strings[i]);
         }
+        lastRow = currentStringNumber + 1;
     }
 
     private boolean isUnitDiedRightNow(final ActionEffect effect, final SquareCoordinate coordinate) {

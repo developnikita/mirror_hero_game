@@ -2,6 +2,7 @@ package com.neolab.heroesGame;
 
 import com.neolab.heroesGame.client.ai.Player;
 import com.neolab.heroesGame.client.ai.PlayerBot;
+import com.neolab.heroesGame.client.ai.PlayerHuman;
 import com.neolab.heroesGame.client.dto.ClientRequest;
 import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
 import com.neolab.heroesGame.client.gui.IGraphics;
@@ -27,10 +28,23 @@ public class ClientPlayerImitation {
         this.gui = gui;
     }
 
+    private ClientPlayerImitation(final Player player,
+                                  final IGraphics gui) {
+        this.player = player;
+        this.gui = gui;
+    }
+
     public static ClientPlayerImitation createPlayerWithAsciiGraphics(final int playerId,
                                                                       final String name) throws IOException {
-        IGraphics graphics = new AsciiGraphics(playerId);
+        final IGraphics graphics = new AsciiGraphics(playerId);
         return new ClientPlayerImitation(playerId, name, graphics);
+    }
+
+    public static ClientPlayerImitation createHumanPlayerWithAsciiGraphics(final int playerId,
+                                                                           final String name) throws IOException {
+        final IGraphics graphics = new AsciiGraphics(playerId);
+        final Player human = new PlayerHuman(playerId, name, graphics);
+        return new ClientPlayerImitation(human, graphics);
     }
 
     public String getAnswer(final ExtendedServerResponse response) throws IOException, HeroExceptions {
