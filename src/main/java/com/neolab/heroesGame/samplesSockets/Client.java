@@ -132,7 +132,7 @@ public class Client {
         }
         int playerId = Integer.parseInt(res);
         String playerName = in.readLine();
-        player = new ClientPlayerImitation(playerId, playerName, false);
+        player = new ClientPlayerImitation(playerId, playerName);
         send(GameEvent.CLIENT_IS_CREATED.toString());
         return true;
     }

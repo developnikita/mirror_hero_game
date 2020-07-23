@@ -22,17 +22,24 @@ import java.util.Optional;
 
 
 public class AsciiGraphics implements IGraphics {
+    private static final int TERMINAL_WIDTH = 70;
+    private static final int TERMINAL_HEIGHT = 35;
+    private static final int ARMY_WIDTH = 40;
+    private static final int ENEMY_ARMY_ROW_START_AT = 0;
+    private static final int YOUR_ARMY_ROW_START_AT = 20;
+    private static final SquareCoordinate IS_AOE_EFFECT = new SquareCoordinate(-1, -1);
     private final Terminal term;
     private final TextGraphics textGraphics;
-    private final int step = 13;
     private int leftOffset;
     private final int playerId;
     private final int infoString = 22;
 
     public AsciiGraphics(final int playerId) throws IOException {
-        term = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(70, 35)).createTerminal();
+
+        term = new DefaultTerminalFactory().setInitialTerminalSize(
+                new TerminalSize(TERMINAL_WIDTH, TERMINAL_HEIGHT)).createTerminal();
         textGraphics = term.newTextGraphics();
-        leftOffset = (term.getTerminalSize().getColumns() - 40) / 2;
+        leftOffset = (term.getTerminalSize().getColumns() - ARMY_WIDTH) / 2;
         this.playerId = playerId;
     }
 
@@ -42,7 +49,7 @@ public class AsciiGraphics implements IGraphics {
         term.clearScreen();
         printBattleArena(response.arena, effect);
         printTurn(isYourTurn);
-        if (!effect.getSourceUnit().equals(new SquareCoordinate(-1, -1))) {
+        if (!effect.getSourceUnit().equals(IS_AOE_EFFECT)) {
             printEffect(effect, isYourTurn);
         }
         term.flush();
@@ -70,13 +77,13 @@ public class AsciiGraphics implements IGraphics {
     }
 
     private void printBattleArena(final BattleArena arena, final ActionEffect effect) throws IOException {
-        leftOffset = (term.getTerminalSize().getColumns() - 40) / 2;
+        leftOffset = (term.getTerminalSize().getColumns() - ARMY_WIDTH) / 2;
         textGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
         textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
-        textGraphics.putString(leftOffset, 0, "------------Армия противника------------");
+        textGraphics.putString(leftOffset, ENEMY_ARMY_ROW_START_AT, "------------Армия противника------------");
         printArmy(arena.getEnemyArmy(playerId), effect, false);
         printArmy(arena.getArmy(playerId), effect, true);
-        textGraphics.putString(leftOffset, 20, "---------------Ваша армия---------------");
+        textGraphics.putString(leftOffset, YOUR_ARMY_ROW_START_AT, "---------------Ваша армия---------------");
     }
 
     /**
@@ -97,6 +104,7 @@ public class AsciiGraphics implements IGraphics {
                 final SquareCoordinate coordinate = new SquareCoordinate(x, y);
                 final Optional<Hero> hero = yours.getHero(coordinate);
                 final TextColor textColor = chooseColorForHero(coordinate, effect, isLastMoveMakeThisArmy);
+                int step = 13;
                 if (!isLastMoveMakeThisArmy && hero.isEmpty() && isUnitDiedRightNow(effect, coordinate)) {
                     printDeadUnit(topString, leftOffset + 1 + x * step);
                 } else {
