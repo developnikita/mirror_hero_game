@@ -1,11 +1,13 @@
 package com.neolab.heroesGame.aditional;
 
+import com.neolab.heroesGame.enumerations.GameEvent;
 import com.opencsv.CSVWriter;
 
 import java.io.*;
 
 public class StatisticWriter {
     public static String playerStatisticFilePath = "playerStatistic.csv";
+    public static String armyStatisticFilePath = "armyStatistic.csv";
     public static String unitActionStatisticFilePath = "unitActionStatistic.csv";
 
     public static void writePlayerWinStatistic(final String winnerPlayerName, final String looserPlayerName) throws IOException {
@@ -17,6 +19,20 @@ public class StatisticWriter {
         final CSVWriter writer = new CSVWriter(new FileWriter(playerStatisticFilePath));
         writer.writeNext(data);
         writer.close();
+    }
+
+    public static void writeArmiesWinStatistic(final String firstMoveArmy, final String secondMoveArmy,
+                                               final GameEvent winner) {
+        final File csvOutputFile = new File(armyStatisticFilePath);
+        if (!csvOutputFile.exists()) {
+            initArmyStatistic();
+        }
+        final String[] data = {firstMoveArmy, secondMoveArmy, winner.getDescription()};
+        try (final CSVWriter fw = new CSVWriter(new FileWriter(csvOutputFile, true))) {
+            fw.writeNext(data);
+        } catch (final IOException e) {
+            // TODO: Logger
+        }
     }
 
     public static void writePlayerDrawStatistic(final String player1, final String player2) throws IOException {
@@ -80,6 +96,16 @@ public class StatisticWriter {
         try (final FileWriter fw = new FileWriter(csvOutputFile)) {
             fw.write(convertToCSV(data) + "\n");
             fw.write(String.join("\n", array));
+        } catch (final IOException e) {
+            // TODO: Logger
+        }
+    }
+
+    private static void initArmyStatistic() {
+        final File csvOutputFile = new File(armyStatisticFilePath);
+        final String[] data = {"Army 1", "Army 2", "Is first army win"};
+        try (final FileWriter fw = new FileWriter(csvOutputFile)) {
+            fw.write(convertToCSV(data) + "\n");
         } catch (final IOException e) {
             // TODO: Logger
         }

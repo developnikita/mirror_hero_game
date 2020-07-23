@@ -9,6 +9,8 @@ import java.util.*;
 
 public class CommonFunction {
 
+    final static private char emptyUnit = ' ';
+
     public static boolean isUnitMagician(final Hero hero) {
         return hero instanceof Magician;
     }
@@ -167,6 +169,114 @@ public class CommonFunction {
             result = String.format("%12s|", "Генерал");
         } else {
             result = String.format("%12s|", "Unknown");
+        }
+        return result;
+    }
+
+    public static String ArmyCodeToString(Army army) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int y = 0; y < 2; y++) {
+            for (int x = 0; x < 3; x++) {
+                Optional<Hero> hero = army.getHero(new SquareCoordinate(x, y));
+                stringBuilder.append(hero.map(CommonFunction::classCodeToString).orElse(" "));
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    public static List<String> getAllAvailableArmiesCode() {
+        char[] string = new char[6];
+        List<String> results = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            string[i] = emptyUnit;
+        }
+        createAllString(string, results);
+        return results;
+    }
+
+    private static void createAllString(char[] currentString, List<String> results) {
+        if (full(currentString)) {
+            results.add(new String(currentString));
+            return;
+        }
+        if (empty(currentString)) {
+            addWarLord(currentString, results);
+            return;
+        }
+        for (int i = 0; i < 3; i++) {
+            if (currentString[i] == emptyUnit) {
+                currentString[i] = 'a';
+                createAllString(currentString, results);
+                currentString[i] = 'h';
+                createAllString(currentString, results);
+                currentString[i] = 'm';
+                createAllString(currentString, results);
+                currentString[i] = emptyUnit;
+                return;
+            }
+        }
+        for (int i = 3; i < 6; i++) {
+            if (currentString[i] == emptyUnit) {
+                currentString[i] = 'f';
+                createAllString(currentString, results);
+                currentString[i] = emptyUnit;
+                return;
+            }
+        }
+
+    }
+
+    private static void addWarLord(char[] currentString, List<String> results) {
+        for (int i = 0; i < 3; i++) {
+            currentString[i] = 'M';
+            createAllString(currentString, results);
+            currentString[i] = 'V';
+            createAllString(currentString, results);
+            currentString[i] = emptyUnit;
+        }
+        for (int i = 3; i < 6; i++) {
+            currentString[i] = 'F';
+            createAllString(currentString, results);
+            currentString[i] = emptyUnit;
+        }
+    }
+
+    private static boolean empty(char[] currentString) {
+        for (int i = 0; i < 6; i++) {
+            if (currentString[i] != emptyUnit) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean full(char[] currentString) {
+        for (int i = 0; i < 6; i++) {
+            if (currentString[i] == emptyUnit) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static String classCodeToString(final Hero hero) {
+        final String result;
+        if (hero.getClass() == Magician.class) {
+            result = "m";
+        } else if (hero instanceof WarlordMagician) {
+            result = "M";
+        } else if (hero instanceof WarlordVampire) {
+            result = "V";
+        } else if (hero instanceof Archer) {
+            result = "a";
+        } else if (hero instanceof Healer) {
+            result = "h";
+        } else if (hero.getClass() == Footman.class) {
+            result = "f";
+        } else if (hero instanceof WarlordFootman) {
+            result = "F";
+        } else {
+            result = "u";
         }
         return result;
     }
