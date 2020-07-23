@@ -4,6 +4,7 @@ import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.answers.Answer;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public abstract class Player {
@@ -17,7 +18,7 @@ public abstract class Player {
         this.name = name;
     }
 
-    public abstract Answer getAnswer(BattleArena board) throws HeroExceptions;
+    public abstract Answer getAnswer(final BattleArena board) throws HeroExceptions, IOException;
 
     public int getId() {
         return id;
