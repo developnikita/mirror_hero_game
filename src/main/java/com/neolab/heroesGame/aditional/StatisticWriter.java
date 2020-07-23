@@ -13,7 +13,7 @@ public class StatisticWriter {
             initPlayerStatistic();
         }
         final String[] data = {winnerPlayerName, looserPlayerName, "1.0", "0.0"};
-        final CSVWriter writer = new CSVWriter(new FileWriter(PLAYER_STATISTIC_FILE_PATH));
+        final CSVWriter writer = new CSVWriter(new FileWriter(PLAYER_STATISTIC_FILE_PATH, true));
         writer.writeNext(data);
         writer.close();
     }
@@ -24,7 +24,7 @@ public class StatisticWriter {
             initPlayerStatistic();
         }
         final String[] data = {player1, player2, "0.5", "0.5"};
-        final CSVWriter writer = new CSVWriter(new FileWriter(PLAYER_STATISTIC_FILE_PATH));
+        final CSVWriter writer = new CSVWriter(new FileWriter(PLAYER_STATISTIC_FILE_PATH, true));
         writer.writeNext(data);
         writer.close();
     }
