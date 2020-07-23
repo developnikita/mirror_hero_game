@@ -26,4 +26,9 @@ public class Footman extends Hero {
         final float armor = 0.1f;
         return new Footman(hp, damage, precision, armor);
     }
+
+    @Override
+    public String getClassName() {
+        return "Мечник";
+    }
 }

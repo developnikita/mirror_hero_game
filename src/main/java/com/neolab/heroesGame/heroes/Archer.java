@@ -26,4 +26,9 @@ public class Archer extends Hero {
         final float armor = 0;
         return new Archer(hp, damage, precision, armor);
     }
+
+    @Override
+    public String getClassName() {
+        return "Лучник";
+    }
 }

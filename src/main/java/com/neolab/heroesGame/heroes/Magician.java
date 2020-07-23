@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Magician extends Hero {
 
@@ -46,5 +47,10 @@ public class Magician extends Hero {
         final float precision = 0.8f;
         final float armor = 0;
         return new Magician(hp, damage, precision, armor);
+    }
+
+    @Override
+    public String getClassName() {
+        return "Маг";
     }
 }

@@ -49,4 +49,9 @@ public class Healer extends Hero {
         final float armor = 0;
         return new Healer(hp, damage, precision, armor);
     }
+
+    @Override
+    public String getClassName() {
+        return "Лекарь";
+    }
 }

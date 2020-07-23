@@ -40,6 +40,11 @@ public class WarlordVampire extends Magician implements IWarlord {
     }
 
     @Override
+    public String getClassName() {
+        return "Вампир";
+    }
+
+    @Override
     public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position, final Army army) {
         final Map<SquareCoordinate, Integer> enemyHeroPosDamage = super.toAct(position, army);
         final AtomicInteger heal = new AtomicInteger(this.getHp());

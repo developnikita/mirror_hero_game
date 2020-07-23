@@ -1,7 +1,6 @@
 package com.neolab.heroesGame.heroes;
 
 import com.fasterxml.jackson.annotation.*;
-import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
@@ -35,10 +34,11 @@ public abstract class Hero implements Cloneable {
     private float armor;
     private final float armorDefault;
     private boolean defence = false;
+    private static int nextId = 0;
 
 
     public Hero(final int hp, final int damage, final float precision, final float armor) {
-        this.unitId = CommonFunction.idGeneration.getNextId();
+        this.unitId = nextId++;
         this.hpDefault = hp;
         this.hpMax = hp;
         this.hp = hp;
@@ -137,6 +137,8 @@ public abstract class Hero implements Cloneable {
             this.defence = false;
         }
     }
+
+    public abstract String getClassName();
 
     /**
      * Если герой погибает удаляем его из оНбеих коллекций

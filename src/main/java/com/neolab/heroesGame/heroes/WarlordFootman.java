@@ -44,6 +44,11 @@ public class WarlordFootman extends Footman implements IWarlord {
     }
 
     @Override
+    public String getClassName() {
+        return "Генерал";
+    }
+
+    @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
