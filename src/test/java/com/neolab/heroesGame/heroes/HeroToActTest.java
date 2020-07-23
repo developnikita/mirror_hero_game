@@ -3,8 +3,9 @@ package com.neolab.heroesGame.heroes;
 import com.neolab.heroesGame.aditional.GetLegalTargetTest;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
-import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
+import com.neolab.heroesGame.heroes.factory.ArcherFactory;
+import com.neolab.heroesGame.heroes.factory.HealerFactory;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -20,17 +21,17 @@ public class HeroToActTest {
 
     @Test
     public void healerToActTest() throws HeroExceptions {
-        Hero healer = Healer.createInstance();
+        final Hero healer = new HealerFactory().create();
         Map<SquareCoordinate, Integer> effect;
-        SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
-        SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
-        SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
+        final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
+        final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
+        final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
 
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(firstPosition);
         coordHeroes1.add(secondPosition);
         coordHeroes1.add(thirdPosition);
-        Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
+        final Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
         assertTrue(army.getHero(firstPosition).isPresent());
         assertTrue(army.getHero(secondPosition).isPresent());
 
@@ -40,36 +41,44 @@ public class HeroToActTest {
         assertEquals(army.getHero(firstPosition).get().getHpMax(), army.getHero(firstPosition).get().getHp());
 
         Hero hero = army.getHero(secondPosition).get();
-        int damageForTest = 10;
+        final int damageForTest = 10;
         hero.setHp(hero.getHpMax() - healer.getDamage() - damageForTest);
         effect = healer.toAct(secondPosition, army);
         assertEquals(1, effect.size());
         assertNotNull(effect.get(secondPosition));
         assertEquals(healer.getDamage(), effect.get(secondPosition).intValue());
         assertEquals(hero.getHpMax() - damageForTest, hero.getHp());
+    }
 
-        try {
-            healer.toAct(new SquareCoordinate(2, 2), army);
-            fail();
-        } catch (HeroExceptions ex) {
-            assertEquals(HeroErrorCode.ERROR_TARGET_ATTACK, ex.getHeroErrorCode());
-        }
+    @Test(expected = HeroExceptions.class)
+    public void wrongTargetForHealer() throws HeroExceptions {
+        final Hero healer = new HealerFactory().create();
+        final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
+        final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
+        final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
+
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        coordHeroes1.add(firstPosition);
+        coordHeroes1.add(secondPosition);
+        coordHeroes1.add(thirdPosition);
+        final Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
+        healer.toAct(new SquareCoordinate(2, 2), army);
     }
 
     @Test
     public void soloTargetAttackToActTest() throws HeroExceptions {
-        Hero archer = spy(Archer.createInstance());
+        final Hero archer = spy(new ArcherFactory().create());
         Map<SquareCoordinate, Integer> effect;
-        SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
-        SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
-        SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
+        final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
+        final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
+        final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
         Mockito.when(archer.isHit(anyFloat())).thenReturn(true);
 
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(firstPosition);
         coordHeroes1.add(secondPosition);
         coordHeroes1.add(thirdPosition);
-        Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
+        final Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
         assertTrue(army.getHero(firstPosition).isPresent());
         assertTrue(army.getHero(secondPosition).isPresent());
 
@@ -86,29 +95,37 @@ public class HeroToActTest {
         assertNotNull(effect.get(secondPosition));
         expectedDamage = Math.round(archer.getDamage() - archer.getDamage() * hero.getArmor());
         assertEquals(expectedDamage, effect.get(secondPosition).intValue());
+    }
 
-        try {
-            archer.toAct(new SquareCoordinate(2, 2), army);
-            fail();
-        } catch (HeroExceptions ex) {
-            assertEquals(HeroErrorCode.ERROR_TARGET_ATTACK, ex.getHeroErrorCode());
-        }
+    @Test(expected = HeroExceptions.class)
+    public void wrongTargetForArcher() throws HeroExceptions {
+        final Hero archer = new ArcherFactory().create();
+        final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
+        final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
+        final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
+
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        coordHeroes1.add(firstPosition);
+        coordHeroes1.add(secondPosition);
+        coordHeroes1.add(thirdPosition);
+        final Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
+        archer.toAct(new SquareCoordinate(2, 2), army);
     }
 
     @Test
     public void magicianTargetAttackToActTest() throws HeroExceptions {
-        Hero magician = spy(Magician.createInstance());
+        final Hero magician = spy(Magician.createInstance());
         Map<SquareCoordinate, Integer> effect;
-        SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
-        SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
-        SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
+        final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
+        final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
+        final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
         Mockito.when(magician.isHit(anyFloat())).thenReturn(true);
 
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(firstPosition);
         coordHeroes1.add(secondPosition);
         coordHeroes1.add(thirdPosition);
-        Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
+        final Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
         assertTrue(army.getHero(firstPosition).isPresent());
         assertTrue(army.getHero(secondPosition).isPresent());
 
@@ -133,19 +150,19 @@ public class HeroToActTest {
 
     @Test
     public void vampireTargetAttackToActTest() throws HeroExceptions {
-        Hero vampire = spy(WarlordVampire.createInstance());
+        final Hero vampire = spy(WarlordVampire.createInstance());
         Map<SquareCoordinate, Integer> effect;
-        SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
-        SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
-        SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
+        final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
+        final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
+        final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
         Mockito.when(vampire.isHit(anyFloat())).thenReturn(true);
         vampire.setHp(1);
 
-        Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
+        final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(firstPosition);
         coordHeroes1.add(secondPosition);
         coordHeroes1.add(thirdPosition);
-        Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
+        final Army army = GetLegalTargetTest.getArmyByCoords(coordHeroes1);
         assertTrue(army.getHero(firstPosition).isPresent());
         assertTrue(army.getHero(secondPosition).isPresent());
         assertTrue(army.getHero(thirdPosition).isPresent());

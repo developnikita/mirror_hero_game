@@ -18,190 +18,151 @@ public class AnswerValidatorTest {
 
     @Test
     public void footmanTest() throws HeroExceptions {
-        BattleArena arena = getBatleArena();
-        SquareCoordinate activeHero = new SquareCoordinate(2, 1);
-        int playerId = 1;
+        final BattleArena arena = getBatleArena();
+        final SquareCoordinate activeHero = new SquareCoordinate(2, 1);
+        final int playerId = 1;
         boolean isValidate;
 
         SquareCoordinate targetHero = new SquareCoordinate(2, 1);
         Answer answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(1, 1);
         answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(0, 1);
         answer = new Answer(activeHero, HeroActions.DEFENCE, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
+    }
 
-        targetHero = new SquareCoordinate(0, 1);
-        answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
-        try {
-            AnswerValidator.isAnswerValidate(answer, arena);
-            fail();
-        } catch (HeroExceptions ex) {
-            assertEquals(HeroErrorCode.ERROR_TARGET_ATTACK, ex.getHeroErrorCode());
-        }
+    @Test(expected = HeroExceptions.class)
+    public void wrongActionFootman1() throws HeroExceptions {
+        final BattleArena arena = getBatleArena();
+        final SquareCoordinate activeHero = new SquareCoordinate(2, 1);
+        final int playerId = 1;
+        final SquareCoordinate targetHero = new SquareCoordinate(0, 1);
+        final Answer answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
+        AnswerValidator.isAnswerValidate(answer, arena);
+    }
 
-        targetHero = new SquareCoordinate(0, 1);
-        answer = new Answer(activeHero, HeroActions.HEAL, targetHero, playerId);
-        try {
-            AnswerValidator.isAnswerValidate(answer, arena);
-            fail();
-        } catch (HeroExceptions ex) {
-            assertEquals(HeroErrorCode.ERROR_UNIT_HEAL, ex.getHeroErrorCode());
-        }
+    @Test(expected = HeroExceptions.class)
+    public void wrongActionFootman2() throws HeroExceptions {
+        final BattleArena arena = getBatleArena();
+        final SquareCoordinate activeHero = new SquareCoordinate(2, 1);
+        final int playerId = 1;
+        final SquareCoordinate targetHero = new SquareCoordinate(1, 1);
+        final Answer answer = new Answer(activeHero, HeroActions.HEAL, targetHero, playerId);
+        AnswerValidator.isAnswerValidate(answer, arena);
     }
 
     @Test
     public void archerTest() throws HeroExceptions {
-        BattleArena arena = getBatleArena();
-        SquareCoordinate activeHero = new SquareCoordinate(2, 0);
-        int playerId = 1;
+        final BattleArena arena = getBatleArena();
+        final SquareCoordinate activeHero = new SquareCoordinate(2, 0);
+        final int playerId = 1;
         boolean isValidate;
 
         SquareCoordinate targetHero = new SquareCoordinate(2, 0);
         Answer answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(1, 1);
         answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(0, 1);
         answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(0, 0);
         answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(-1, -1);
         answer = new Answer(activeHero, HeroActions.DEFENCE, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
+    }
 
-        targetHero = new SquareCoordinate(0, 1);
-        answer = new Answer(activeHero, HeroActions.HEAL, targetHero, playerId);
-        try {
-            AnswerValidator.isAnswerValidate(answer, arena);
-            fail();
-        } catch (HeroExceptions ex) {
-            assertEquals(HeroErrorCode.ERROR_UNIT_HEAL, ex.getHeroErrorCode());
-        }
+    @Test(expected = HeroExceptions.class)
+    public void wrongActionArcher() throws HeroExceptions {
+        final BattleArena arena = getBatleArena();
+        final SquareCoordinate activeHero = new SquareCoordinate(2, 0);
+        final int playerId = 1;
+        final SquareCoordinate targetHero = new SquareCoordinate(1, 1);
+        final Answer answer = new Answer(activeHero, HeroActions.HEAL, targetHero, playerId);
+        AnswerValidator.isAnswerValidate(answer, arena);
     }
 
     @Test
     public void healerTest() throws HeroExceptions {
-        BattleArena arena = getBatleArena();
-        SquareCoordinate activeHero = new SquareCoordinate(0, 0);
-        int playerId = 1;
+        final BattleArena arena = getBatleArena();
+        final SquareCoordinate activeHero = new SquareCoordinate(0, 0);
+        final int playerId = 1;
         boolean isValidate;
 
         SquareCoordinate targetHero = new SquareCoordinate(2, 0);
         Answer answer = new Answer(activeHero, HeroActions.HEAL, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(1, 1);
         answer = new Answer(activeHero, HeroActions.HEAL, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(0, 1);
         answer = new Answer(activeHero, HeroActions.HEAL, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(0, 0);
         answer = new Answer(activeHero, HeroActions.HEAL, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(-1, -1);
         answer = new Answer(activeHero, HeroActions.DEFENCE, targetHero, playerId);
-        try {
-            isValidate = AnswerValidator.isAnswerValidate(answer, arena);
-            assertTrue(isValidate);
-        } catch (HeroExceptions ex) {
-            fail();
-        }
+        isValidate = AnswerValidator.isAnswerValidate(answer, arena);
+        assertTrue(isValidate);
 
         targetHero = new SquareCoordinate(-1, -1);
         answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
         try {
             AnswerValidator.isAnswerValidate(answer, arena);
             fail();
-        } catch (HeroExceptions ex) {
+        } catch (final HeroExceptions ex) {
             assertEquals(HeroErrorCode.ERROR_UNIT_ATTACK, ex.getHeroErrorCode());
         }
     }
 
+    @Test(expected = HeroExceptions.class)
+    public void wrongActionHealer() throws HeroExceptions {
+        final BattleArena arena = getBatleArena();
+        final SquareCoordinate activeHero = new SquareCoordinate(0, 0);
+        final int playerId = 1;
+        final SquareCoordinate targetHero = new SquareCoordinate(1, 1);
+        final Answer answer = new Answer(activeHero, HeroActions.ATTACK, targetHero, playerId);
+        AnswerValidator.isAnswerValidate(answer, arena);
+    }
+
     private BattleArena getBatleArena() throws HeroExceptions {
-        Map<Integer, Army> armies = new HashMap<>();
+        final Map<Integer, Army> armies = new HashMap<>();
         armies.put(1, getArmy());
         armies.put(2, getArmy());
         return new BattleArena(armies);
     }
 
     private Army getArmy() throws HeroExceptions {
-        Map<SquareCoordinate, Hero> heroes = new HashMap<>();
+        final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         heroes.put(new SquareCoordinate(0, 0), Healer.createInstance());
         heroes.put(new SquareCoordinate(1, 0), Magician.createInstance());
         heroes.put(new SquareCoordinate(2, 0), Archer.createInstance());

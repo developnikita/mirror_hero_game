@@ -8,70 +8,68 @@ import com.neolab.heroesGame.heroes.*;
 import com.neolab.heroesGame.heroes.factory.*;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.junit.Assert.*;
 
 public class CloneTest {
 
     @Test
-    public void cloneArcherTest() throws IOException {
-        Hero hero = new ArcherFactory().create();
-        Hero clone = hero.getCopy();
+    public void cloneArcherTest() {
+        final Hero hero = new ArcherFactory().create();
+        final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
         assertTrue(clone instanceof Archer);
     }
 
     @Test
-    public void cloneFootmanTest() throws IOException {
-        Hero hero = new FootmanFactory().create();
-        Hero clone = hero.getCopy();
+    public void cloneFootmanTest() {
+        final Hero hero = new FootmanFactory().create();
+        final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
         assertTrue(clone instanceof Footman);
     }
 
     @Test
-    public void cloneHealerTest() throws IOException {
-        Hero hero = new HealerFactory().create();
-        Hero clone = hero.getCopy();
+    public void cloneHealerTest() {
+        final Hero hero = new HealerFactory().create();
+        final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
         assertTrue(clone instanceof Healer);
     }
 
     @Test
-    public void cloneMagicianTest() throws IOException {
-        Hero hero = new MagicianFactory().create();
-        Hero clone = hero.getCopy();
+    public void cloneMagicianTest() {
+        final Hero hero = new MagicianFactory().create();
+        final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
         assertTrue(clone instanceof Magician);
     }
 
     @Test
-    public void cloneWarlordFootmanTest() throws IOException {
-        Hero hero = new WarlordFootmanFactory().create();
-        Hero clone = hero.getCopy();
+    public void cloneWarlordFootmanTest() {
+        final Hero hero = new WarlordFootmanFactory().create();
+        final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
         assertTrue(clone instanceof WarlordFootman);
     }
 
     @Test
-    public void cloneWarlordMagicianTest() throws IOException {
-        Hero hero = new WarlordMagicianFactory().create();
-        Hero clone = hero.getCopy();
+    public void cloneWarlordMagicianTest() {
+        final Hero hero = new WarlordMagicianFactory().create();
+        final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
         assertTrue(clone instanceof WarlordMagician);
     }
 
     @Test
-    public void cloneWarlordVampireTest() throws IOException {
-        Hero hero = new WarlordVampireFactory().create();
-        Hero clone = hero.getCopy();
+    public void cloneWarlordVampireTest() {
+        final Hero hero = new WarlordVampireFactory().create();
+        final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
         assertNotSame(hero, clone);
         assertTrue(clone instanceof WarlordVampire);
@@ -79,8 +77,8 @@ public class CloneTest {
 
     @Test
     public void cloneArmyTest() throws HeroExceptions {
-        Army army = FactoryArmies.createRandomArmy();
-        Army clone = army.getCopy();
+        final Army army = FactoryArmies.createRandomArmy();
+        final Army clone = army.getCopy();
         assertEquals(army, clone);
         assertNotSame(army, clone);
 
@@ -111,8 +109,8 @@ public class CloneTest {
 
     @Test
     public void cloneArenaTest() throws HeroExceptions {
-        BattleArena arena = new BattleArena(FactoryArmies.generateArmies(1, 2));
-        BattleArena clone = arena.getCopy();
+        final BattleArena arena = new BattleArena(FactoryArmies.generateArmies(1, 2));
+        final BattleArena clone = arena.getCopy();
 
         assertEquals(arena, clone);
         assertNotSame(arena, clone);
