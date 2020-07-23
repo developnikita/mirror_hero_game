@@ -7,18 +7,22 @@ import com.neolab.heroesGame.heroes.factory.ArcherFactory;
 import com.neolab.heroesGame.heroes.factory.FootmanFactory;
 import com.neolab.heroesGame.heroes.factory.WarlordFootmanFactory;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.spy;
 
 public class HeroesTest {
 
     @Test
     public void heroesMethodsTest() throws HeroExceptions {
         final Hero targetHero = new WarlordFootmanFactory().create();
-        final Hero activeHero = new WarlordFootmanFactory().create();
+        final Hero activeHero = spy(new WarlordFootmanFactory().create());
+        final int activeHeroDamage = activeHero.getDamage();
         final Map<SquareCoordinate, Hero> mapTarget = new HashMap<>();
         final SquareCoordinate targetCoord = new SquareCoordinate(0, 0);
         mapTarget.put(targetCoord, targetHero);
@@ -38,6 +42,7 @@ public class HeroesTest {
         final int damageByWarlordFootman = 51;
         final int damageByFootman = 54;
         final int damageByArcher = 60;
+        Mockito.when(activeHero.randomIncreaseDamage(anyInt())).thenReturn(activeHeroDamage);
         final Hero footman = new FootmanFactory().create();
         final Hero archer = new ArcherFactory().create();
         assertEquals(damageByWarlordFootman, activeHero.calculateDamage(targetHero));

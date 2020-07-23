@@ -182,13 +182,11 @@ public class AsciiGraphics implements IGraphics {
             if (effect.getAction() == HeroActions.HEAL && effect.getTargetUnitsMap().containsKey(coordinate)) {
                 return TextColor.ANSI.GREEN;
             }
-        } else if (effect.getTargetUnitsMap().containsKey(coordinate)) {
-            if (effect.getAction() == HeroActions.ATTACK) {
-                if (effect.getTargetUnitsMap().get(coordinate) != 0) {
-                    return TextColor.ANSI.RED;
-                }
-                return TextColor.ANSI.YELLOW;
+        } else if (effect.getTargetUnitsMap().containsKey(coordinate) && effect.getAction() == HeroActions.ATTACK) {
+            if (effect.getTargetUnitsMap().get(coordinate) != 0) {
+                return TextColor.ANSI.RED;
             }
+            return TextColor.ANSI.YELLOW;
         }
         return TextColor.ANSI.WHITE;
     }
