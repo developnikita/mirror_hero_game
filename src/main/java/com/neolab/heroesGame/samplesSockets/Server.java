@@ -1,6 +1,5 @@
 package com.neolab.heroesGame.samplesSockets;
 
-import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.enumerations.GameEvent;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ public class Server {
 
                 try {
                     if(countPlayers <= props.MAX_COUNT_PLAYERS){
-                        createResponseSocket(socket, nextPlayerId.getNextId());
+                        createResponseSocket(socket, IntPlayerId.getNextId());
                         createGameRoom();
                     }
                     else {
@@ -86,10 +85,12 @@ public class Server {
      * Для генеариия id игроков
      */
     private static class IntPlayerId {
-        public static int id = 0;
-    }
+        private static int id = 0;
 
-    private static final CommonFunction.IdGeneration nextPlayerId = () -> ++IntPlayerId.id;
+        public static int getNextId() {
+            return id++;
+        }
+    }
 
     public static void main(final String[] args) {
         final Server server = new Server();

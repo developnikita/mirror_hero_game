@@ -16,7 +16,7 @@ import java.util.*;
 
 public class PlayerBot extends Player {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Answer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerBot.class);
     private final long SEED = 5916;
     private final Random RANDOM = new Random(SEED);
 

@@ -77,10 +77,6 @@ public class BattleArena {
 
     @JsonIgnore
     public BattleArena getCopy() {
-        return getCloneBattleArena();
-    }
-
-    private BattleArena getCloneBattleArena() {
         final Map<Integer, Army> clone = new HashMap<>();
         armies.keySet().forEach(key -> clone.put(key, armies.get(key).getCopy()));
         return new BattleArena(clone);

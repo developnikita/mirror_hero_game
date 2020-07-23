@@ -5,10 +5,13 @@ import com.neolab.heroesGame.heroes.*;
 
 import java.util.*;
 
-public class FactoryArmies {
+public final class FactoryArmies {
 
     private static final long SEED = 1700;
     private static final Random RANDOM = new Random(SEED);
+
+    private FactoryArmies() {
+    }
 
     public static Map<Integer, Army> generateArmies(final Integer firstPlayerId,
                                                     final Integer secondPlayerId) throws HeroExceptions {

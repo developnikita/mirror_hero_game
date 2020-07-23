@@ -194,6 +194,7 @@ public abstract class Hero implements Cloneable {
         try {
             return (Hero) super.clone();
         } catch (final CloneNotSupportedException ex) {
+            //!!!!Никогда не возникнет. Исключение CloneNotSupported возникает если не cloneable
             throw new AssertionError();
         }
     }
