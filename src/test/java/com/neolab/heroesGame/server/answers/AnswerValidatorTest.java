@@ -6,7 +6,8 @@ import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroActions;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
-import com.neolab.heroesGame.heroes.*;
+import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.heroes.factory.*;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -163,12 +164,12 @@ public class AnswerValidatorTest {
 
     private Army getArmy() throws HeroExceptions {
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
-        heroes.put(new SquareCoordinate(0, 0), Healer.createInstance());
-        heroes.put(new SquareCoordinate(1, 0), Magician.createInstance());
-        heroes.put(new SquareCoordinate(2, 0), Archer.createInstance());
-        heroes.put(new SquareCoordinate(0, 1), WarlordFootman.createInstance());
-        heroes.put(new SquareCoordinate(1, 1), Footman.createInstance());
-        heroes.put(new SquareCoordinate(2, 1), Footman.createInstance());
+        heroes.put(new SquareCoordinate(0, 0), new HealerFactory().create());
+        heroes.put(new SquareCoordinate(1, 0), new MagicianFactory().create());
+        heroes.put(new SquareCoordinate(2, 0), new ArcherFactory().create());
+        heroes.put(new SquareCoordinate(0, 1), new WarlordFootmanFactory().create());
+        heroes.put(new SquareCoordinate(1, 1), new FootmanFactory().create());
+        heroes.put(new SquareCoordinate(2, 1), new FootmanFactory().create());
         return new Army(heroes);
     }
 

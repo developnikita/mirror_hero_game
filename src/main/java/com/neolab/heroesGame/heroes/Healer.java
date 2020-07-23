@@ -42,14 +42,6 @@ public class Healer extends Hero {
         return allyHeroPosHeal;
     }
 
-    public static Hero createInstance() {
-        final int hp = 75;
-        final int damage = 40;
-        final float precision = 1;
-        final float armor = 0;
-        return new Healer(hp, damage, precision, armor);
-    }
-
     @Override
     public String getClassName() {
         return "Лекарь";

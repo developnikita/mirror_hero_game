@@ -41,14 +41,6 @@ public class Magician extends Hero {
         return enemyHeroPosDamage;
     }
 
-    public static Hero createInstance() {
-        final int hp = 75;
-        final int damage = 30;
-        final float precision = 0.8f;
-        final float armor = 0;
-        return new Magician(hp, damage, precision, armor);
-    }
-
     @Override
     public String getClassName() {
         return "Маг";

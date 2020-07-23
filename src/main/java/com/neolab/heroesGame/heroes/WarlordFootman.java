@@ -35,14 +35,6 @@ public class WarlordFootman extends Footman implements IWarlord {
         return super.getUnitId();
     }
 
-    public static Hero createInstance() {
-        final int hp = 180;
-        final int damage = 60;
-        final float precision = 0.9f;
-        final float armor = 0.15f;
-        return new WarlordFootman(hp, damage, precision, armor);
-    }
-
     @Override
     public String getClassName() {
         return "Генерал";

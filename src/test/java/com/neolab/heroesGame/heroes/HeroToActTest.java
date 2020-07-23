@@ -6,6 +6,8 @@ import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.factory.ArcherFactory;
 import com.neolab.heroesGame.heroes.factory.HealerFactory;
+import com.neolab.heroesGame.heroes.factory.MagicianFactory;
+import com.neolab.heroesGame.heroes.factory.WarlordVampireFactory;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -114,7 +116,7 @@ public class HeroToActTest {
 
     @Test
     public void magicianTargetAttackToActTest() throws HeroExceptions {
-        final Hero magician = spy(Magician.createInstance());
+        final Hero magician = spy(new MagicianFactory().create());
         final Map<SquareCoordinate, Integer> effect;
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
         final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
@@ -150,7 +152,7 @@ public class HeroToActTest {
 
     @Test
     public void vampireTargetAttackToActTest() throws HeroExceptions {
-        final Hero vampire = spy(WarlordVampire.createInstance());
+        final Hero vampire = spy(new WarlordVampireFactory().create());
         final Map<SquareCoordinate, Integer> effect;
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
         final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);

@@ -3,6 +3,9 @@ package com.neolab.heroesGame.heroes;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.errors.HeroExceptions;
+import com.neolab.heroesGame.heroes.factory.ArcherFactory;
+import com.neolab.heroesGame.heroes.factory.FootmanFactory;
+import com.neolab.heroesGame.heroes.factory.WarlordFootmanFactory;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -14,16 +17,12 @@ public class HeroesTest {
 
     @Test
     public void heroesMethodsTest() throws HeroExceptions {
-        final Hero targetHero = WarlordFootman.createInstance();
-        final Hero activeHero = WarlordFootman.createInstance();
+        final Hero targetHero = new WarlordFootmanFactory().create();
+        final Hero activeHero = new WarlordFootmanFactory().create();
         final Map<SquareCoordinate, Hero> mapTarget = new HashMap<>();
         final SquareCoordinate targetCoord = new SquareCoordinate(0, 0);
-        final SquareCoordinate activeCoord = new SquareCoordinate(1, 1);
         mapTarget.put(targetCoord, targetHero);
-        final Map<SquareCoordinate, Hero> mapActive = new HashMap<>();
-        mapActive.put(activeCoord, activeHero);
         final Army armyTarget = new Army(mapTarget);
-        final Army armyActive = new Army(mapActive);
 
         //testEquals
         assertNotEquals(activeHero, targetHero);
@@ -36,11 +35,11 @@ public class HeroesTest {
         assertNotEquals(oldSize, newSize);
 
         //calculateDamage
-        final int damageByWarlordFootman = 56;
-        final int damageByFootman = 59;
-        final int damageByArcher = 66;
-        final Hero footman = Footman.createInstance();
-        final Hero archer = Archer.createInstance();
+        final int damageByWarlordFootman = 51;
+        final int damageByFootman = 54;
+        final int damageByArcher = 60;
+        final Hero footman = new FootmanFactory().create();
+        final Hero archer = new ArcherFactory().create();
         assertEquals(damageByWarlordFootman, activeHero.calculateDamage(targetHero));
         assertEquals(damageByFootman, activeHero.calculateDamage(footman));
         assertEquals(damageByArcher, activeHero.calculateDamage(archer));

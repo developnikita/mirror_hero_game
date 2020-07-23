@@ -40,14 +40,6 @@ public class WarlordMagician extends Magician implements IWarlord {
         return "Архимаг";
     }
 
-    public static Hero createInstance() {
-        final int hp = 90;
-        final int damage = 40;
-        final float precision = 0.75f;
-        final float armor = 0.05f;
-        return new WarlordMagician(hp, damage, precision, armor);
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

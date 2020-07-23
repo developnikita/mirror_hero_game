@@ -1,7 +1,11 @@
 package com.neolab.heroesGame.arena;
 
 import com.neolab.heroesGame.errors.HeroExceptions;
-import com.neolab.heroesGame.heroes.*;
+import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.heroes.factory.FootmanFactory;
+import com.neolab.heroesGame.heroes.factory.WarlordFootmanFactory;
+import com.neolab.heroesGame.heroes.factory.WarlordMagicianFactory;
+import com.neolab.heroesGame.heroes.factory.WarlordVampireFactory;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -12,8 +16,8 @@ import static org.junit.Assert.*;
 public class ArmyTest {
     @Test
     public void ArmyMethodsTest() throws HeroExceptions {
-        final Hero warlord = WarlordFootman.createInstance();
-        final Hero footman = Footman.createInstance();
+        final Hero warlord = new WarlordFootmanFactory().create();
+        final Hero footman = new FootmanFactory().create();
         final int defaultHpWarlord = warlord.getHp();
         final int defaultDamageWarlord = warlord.getDamage();
         final int defaultHp = footman.getHp();
@@ -29,7 +33,7 @@ public class ArmyTest {
         //someOneAct
         final Map<SquareCoordinate, Hero> map1 = new HashMap<>();
         final SquareCoordinate sq = new SquareCoordinate(1, 1);
-        map1.put(sq, WarlordVampire.createInstance());
+        map1.put(sq, new WarlordVampireFactory().create());
         final Army army1 = new Army(map1);
         final Hero h = army1.getHero(sq).orElseThrow();
         army1.removeAvailableHeroById(h.getUnitId());
@@ -69,8 +73,8 @@ public class ArmyTest {
     @Test(expected = HeroExceptions.class)
     public void findTwoWarlordThrowsTest() throws HeroExceptions {
         final Map<SquareCoordinate, Hero> map = new HashMap<>();
-        map.put(new SquareCoordinate(1, 2), WarlordMagician.createInstance());
-        map.put(new SquareCoordinate(0, 0), WarlordFootman.createInstance());
+        map.put(new SquareCoordinate(1, 2), new WarlordMagicianFactory().create());
+        map.put(new SquareCoordinate(0, 0), new WarlordFootmanFactory().create());
 
         final Army army = new Army(map);
     }
