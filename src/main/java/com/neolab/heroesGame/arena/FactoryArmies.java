@@ -5,6 +5,7 @@ import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.heroes.WarlordFootman;
 import com.neolab.heroesGame.heroes.factory.*;
 
+import java.io.IOException;
 import java.util.*;
 
 public final class FactoryArmies {
@@ -16,7 +17,7 @@ public final class FactoryArmies {
     }
 
     public static Map<Integer, Army> generateArmies(final Integer firstPlayerId,
-                                                    final Integer secondPlayerId) throws HeroExceptions {
+                                                    final Integer secondPlayerId) throws HeroExceptions, IOException {
         final Map<Integer, Army> armies = new HashMap<>();
         armies.put(firstPlayerId, createRandomArmy());
         armies.put(secondPlayerId, createRandomArmy());
@@ -29,7 +30,7 @@ public final class FactoryArmies {
      * Вторую линию забивает Healer, Magician, Archer с равным шансом
      * Место для варлорда выбирает Set.iterator().next()
      */
-    public static Army createRandomArmy() throws HeroExceptions {
+    public static Army createRandomArmy() throws HeroExceptions, IOException {
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         final Hero warlord = createWarlord();
         final Set<SquareCoordinate> firstLine = makeLine(1);
@@ -55,7 +56,7 @@ public final class FactoryArmies {
         line.remove(temp);
     }
 
-    private static Hero createWarlord() {
+    private static Hero createWarlord() throws IOException {
         final int switcher = RANDOM.nextInt(4);
         if (switcher == 0) {
             return new WarlordMagicianFactory().create();
@@ -66,7 +67,7 @@ public final class FactoryArmies {
         }
     }
 
-    private static Hero createSecondLineUnit() {
+    private static Hero createSecondLineUnit() throws IOException {
         final int switcher = RANDOM.nextInt(3) % 3;
         if (switcher == 0) {
             return new ArcherFactory().create();

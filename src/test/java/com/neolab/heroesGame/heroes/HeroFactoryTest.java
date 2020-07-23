@@ -23,7 +23,7 @@ public class HeroFactoryTest {
     }
 
     @Test
-    public void archerFactoryTest() {
+    public void archerFactoryTest() throws IOException {
         final HeroFactory factory = new ArcherFactory();
         final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("hero.archer.hp"));
@@ -37,7 +37,7 @@ public class HeroFactoryTest {
     }
 
     @Test
-    public void footmanFactoryTest() {
+    public void footmanFactoryTest() throws IOException {
         final HeroFactory factory = new FootmanFactory();
         final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("hero.footman.hp"));
@@ -51,7 +51,7 @@ public class HeroFactoryTest {
     }
 
     @Test
-    public void healerFactoryTest() {
+    public void healerFactoryTest() throws IOException {
         final HeroFactory factory = new HealerFactory();
         final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("hero.healer.hp"));
@@ -65,7 +65,7 @@ public class HeroFactoryTest {
     }
 
     @Test
-    public void magicianFactoryTest() {
+    public void magicianFactoryTest() throws IOException {
         final HeroFactory factory = new MagicianFactory();
         final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("hero.magician.hp"));
@@ -79,7 +79,7 @@ public class HeroFactoryTest {
     }
 
     @Test
-    public void warlordFootmanFactoryTest() {
+    public void warlordFootmanFactoryTest() throws IOException {
         final HeroFactory factory = new WarlordFootmanFactory();
         final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("warlord.footman.hp"));
@@ -93,7 +93,7 @@ public class HeroFactoryTest {
     }
 
     @Test
-    public void warlordMagicianFactoryTest() {
+    public void warlordMagicianFactoryTest() throws IOException {
         final HeroFactory factory = new WarlordMagicianFactory();
         final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("warlord.magician.hp"));
@@ -107,7 +107,7 @@ public class HeroFactoryTest {
     }
 
     @Test
-    public void warlordVampireFactoryTest() {
+    public void warlordVampireFactoryTest() throws IOException {
         final HeroFactory factory = new WarlordVampireFactory();
         final Hero h = factory.create();
         final int hp = Integer.parseInt(prop.getProperty("warlord.vampire.hp"));

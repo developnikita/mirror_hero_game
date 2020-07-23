@@ -11,6 +11,7 @@ import com.neolab.heroesGame.heroes.factory.WarlordVampireFactory;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.spy;
 public class HeroToActTest {
 
     @Test
-    public void healerToActTest() throws HeroExceptions {
+    public void healerToActTest() throws HeroExceptions, IOException {
         final Hero healer = new HealerFactory().create();
         Map<SquareCoordinate, Integer> effect;
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
@@ -54,7 +55,7 @@ public class HeroToActTest {
     }
 
     @Test(expected = HeroExceptions.class)
-    public void wrongTargetForHealer() throws HeroExceptions {
+    public void wrongTargetForHealer() throws HeroExceptions, IOException {
         final Hero healer = new HealerFactory().create();
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
         final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
@@ -69,7 +70,7 @@ public class HeroToActTest {
     }
 
     @Test
-    public void soloTargetAttackToActTest() throws HeroExceptions {
+    public void soloTargetAttackToActTest() throws HeroExceptions, IOException {
         final Hero archer = spy(new ArcherFactory().create());
         final int archerDamage = archer.getDamage();
         Map<SquareCoordinate, Integer> effect;
@@ -103,7 +104,7 @@ public class HeroToActTest {
     }
 
     @Test(expected = HeroExceptions.class)
-    public void wrongTargetForArcher() throws HeroExceptions {
+    public void wrongTargetForArcher() throws HeroExceptions, IOException {
         final Hero archer = new ArcherFactory().create();
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
         final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
@@ -118,7 +119,7 @@ public class HeroToActTest {
     }
 
     @Test
-    public void magicianTargetAttackToActTest() throws HeroExceptions {
+    public void magicianTargetAttackToActTest() throws HeroExceptions, IOException {
         final Hero magician = spy(new MagicianFactory().create());
         final int magicianDamage = magician.getDamage();
         final Map<SquareCoordinate, Integer> effect;
@@ -156,7 +157,7 @@ public class HeroToActTest {
     }
 
     @Test
-    public void vampireTargetAttackToActTest() throws HeroExceptions {
+    public void vampireTargetAttackToActTest() throws HeroExceptions, IOException {
         final Hero vampire = spy(new WarlordVampireFactory().create());
         final int vampireDamage = vampire.getDamage();
         final Map<SquareCoordinate, Integer> effect;

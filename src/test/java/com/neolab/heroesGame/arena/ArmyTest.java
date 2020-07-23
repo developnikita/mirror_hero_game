@@ -8,6 +8,7 @@ import com.neolab.heroesGame.heroes.factory.WarlordMagicianFactory;
 import com.neolab.heroesGame.heroes.factory.WarlordVampireFactory;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import static org.junit.Assert.*;
 
 public class ArmyTest {
     @Test
-    public void ArmyMethodsTest() throws HeroExceptions {
+    public void ArmyMethodsTest() throws HeroExceptions, IOException {
         final Hero warlord = new WarlordFootmanFactory().create();
         final Hero footman = new FootmanFactory().create();
         final int defaultHpWarlord = warlord.getHp();
@@ -71,7 +72,7 @@ public class ArmyTest {
     }
 
     @Test(expected = HeroExceptions.class)
-    public void findTwoWarlordThrowsTest() throws HeroExceptions {
+    public void findTwoWarlordThrowsTest() throws HeroExceptions, IOException {
         final Map<SquareCoordinate, Hero> map = new HashMap<>();
         map.put(new SquareCoordinate(1, 2), new WarlordMagicianFactory().create());
         map.put(new SquareCoordinate(0, 0), new WarlordFootmanFactory().create());

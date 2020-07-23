@@ -8,6 +8,7 @@ import com.neolab.heroesGame.heroes.factory.FootmanFactory;
 import com.neolab.heroesGame.heroes.factory.WarlordFootmanFactory;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class GetLegalTargetForFlankUnitTest {
 
     @Test
-    public void testGetCorrectTargetForFootman1() throws HeroExceptions {
+    public void testGetCorrectTargetForFootman1() throws HeroExceptions, IOException {
         final SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
@@ -33,7 +34,7 @@ public class GetLegalTargetForFlankUnitTest {
     }
 
     @Test
-    public void testGetCorrectTargetForFootman2() throws HeroExceptions {
+    public void testGetCorrectTargetForFootman2() throws HeroExceptions, IOException {
         final SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
@@ -46,7 +47,7 @@ public class GetLegalTargetForFlankUnitTest {
     }
 
     @Test
-    public void testGetCorrectTargetForFootman3() throws HeroExceptions {
+    public void testGetCorrectTargetForFootman3() throws HeroExceptions, IOException {
         final SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
@@ -59,7 +60,7 @@ public class GetLegalTargetForFlankUnitTest {
 
 
     @Test
-    public void testGetCorrectTargetForFootman4() throws HeroExceptions {
+    public void testGetCorrectTargetForFootman4() throws HeroExceptions, IOException {
         final SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
@@ -72,7 +73,7 @@ public class GetLegalTargetForFlankUnitTest {
     }
 
     @Test
-    public void testGetCorrectTargetForFootman5() throws HeroExceptions {
+    public void testGetCorrectTargetForFootman5() throws HeroExceptions, IOException {
         final SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
@@ -87,7 +88,7 @@ public class GetLegalTargetForFlankUnitTest {
     }
 
     @Test
-    public void testGetCorrectTargetForFootman6() throws HeroExceptions {
+    public void testGetCorrectTargetForFootman6() throws HeroExceptions, IOException {
         final SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
@@ -101,7 +102,7 @@ public class GetLegalTargetForFlankUnitTest {
 
 
     @Test
-    public void testGetCorrectTargetForFootman7() throws HeroExceptions {
+    public void testGetCorrectTargetForFootman7() throws HeroExceptions, IOException {
         final SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 
@@ -114,7 +115,7 @@ public class GetLegalTargetForFlankUnitTest {
 
 
     @Test
-    public void testGetCorrectTargetForFootman8() throws HeroExceptions {
+    public void testGetCorrectTargetForFootman8() throws HeroExceptions, IOException {
         final SquareCoordinate activeUnit = new SquareCoordinate(0, 1);
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
 

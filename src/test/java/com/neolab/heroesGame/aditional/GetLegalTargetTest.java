@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.io.IOException;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 public class GetLegalTargetTest {
 
     @Parameterized.Parameters()
-    public static Iterable<Object[]> data() throws HeroExceptions {
+    public static Iterable<Object[]> data() throws HeroExceptions, IOException {
         return Arrays.asList(new Object[][]{
                 {set1(), army1()}, {set2(), army2()}, {set3(), army3()}, {set4(), army4()},
                 {set5(), army5()}, {set6(), army6()}, {set7(), army7()}, {set8(), army8()},
@@ -50,7 +51,7 @@ public class GetLegalTargetTest {
         return legalTarget;
     }
 
-    private static Army army1() throws HeroExceptions {
+    private static Army army1() throws HeroExceptions, IOException {
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(0, 1));
         coordHeroes1.add(new SquareCoordinate(1, 1));
@@ -65,7 +66,7 @@ public class GetLegalTargetTest {
         return legalTarget;
     }
 
-    private static Army army2() throws HeroExceptions {
+    private static Army army2() throws HeroExceptions, IOException {
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(0, 1));
         coordHeroes1.add(new SquareCoordinate(2, 1));
@@ -79,7 +80,7 @@ public class GetLegalTargetTest {
         return legalTarget;
     }
 
-    private static Army army3() throws HeroExceptions {
+    private static Army army3() throws HeroExceptions, IOException {
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(1, 1));
         coordHeroes1.add(new SquareCoordinate(2, 1));
@@ -92,7 +93,7 @@ public class GetLegalTargetTest {
         return legalTarget;
     }
 
-    private static Army army4() throws HeroExceptions {
+    private static Army army4() throws HeroExceptions, IOException {
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(2, 1));
         return getArmyByCoords(coordHeroes1);
@@ -106,7 +107,7 @@ public class GetLegalTargetTest {
         return legalTarget;
     }
 
-    private static Army army5() throws HeroExceptions {
+    private static Army army5() throws HeroExceptions, IOException {
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(0, 0));
         coordHeroes1.add(new SquareCoordinate(1, 0));
@@ -120,7 +121,7 @@ public class GetLegalTargetTest {
         return legalTarget;
     }
 
-    private static Army army6() throws HeroExceptions {
+    private static Army army6() throws HeroExceptions, IOException {
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(0, 0));
         return getArmyByCoords(coordHeroes1);
@@ -132,7 +133,7 @@ public class GetLegalTargetTest {
         return legalTarget;
     }
 
-    private static Army army7() throws HeroExceptions {
+    private static Army army7() throws HeroExceptions, IOException {
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(2, 0));
         return getArmyByCoords(coordHeroes1);
@@ -144,7 +145,7 @@ public class GetLegalTargetTest {
         return legalTarget;
     }
 
-    private static Army army8() throws HeroExceptions {
+    private static Army army8() throws HeroExceptions, IOException {
         final Set<SquareCoordinate> coordHeroes1 = new HashSet<>();
         coordHeroes1.add(new SquareCoordinate(1, 0));
         return getArmyByCoords(coordHeroes1);
@@ -153,7 +154,7 @@ public class GetLegalTargetTest {
     /**
      * Создает армию из футфайтеров с варлордом для того, чтобы не генерировать армию в каждом тесте
      */
-    public static Army getArmyByCoords(final Set<SquareCoordinate> coords) throws HeroExceptions {
+    public static Army getArmyByCoords(final Set<SquareCoordinate> coords) throws HeroExceptions, IOException {
         boolean isWarlordNotExist = true;
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         for (final SquareCoordinate coord : coords) {

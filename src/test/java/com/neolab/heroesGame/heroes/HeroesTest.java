@@ -9,6 +9,7 @@ import com.neolab.heroesGame.heroes.factory.WarlordFootmanFactory;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ import static org.mockito.Mockito.spy;
 public class HeroesTest {
 
     @Test
-    public void heroesMethodsTest() throws HeroExceptions {
+    public void heroesMethodsTest() throws HeroExceptions, IOException {
         final Hero targetHero = new WarlordFootmanFactory().create();
         final Hero activeHero = spy(new WarlordFootmanFactory().create());
         final int activeHeroDamage = activeHero.getDamage();

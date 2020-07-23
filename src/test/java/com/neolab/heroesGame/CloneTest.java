@@ -8,12 +8,14 @@ import com.neolab.heroesGame.heroes.*;
 import com.neolab.heroesGame.heroes.factory.*;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 public class CloneTest {
 
     @Test
-    public void cloneArcherTest() {
+    public void cloneArcherTest() throws IOException {
         final Hero hero = new ArcherFactory().create();
         final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
@@ -22,7 +24,7 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneFootmanTest() {
+    public void cloneFootmanTest() throws IOException {
         final Hero hero = new FootmanFactory().create();
         final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
@@ -31,7 +33,7 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneHealerTest() {
+    public void cloneHealerTest() throws IOException {
         final Hero hero = new HealerFactory().create();
         final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
@@ -40,7 +42,7 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneMagicianTest() {
+    public void cloneMagicianTest() throws IOException {
         final Hero hero = new MagicianFactory().create();
         final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
@@ -49,7 +51,7 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneWarlordFootmanTest() {
+    public void cloneWarlordFootmanTest() throws IOException {
         final Hero hero = new WarlordFootmanFactory().create();
         final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
@@ -58,7 +60,7 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneWarlordMagicianTest() {
+    public void cloneWarlordMagicianTest() throws IOException {
         final Hero hero = new WarlordMagicianFactory().create();
         final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
@@ -67,7 +69,7 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneWarlordVampireTest() {
+    public void cloneWarlordVampireTest() throws IOException {
         final Hero hero = new WarlordVampireFactory().create();
         final Hero clone = hero.getCopy();
         assertEquals(hero, clone);
@@ -76,7 +78,7 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneArmyTest() throws HeroExceptions {
+    public void cloneArmyTest() throws HeroExceptions, IOException {
         final Army army = FactoryArmies.createRandomArmy();
         final Army clone = army.getCopy();
         assertEquals(army, clone);
@@ -108,7 +110,7 @@ public class CloneTest {
     }
 
     @Test
-    public void cloneArenaTest() throws HeroExceptions {
+    public void cloneArenaTest() throws HeroExceptions, IOException {
         final BattleArena arena = new BattleArena(FactoryArmies.generateArmies(1, 2));
         final BattleArena clone = arena.getCopy();
 

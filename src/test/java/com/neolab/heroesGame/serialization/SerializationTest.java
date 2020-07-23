@@ -16,6 +16,7 @@ import com.neolab.heroesGame.server.answers.Answer;
 import com.neolab.heroesGame.server.dto.ExtendedServerRequest;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void archerSerializationDeserializationTest() throws JsonProcessingException {
+    public void archerSerializationDeserializationTest() throws IOException {
         final Hero archer = new ArcherFactory().create();
         final String json = mapper.writeValueAsString(archer);
         final Hero newArcher = mapper.readValue(json, Hero.class);
@@ -46,7 +47,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void footmanSerializationDeserializationTest() throws JsonProcessingException {
+    public void footmanSerializationDeserializationTest() throws IOException {
         final Hero footman = new FootmanFactory().create();
         final String json = mapper.writeValueAsString(footman);
         final Hero newFootman = mapper.readValue(json, Hero.class);
@@ -56,7 +57,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void healerSerializationDeserializationTest() throws JsonProcessingException {
+    public void healerSerializationDeserializationTest() throws IOException {
         final Hero healer = new HealerFactory().create();
         final String json = mapper.writeValueAsString(healer);
         final Hero newHealer = mapper.readValue(json, Hero.class);
@@ -66,7 +67,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void magicianSerializationDeserializationTest() throws JsonProcessingException {
+    public void magicianSerializationDeserializationTest() throws IOException {
         final Hero magician = new MagicianFactory().create();
         final String json = mapper.writeValueAsString(magician);
         final Hero newMagician = mapper.readValue(json, Hero.class);
@@ -76,7 +77,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void warlordFootmanSerializationDeserializationTest() throws JsonProcessingException {
+    public void warlordFootmanSerializationDeserializationTest() throws IOException {
         final Hero warlordFootman = new WarlordFootmanFactory().create();
         final String json = mapper.writeValueAsString(warlordFootman);
         final Hero newWarlordFootman = mapper.readValue(json, Hero.class);
@@ -92,7 +93,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void warlordMagicianSerializationDeserializationTest() throws JsonProcessingException {
+    public void warlordMagicianSerializationDeserializationTest() throws IOException {
         final Hero warlordMagician = new WarlordMagicianFactory().create();
         final String json = mapper.writeValueAsString(warlordMagician);
         final Hero newWarlordMagician = mapper.readValue(json, Hero.class);
@@ -108,7 +109,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void warlordVampireSerializationDeserializationTest() throws JsonProcessingException {
+    public void warlordVampireSerializationDeserializationTest() throws IOException {
         final Hero warlordVampire = new WarlordVampireFactory().create();
         final String json = mapper.writeValueAsString(warlordVampire);
         final Hero newWarlordVampire = mapper.readValue(json, Hero.class);
@@ -124,7 +125,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void armySerializationDeserializationTest() throws JsonProcessingException, HeroExceptions {
+    public void armySerializationDeserializationTest() throws IOException, HeroExceptions {
         final Army army = FactoryArmies.generateArmies(1, 2).get(1);
         final String json = mapper.writeValueAsString(army);
         final Army newArmy = mapper.readValue(json, Army.class);
@@ -133,7 +134,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void battleArenaSerializationDeserializationTest() throws JsonProcessingException, HeroExceptions {
+    public void battleArenaSerializationDeserializationTest() throws IOException, HeroExceptions {
         final BattleArena arena = new BattleArena(FactoryArmies.generateArmies(1, 2));
         final String json = mapper.writeValueAsString(arena);
         final BattleArena newArena = mapper.readValue(json, BattleArena.class);

@@ -4,11 +4,13 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.*;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertTrue;
 
 public class ArmyFactoryTest {
     @Test
-    public void stringArmyFactoryTest() throws HeroExceptions {
+    public void stringArmyFactoryTest() throws HeroExceptions, IOException {
         final String armyStr = "affVmh";
         final ArmyFactory factory = new StringArmyFactory(armyStr);
         final Army army = factory.create();
