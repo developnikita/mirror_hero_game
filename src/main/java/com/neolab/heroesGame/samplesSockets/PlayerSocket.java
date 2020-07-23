@@ -42,8 +42,8 @@ public class PlayerSocket {
     public boolean isAssignIdAndNameClient() throws IOException {
         send(String.valueOf(playerId));
         send(playerName);
-        String response = in.readLine();
-        if(response.equals("OK")){
+        final String response = in.readLine();
+        if (response.equals("OK")) {
             return true;
         }
         downService();

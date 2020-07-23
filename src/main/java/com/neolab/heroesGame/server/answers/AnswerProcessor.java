@@ -84,11 +84,11 @@ public final class AnswerProcessor {
     }
 
     private Hero getActiveHero(final BattleArena board, final Answer answer) throws HeroExceptions {
-       final Optional<Hero> activeHero = board.getArmy(activePlayerId).getHero(answer.getActiveHero());
-       if (activeHero.isPresent()) {
-           return activeHero.get();
-       }
-       throw new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT);
+        final Optional<Hero> activeHero = board.getArmy(activePlayerId).getHero(answer.getActiveHero());
+        if (activeHero.isPresent()) {
+            return activeHero.get();
+        }
+        throw new HeroExceptions(HeroErrorCode.ERROR_ACTIVE_UNIT);
     }
 
     private void removeUsedHero(final int activePlayerId, final int heroId) {

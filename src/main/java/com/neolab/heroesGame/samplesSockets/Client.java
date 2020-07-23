@@ -35,7 +35,7 @@ public class Client {
      * @param ip   ip адрес клиента
      * @param port порт соединения
      */
-    private Client(final String ip, final int port){
+    private Client(final String ip, final int port) {
         this.ip = ip;
         this.port = port;
     }
@@ -66,7 +66,7 @@ public class Client {
      * @param message сообщение
      */
     private void send(final String message) throws IOException {
-        out.write( message + "\n");
+        out.write(message + "\n");
         out.flush();
     }
 
@@ -110,25 +110,24 @@ public class Client {
                         break;
                     }
 
-                    ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(requestJson);
+                    final ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(requestJson);
 
-                    switch (response.event){
+                    switch (response.event) {
                         case NOW_YOUR_TURN -> send(player.getAnswer(response));
                         case WAIT_ITS_NOT_YOUR_TURN -> player.sendInformation(response);
                         case YOU_WIN_GAME, YOU_LOSE_GAME -> player.endGame(response);
                         default -> throw new HeroExceptions(HeroErrorCode.ERROR_EVENT);
                     }
                 }
-            }
-            catch (Exception e) {
+            } catch (final Exception e) {
                 downService();
                 e.printStackTrace();
             }
         }
 
         private void createPlayer() throws IOException {
-            int playerId = Integer.parseInt(in.readLine());
-            String playerName = in.readLine();
+            final int playerId = Integer.parseInt(in.readLine());
+            final String playerName = in.readLine();
             player = new ClientPlayerImitation(playerId, playerName, false);
             send("OK");
         }

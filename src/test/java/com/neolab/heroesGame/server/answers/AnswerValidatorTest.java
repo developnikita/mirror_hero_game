@@ -18,7 +18,7 @@ public class AnswerValidatorTest {
 
     @Test
     public void footmanTest() throws HeroExceptions {
-        final BattleArena arena = getBatleArena();
+        final BattleArena arena = getBattleArena();
         final SquareCoordinate activeHero = new SquareCoordinate(2, 1);
         final int playerId = 1;
         boolean isValidate;
@@ -41,7 +41,7 @@ public class AnswerValidatorTest {
 
     @Test(expected = HeroExceptions.class)
     public void wrongActionFootman1() throws HeroExceptions {
-        final BattleArena arena = getBatleArena();
+        final BattleArena arena = getBattleArena();
         final SquareCoordinate activeHero = new SquareCoordinate(2, 1);
         final int playerId = 1;
         final SquareCoordinate targetHero = new SquareCoordinate(0, 1);
@@ -51,7 +51,7 @@ public class AnswerValidatorTest {
 
     @Test(expected = HeroExceptions.class)
     public void wrongActionFootman2() throws HeroExceptions {
-        final BattleArena arena = getBatleArena();
+        final BattleArena arena = getBattleArena();
         final SquareCoordinate activeHero = new SquareCoordinate(2, 1);
         final int playerId = 1;
         final SquareCoordinate targetHero = new SquareCoordinate(1, 1);
@@ -61,7 +61,7 @@ public class AnswerValidatorTest {
 
     @Test
     public void archerTest() throws HeroExceptions {
-        final BattleArena arena = getBatleArena();
+        final BattleArena arena = getBattleArena();
         final SquareCoordinate activeHero = new SquareCoordinate(2, 0);
         final int playerId = 1;
         boolean isValidate;
@@ -94,7 +94,7 @@ public class AnswerValidatorTest {
 
     @Test(expected = HeroExceptions.class)
     public void wrongActionArcher() throws HeroExceptions {
-        final BattleArena arena = getBatleArena();
+        final BattleArena arena = getBattleArena();
         final SquareCoordinate activeHero = new SquareCoordinate(2, 0);
         final int playerId = 1;
         final SquareCoordinate targetHero = new SquareCoordinate(1, 1);
@@ -104,7 +104,7 @@ public class AnswerValidatorTest {
 
     @Test
     public void healerTest() throws HeroExceptions {
-        final BattleArena arena = getBatleArena();
+        final BattleArena arena = getBattleArena();
         final SquareCoordinate activeHero = new SquareCoordinate(0, 0);
         final int playerId = 1;
         boolean isValidate;
@@ -146,7 +146,7 @@ public class AnswerValidatorTest {
 
     @Test(expected = HeroExceptions.class)
     public void wrongActionHealer() throws HeroExceptions {
-        final BattleArena arena = getBatleArena();
+        final BattleArena arena = getBattleArena();
         final SquareCoordinate activeHero = new SquareCoordinate(0, 0);
         final int playerId = 1;
         final SquareCoordinate targetHero = new SquareCoordinate(1, 1);
@@ -154,7 +154,7 @@ public class AnswerValidatorTest {
         AnswerValidator.isAnswerValidate(answer, arena);
     }
 
-    private BattleArena getBatleArena() throws HeroExceptions {
+    private BattleArena getBattleArena() throws HeroExceptions {
         final Map<Integer, Army> armies = new HashMap<>();
         armies.put(1, getArmy());
         armies.put(2, getArmy());

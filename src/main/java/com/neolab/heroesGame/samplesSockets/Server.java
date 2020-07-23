@@ -16,25 +16,24 @@ public class Server {
     private static final PropsServerManager props = new PropsServerManager();
     public static final int PORT = props.PORT;
     private static final ConcurrentLinkedQueue<PlayerSocket> serverList = new ConcurrentLinkedQueue<>();
-    private static int countPlayers  = 0;
+    private static int countPlayers = 0;
 
     private void startServer() {
         System.out.println(String.format("Server started, port: %d", PORT));
         try (final ServerSocket serverSocket = new ServerSocket(PORT)) {
 
-            while(true) {
+            while (true) {
 
                 // Блокируется до возникновения нового соединения
                 final Socket socket = serverSocket.accept();
                 countPlayers = (countPlayers <= props.MAX_COUNT_PLAYERS) ? ++countPlayers : countPlayers;
 
                 try {
-                    if(countPlayers <= props.MAX_COUNT_PLAYERS){
+                    if (countPlayers <= props.MAX_COUNT_PLAYERS) {
                         createResponseSocket(socket, nextPlayerId.getNextId());
                         createGameRoom();
-                    }
-                    else {
-                        final PlayerSocket playerSocket =  new PlayerSocket(socket, 0, "null");
+                    } else {
+                        final PlayerSocket playerSocket = new PlayerSocket(socket, 0, "null");
                         playerSocket.send(GameEvent.MAX_COUNT_PLAYERS.toString());
                         playerSocket.downService();
                     }
@@ -53,13 +52,14 @@ public class Server {
 
     /**
      * создаём серверный сокет для общения с конкретным клиентом
-     * @param socket копия клиенсткого сокета на стороне сервера
+     *
+     * @param socket   копия клиенсткого сокета на стороне сервера
      * @param playerId назначается сервером на игрока
      */
-    private void createResponseSocket(Socket socket, int playerId) throws IOException {
-        final PlayerSocket playerSocket =  new PlayerSocket(socket, playerId, props.mapIdNamePlayers.get(playerId));
+    private void createResponseSocket(final Socket socket, final int playerId) throws IOException {
+        final PlayerSocket playerSocket = new PlayerSocket(socket, playerId, props.mapIdNamePlayers.get(playerId));
 
-        if(playerSocket.isAssignIdAndNameClient()){
+        if (playerSocket.isAssignIdAndNameClient()) {
             serverList.add(playerSocket);
         }
     }
@@ -68,7 +68,7 @@ public class Server {
      * если в очереди есть 2 свободных игрока то создаем комнату
      */
     private void createGameRoom() throws Exception {
-        if(serverList.size() >= 2){
+        if (serverList.size() >= 2) {
             new GameRoom(serverList).start();
         }
     }
@@ -77,7 +77,7 @@ public class Server {
      * закрытие сервера, удаление себя из списка нитей
      */
     private void downService() {
-        for(PlayerSocket playerSocket : serverList){
+        for (final PlayerSocket playerSocket : serverList) {
             playerSocket.downService();
         }
     }

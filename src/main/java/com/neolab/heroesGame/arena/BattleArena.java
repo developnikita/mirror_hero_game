@@ -81,7 +81,7 @@ public class BattleArena {
     }
 
     private BattleArena getCloneBattleArena() {
-        Map<Integer, Army> clone = new HashMap<>();
+        final Map<Integer, Army> clone = new HashMap<>();
         armies.keySet().forEach(key -> clone.put(key, armies.get(key).getCopy()));
         return new BattleArena(clone);
     }

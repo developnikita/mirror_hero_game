@@ -9,7 +9,7 @@ public class WarlordFootman extends Footman implements IWarlord {
 
     private float improveCoefficient = 0.1f;
 
-    public WarlordFootman(int hp, int damage, float precision, float armor) {
+    public WarlordFootman(final int hp, final int damage, final float precision, final float armor) {
         super(hp, damage, precision, armor);
     }
 
@@ -44,11 +44,11 @@ public class WarlordFootman extends Footman implements IWarlord {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        WarlordFootman that = (WarlordFootman) o;
+        final WarlordFootman that = (WarlordFootman) o;
         return Float.compare(that.improveCoefficient, improveCoefficient) == 0;
     }
 

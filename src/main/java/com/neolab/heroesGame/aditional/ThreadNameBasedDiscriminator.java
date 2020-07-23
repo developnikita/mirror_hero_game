@@ -10,7 +10,7 @@ public class ThreadNameBasedDiscriminator implements Discriminator<ILoggingEvent
     private boolean started;
 
     @Override
-    public String getDiscriminatingValue(ILoggingEvent iLoggingEvent) {
+    public String getDiscriminatingValue(final ILoggingEvent iLoggingEvent) {
         return Thread.currentThread().getName();
     }
 

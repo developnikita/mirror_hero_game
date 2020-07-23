@@ -13,10 +13,10 @@ public class WarlordVampire extends Magician implements IWarlord {
 
     private float improveCoefficient = 0.05f;
 
-    public WarlordVampire(int hp, int damage, float precision, float armor) {
+    public WarlordVampire(final int hp, final int damage, final float precision, final float armor) {
         super(hp, damage, precision, armor);
     }
-    
+
     @JsonCreator
     protected WarlordVampire(@JsonProperty("unitId") final int unitId, @JsonProperty("hpDefault") final int hpDefault,
                              @JsonProperty("hpMax") final int hpMax, @JsonProperty("hp") final int hp,
@@ -57,11 +57,11 @@ public class WarlordVampire extends Magician implements IWarlord {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        WarlordVampire that = (WarlordVampire) o;
+        final WarlordVampire that = (WarlordVampire) o;
         return Float.compare(that.improveCoefficient, improveCoefficient) == 0;
     }
 

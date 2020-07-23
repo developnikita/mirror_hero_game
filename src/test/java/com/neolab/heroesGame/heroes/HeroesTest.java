@@ -1,4 +1,5 @@
 package com.neolab.heroesGame.heroes;
+
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.errors.HeroExceptions;

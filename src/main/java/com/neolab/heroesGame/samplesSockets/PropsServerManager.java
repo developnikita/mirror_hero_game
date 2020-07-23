@@ -17,10 +17,10 @@ public class PropsServerManager {
     public int MAX_COUNT_PLAYERS;
     public final Map<Integer, String> mapIdNamePlayers = new HashMap<>();
 
-    public PropsServerManager(){
+    public PropsServerManager() {
         //инициализируем специальный объект Properties
         //типа Hashtable для удобной работы с данными
-        Properties prop = new Properties();
+        final Properties prop = new Properties();
 
         try {
             //обращаемся к файлу и получаем данные
@@ -42,13 +42,13 @@ public class PropsServerManager {
 
             mapIdNamePlayers.put(playerOneId, playerOneName);
             mapIdNamePlayers.put(playerTwoId, playerTwoName);
-            mapIdNamePlayers.put(playerThreeId,playerThreeName);
+            mapIdNamePlayers.put(playerThreeId, playerThreeName);
             mapIdNamePlayers.put(playerFourId, playerFourName);
             mapIdNamePlayers.put(playerFiveId, playerFiveName);
             mapIdNamePlayers.put(playerSixId, playerSixName);
 
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOGGER.error("Ошибка в программе: файл " + PATH_TO_PROPERTIES + " не обнаружен");
             e.printStackTrace();
         }

@@ -37,7 +37,7 @@ public class AsciiGraphics implements IGraphics {
     }
 
     @Override
-    public void showPosition(final ExtendedServerResponse response, boolean isYourTurn) throws IOException {
+    public void showPosition(final ExtendedServerResponse response, final boolean isYourTurn) throws IOException {
         final ActionEffect effect = Optional.ofNullable(response.effect).orElse(ActionEffect.defaultActionEffect());
         term.clearScreen();
         printBattleArena(response.arena, effect);
@@ -92,11 +92,11 @@ public class AsciiGraphics implements IGraphics {
         int topString = isItYourArmy ? 12 : 2;
         final boolean isLastMoveMakeThisArmy = (effect.getLastMovedPlayerId() == playerId) == isItYourArmy;
         for (int i = 0; i < 2; i++) {
-            int y = isItYourArmy ? 1 - i : i;
+            final int y = isItYourArmy ? 1 - i : i;
             for (int x = 0; x < 3; x++) {
                 final SquareCoordinate coordinate = new SquareCoordinate(x, y);
                 final Optional<Hero> hero = yours.getHero(coordinate);
-                TextColor textColor = chooseColorForHero(coordinate, effect, isLastMoveMakeThisArmy);
+                final TextColor textColor = chooseColorForHero(coordinate, effect, isLastMoveMakeThisArmy);
                 if (!isLastMoveMakeThisArmy && hero.isEmpty() && isUnitDiedRightNow(effect, coordinate)) {
                     printDeadUnit(topString, leftOffset + 1 + x * step);
                 } else {
@@ -107,7 +107,7 @@ public class AsciiGraphics implements IGraphics {
         }
     }
 
-    private void printTurn(boolean isYourTurn) {
+    private void printTurn(final boolean isYourTurn) {
         if (isYourTurn) {
             textGraphics.putString(leftOffset, infoString, "Сейчас ваш ход", SGR.BOLD);
         } else {
@@ -118,7 +118,7 @@ public class AsciiGraphics implements IGraphics {
 
     private void printEffect(final ActionEffect effect, final boolean isNowYourTurn) throws IOException {
         final int offsetForEffect = 23;
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Во время прошлого хода ");
         stringBuilder.append(isNowYourTurn ? "вражеский " : "ваш ");
         stringBuilder.append(effect.toString());
@@ -126,7 +126,7 @@ public class AsciiGraphics implements IGraphics {
         if (effect.getAction() == HeroActions.ATTACK) {
             printAttackEffect(stringBuilder, offsetForEffect);
         } else if (effect.getAction() == HeroActions.DEFENCE) {
-            int offset = (term.getTerminalSize().getColumns() - stringBuilder.length()) / 2;
+            final int offset = (term.getTerminalSize().getColumns() - stringBuilder.length()) / 2;
             textGraphics.putString(offset, offsetForEffect, stringBuilder.toString());
         } else {
             printHealEffect(stringBuilder, offsetForEffect);
@@ -135,7 +135,7 @@ public class AsciiGraphics implements IGraphics {
 
     private void printHealEffect(final StringBuilder stringBuilder, int currentStringNumber) {
         final int offset = 10;
-        String[] strings = stringBuilder.toString().split("восстановил");
+        final String[] strings = stringBuilder.toString().split("восстановил");
         textGraphics.putString(0, currentStringNumber++, strings[0] + ":");
         for (int i = 1; i < strings.length; i++) {
             textGraphics.putString(offset, currentStringNumber++, "восстановил" + strings[i]);
@@ -143,16 +143,16 @@ public class AsciiGraphics implements IGraphics {
     }
 
     private void printAttackEffect(final StringBuilder stringBuilder, int currentStringNumber) {
-        int offset = 10;
-        String[] strings = stringBuilder.toString().split("нанес|промахнулся");
+        final int offset = 10;
+        final String[] strings = stringBuilder.toString().split("нанес|промахнулся");
         textGraphics.putString(0, currentStringNumber++, strings[0] + ":");
         for (int i = 1; i < strings.length; i++) {
-            String additional = strings[i].contains("урона") ? "-нанес" : "-промахнулся";
+            final String additional = strings[i].contains("урона") ? "-нанес" : "-промахнулся";
             textGraphics.putString(offset, currentStringNumber++, additional + strings[i]);
         }
     }
 
-    private boolean isUnitDiedRightNow(ActionEffect effect, SquareCoordinate coordinate) {
+    private boolean isUnitDiedRightNow(final ActionEffect effect, final SquareCoordinate coordinate) {
         return effect.getTargetUnitsMap().containsKey(coordinate)
                 && effect.getAction() == HeroActions.ATTACK;
 

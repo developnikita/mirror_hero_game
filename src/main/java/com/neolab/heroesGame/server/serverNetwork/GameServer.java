@@ -27,7 +27,7 @@ public class GameServer {
     private final BattleArena battleArena;
     private int counter;
 
-    public GameServer(PlayerSocket playerOne, PlayerSocket playerTwo) throws Exception {
+    public GameServer(final PlayerSocket playerOne, final PlayerSocket playerTwo) throws Exception {
         currentPlayer = playerOne;
         waitingPlayer = playerTwo;
         battleArena = new BattleArena(FactoryArmies.generateArmies(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId()));
@@ -76,7 +76,7 @@ public class GameServer {
         setAnswerProcessorPlayerId(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId());
     }
 
-    private void setAnswerProcessorPlayerId(int currentPlayerId, int waitingPlayerId) {
+    private void setAnswerProcessorPlayerId(final int currentPlayerId, final int waitingPlayerId) {
         answerProcessor.setActivePlayerId(currentPlayerId);
         answerProcessor.setWaitingPlayerId(waitingPlayerId);
     }
@@ -130,8 +130,8 @@ public class GameServer {
         return waitingPlayer.getPlayerId();
     }
 
-    private void someoneWin(PlayerSocket winner) throws IOException {
-        PlayerSocket loser = getLoser(winner);
+    private void someoneWin(final PlayerSocket winner) throws IOException {
+        final PlayerSocket loser = getLoser(winner);
         StatisticWriter.writePlayerWinStatistic(winner.getPlayerName(), loser.getPlayerName());
         battleArena.toLog();
         LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", winner.getPlayerId());
@@ -141,7 +141,7 @@ public class GameServer {
                 GameEvent.YOU_LOSE_GAME, battleArena, answerProcessor.getActionEffect()));
     }
 
-    private PlayerSocket getLoser(PlayerSocket winner) {
+    private PlayerSocket getLoser(final PlayerSocket winner) {
         return winner.equals(currentPlayer) ? waitingPlayer : currentPlayer;
     }
 

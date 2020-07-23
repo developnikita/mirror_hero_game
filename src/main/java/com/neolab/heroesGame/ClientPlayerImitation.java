@@ -31,17 +31,17 @@ public class ClientPlayerImitation {
         }
     }
 
-    public String getAnswer(ExtendedServerResponse response) throws IOException, HeroExceptions {
+    public String getAnswer(final ExtendedServerResponse response) throws IOException, HeroExceptions {
         gui.showPosition(response, true);
-        Answer answer = player.getAnswer(response.arena);
+        final Answer answer = player.getAnswer(response.arena);
         return new ClientRequest(answer).jsonAnswer;
     }
 
-    public void sendInformation(ExtendedServerResponse response) throws IOException {
+    public void sendInformation(final ExtendedServerResponse response) throws IOException {
         gui.showPosition(response, false);
     }
 
-    public void endGame(ExtendedServerResponse response) throws IOException {
+    public void endGame(final ExtendedServerResponse response) throws IOException {
         gui.endGame(response);
     }
 

@@ -9,10 +9,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * класс реализующий функционал игровой комнты для двух игроков
  */
-public class GameRoom extends Thread{
+public class GameRoom extends Thread {
     private final GameServer gameServer;
 
-    public GameRoom(ConcurrentLinkedQueue<PlayerSocket> serverList) throws Exception {
+    public GameRoom(final ConcurrentLinkedQueue<PlayerSocket> serverList) throws Exception {
         final PlayerSocket playerOne = serverList.poll();
         final PlayerSocket playerTwo = serverList.poll();
         gameServer = new GameServer(playerOne, playerTwo);
@@ -22,7 +22,7 @@ public class GameRoom extends Thread{
     public void run() {
         try {
             gameServer.gameProcess();
-        } catch (IOException | HeroExceptions | InterruptedException ex) {
+        } catch (final IOException | HeroExceptions | InterruptedException ex) {
             ex.printStackTrace();
         }
     }

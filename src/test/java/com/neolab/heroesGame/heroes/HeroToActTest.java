@@ -40,7 +40,7 @@ public class HeroToActTest {
         assertNotNull(effect.get(firstPosition));
         assertEquals(army.getHero(firstPosition).get().getHpMax(), army.getHero(firstPosition).get().getHp());
 
-        Hero hero = army.getHero(secondPosition).get();
+        final Hero hero = army.getHero(secondPosition).get();
         final int damageForTest = 10;
         hero.setHp(hero.getHpMax() - healer.getDamage() - damageForTest);
         effect = healer.toAct(secondPosition, army);
@@ -115,7 +115,7 @@ public class HeroToActTest {
     @Test
     public void magicianTargetAttackToActTest() throws HeroExceptions {
         final Hero magician = spy(Magician.createInstance());
-        Map<SquareCoordinate, Integer> effect;
+        final Map<SquareCoordinate, Integer> effect;
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
         final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
         final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
@@ -151,7 +151,7 @@ public class HeroToActTest {
     @Test
     public void vampireTargetAttackToActTest() throws HeroExceptions {
         final Hero vampire = spy(WarlordVampire.createInstance());
-        Map<SquareCoordinate, Integer> effect;
+        final Map<SquareCoordinate, Integer> effect;
         final SquareCoordinate firstPosition = new SquareCoordinate(0, 0);
         final SquareCoordinate secondPosition = new SquareCoordinate(1, 1);
         final SquareCoordinate thirdPosition = new SquareCoordinate(2, 0);
@@ -169,7 +169,7 @@ public class HeroToActTest {
 
         effect = vampire.toAct(firstPosition, army);
         int health = 1;
-        for (Integer value : effect.values()) {
+        for (final Integer value : effect.values()) {
             health += value;
         }
         assertEquals(3, effect.size());

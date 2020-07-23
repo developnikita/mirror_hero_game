@@ -9,7 +9,7 @@ public class WarlordMagician extends Magician implements IWarlord {
 
     private float improveCoefficient = 0.05f;
 
-    public WarlordMagician(int hp, int damage, float precision, float armor) {
+    public WarlordMagician(final int hp, final int damage, final float precision, final float armor) {
         super(hp, damage, precision, armor);
     }
 
@@ -44,11 +44,11 @@ public class WarlordMagician extends Magician implements IWarlord {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        WarlordMagician that = (WarlordMagician) o;
+        final WarlordMagician that = (WarlordMagician) o;
         return Float.compare(that.improveCoefficient, improveCoefficient) == 0;
     }
 
