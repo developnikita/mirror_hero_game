@@ -23,7 +23,7 @@ public class Server {
     private static final AtomicInteger countGameRooms = new AtomicInteger(0);
 
     private static void startServer() throws IOException {
-        LOGGER.info("Server started, port: {}", PORT);
+        LOGGER.warn("Server started, port: {}", PORT);
         try (final ServerSocket serverSocket = new ServerSocket(PORT)) {
 
             while(true) {
@@ -85,11 +85,11 @@ public class Server {
     /**
      * если в очереди есть 2 свободных игрока то создаем комнату
      */
-    private static void createGameRoom() throws Exception {
+    private static void createGameRoom() {
 
         if(countGameRooms.get() < props.MAX_COUNT_GAME_ROOMS && queuePlayers.size() >= 2){
             countGameRooms.incrementAndGet();
-            new GameRoom(queuePlayers).start();
+            new GameRoom(queuePlayers, props.MAX_COUNT_BATTLES).start();
         }
     }
 

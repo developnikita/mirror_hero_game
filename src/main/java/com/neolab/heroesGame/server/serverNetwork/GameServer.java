@@ -65,6 +65,7 @@ public class GameServer {
             }
             changeCurrentAndWaitingPlayers();
         }
+
     }
 
 
@@ -134,7 +135,7 @@ public class GameServer {
         final PlayerSocket loser = getLoser(winner);
         StatisticWriter.writePlayerWinStatistic(winner.getPlayerName(), loser.getPlayerName());
         battleArena.toLog();
-        LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", winner.getPlayerId());
+        LOGGER.warn("Игрок<{}> выиграл это тяжкое сражение", winner.getPlayerId());
         winner.send(ExtendedServerRequest.getRequestString(
                 GameEvent.YOU_WIN_GAME, battleArena, answerProcessor.getActionEffect()));
         loser.send(ExtendedServerRequest.getRequestString(
