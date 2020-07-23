@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.server.ActionEffect;
-import com.neolab.heroesGame.server.dto.ExtendedServerRequest;
 
 import java.util.Objects;
 

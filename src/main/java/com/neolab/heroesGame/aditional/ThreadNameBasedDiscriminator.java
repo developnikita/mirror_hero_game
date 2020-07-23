@@ -7,7 +7,7 @@ public class ThreadNameBasedDiscriminator implements Discriminator<ILoggingEvent
 
     private static final String KEY = "roomName";
 
-    private boolean started;
+    private boolean started = false;
 
     @Override
     public String getDiscriminatingValue(final ILoggingEvent iLoggingEvent) {

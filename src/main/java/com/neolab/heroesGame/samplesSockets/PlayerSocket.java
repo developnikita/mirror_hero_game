@@ -1,10 +1,13 @@
 package com.neolab.heroesGame.samplesSockets;
 
 import com.neolab.heroesGame.enumerations.GameEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 
 public class PlayerSocket {
 
@@ -14,6 +17,7 @@ public class PlayerSocket {
     private final int playerId;
     private final String playerName;
     static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss");
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerSocket.class);
 
     public BufferedReader getIn() {
         return in;
@@ -71,18 +75,40 @@ public class PlayerSocket {
      * @param msg сообщение
      */
     public void send(final String msg) throws IOException {
-        out.write(msg + "\n");
-        out.flush();
+        try {
+            out.write(msg + "\n");
+            out.flush();
+        }
+        catch (IOException ex){
+            LOGGER.error("Игрок {} разорвал соединение", playerId);
+            downService();
+            Server.getServerList().remove(this);
+            Server.getQueuePlayers().remove(this);
+        }
     }
 
-    public void downService() {
-        try {
-            if (!socket.isClosed()) {
-                socket.close();
-                in.close();
-                out.close();
-            }
-        } catch (final IOException ignored) {
+    public void downService() throws IOException {
+        if (!socket.isClosed()) {
+            socket.close();
+            in.close();
+            out.close();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlayerSocket)) return false;
+        PlayerSocket that = (PlayerSocket) o;
+        return getPlayerId() == that.getPlayerId() &&
+                socket.equals(that.socket) &&
+                getIn().equals(that.getIn()) &&
+                out.equals(that.out) &&
+                getPlayerName().equals(that.getPlayerName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(socket, getIn(), out, getPlayerId(), getPlayerName());
     }
 }

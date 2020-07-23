@@ -1,36 +1,40 @@
 package com.neolab.heroesGame.samplesSockets;
 
-import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.enumerations.GameEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.IntSupplier;
 
-/**
- * Консольный многопользовательский чат.
- * Сервер
- */
+
 public class Server {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
     private static final PropsServerManager props = new PropsServerManager();
     public static final int PORT = props.PORT;
     private static final ConcurrentLinkedQueue<PlayerSocket> serverList = new ConcurrentLinkedQueue<>();
-    private static int countPlayers  = 0;
+    private static final Queue<PlayerSocket> queuePlayers = new LinkedList<>();
+    private static final AtomicInteger countGameRooms = new AtomicInteger(0);
 
-    private void startServer() {
-        System.out.println(String.format("Server started, port: %d", PORT));
+    private static void startServer() throws IOException {
+        LOGGER.info("Server started, port: {}", PORT);
         try (final ServerSocket serverSocket = new ServerSocket(PORT)) {
 
             while(true) {
 
                 // Блокируется до возникновения нового соединения
                 final Socket socket = serverSocket.accept();
-                countPlayers = (countPlayers <= props.MAX_COUNT_PLAYERS) ? ++countPlayers : countPlayers;
+                int countPlayers = serverList.size();
 
                 try {
-                    if(countPlayers <= props.MAX_COUNT_PLAYERS){
-                        createResponseSocket(socket, nextPlayerId.getNextId());
+                    if(countPlayers < props.MAX_COUNT_PLAYERS){
+                        createResponseSocket(socket);
                         createGameRoom();
                     }
                     else {
@@ -47,36 +51,52 @@ public class Server {
 
         } catch (final Exception e) {
             downService();
-            e.printStackTrace();
         }
+    }
+
+    public static AtomicInteger getCountGameRooms() {
+        return countGameRooms;
+    }
+
+    public static ConcurrentLinkedQueue<PlayerSocket> getServerList() {
+        return serverList;
+    }
+
+    public static Queue<PlayerSocket> getQueuePlayers() {
+        return queuePlayers;
     }
 
     /**
      * создаём серверный сокет для общения с конкретным клиентом
      * @param socket копия клиенсткого сокета на стороне сервера
-     * @param playerId назначается сервером на игрока
      */
-    private void createResponseSocket(Socket socket, int playerId) throws IOException, InterruptedException {
-        final PlayerSocket playerSocket =  new PlayerSocket(socket, playerId, props.mapIdNamePlayers.get(playerId));
+    private static void createResponseSocket(final Socket socket) throws IOException, InterruptedException {
+        final int playerId = idGenerator.getAsInt();
+        final String name = props.mapIdNamePlayers.get(playerId);
+        final String playerName = (name == null) ? generatePlayerName(playerId) : name;
+        final PlayerSocket playerSocket =  new PlayerSocket(socket, playerId, playerName);
 
         if(playerSocket.isAssignIdAndNameClient()){
             serverList.add(playerSocket);
+            queuePlayers.add(playerSocket);
         }
     }
 
     /**
      * если в очереди есть 2 свободных игрока то создаем комнату
      */
-    private void createGameRoom() throws Exception {
-        if(serverList.size() >= 2){
-            new GameRoom(serverList).start();
+    private static void createGameRoom() throws Exception {
+
+        if(countGameRooms.get() < props.MAX_COUNT_GAME_ROOMS && queuePlayers.size() >= 2){
+            countGameRooms.incrementAndGet();
+            new GameRoom(queuePlayers).start();
         }
     }
 
     /**
      * закрытие сервера, удаление себя из списка нитей
      */
-    private void downService() {
+    private static void downService() throws IOException {
         for(PlayerSocket playerSocket : serverList){
             playerSocket.downService();
         }
@@ -85,15 +105,22 @@ public class Server {
     /**
      * Для генеариия id игроков
      */
-    private static class IntPlayerId {
-        public static int id = 0;
+    private static final IntSupplier idGenerator = new IntSupplier() {
+        private int id = 1;
+
+        public int getAsInt() {
+            return id++;
+        }
+    };
+
+    private static String generatePlayerName(int playerId){
+        return String.format("player_%d", playerId);
     }
 
-    private static final CommonFunction.IdGeneration nextPlayerId = () -> ++IntPlayerId.id;
 
-    public static void main(final String[] args) {
-        final Server server = new Server();
-        server.startServer();
+
+    public static void main(final String[] args) throws IOException {
+        Server.startServer();
     }
 }
 

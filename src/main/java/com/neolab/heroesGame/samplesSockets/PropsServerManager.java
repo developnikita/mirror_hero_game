@@ -15,6 +15,7 @@ public class PropsServerManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(PropsServerManager.class);
     public int PORT = 8081;
     public int MAX_COUNT_PLAYERS;
+    public int MAX_COUNT_GAME_ROOMS;
     public final Map<Integer, String> mapIdNamePlayers = new HashMap<>();
 
     public PropsServerManager() {
@@ -24,33 +25,20 @@ public class PropsServerManager {
 
         try {
             //обращаемся к файлу и получаем данные
+            //todo почему-то getResource не работает
+            //prop.load(PropsServerManager.class.getResourceAsStream("resources/server.properties"));
             prop.load(new FileInputStream(PATH_TO_PROPERTIES));
             PORT = Integer.parseInt(prop.getProperty("server.PORT"));
             MAX_COUNT_PLAYERS = Integer.parseInt(prop.getProperty("MAX_COUNT_PLAYERS"));
-            final int playerOneId = Integer.parseInt(prop.getProperty("playerOne.id"));
-            final int playerTwoId = Integer.parseInt(prop.getProperty("playerTwo.id"));
-            final int playerThreeId = Integer.parseInt(prop.getProperty("playerThree.id"));
-            final int playerFourId = Integer.parseInt(prop.getProperty("playerFour.id"));
-            final int playerFiveId = Integer.parseInt(prop.getProperty("playerFive.id"));
-            final int playerSixId = Integer.parseInt(prop.getProperty("playerSix.id"));
+            MAX_COUNT_GAME_ROOMS = Integer.parseInt(prop.getProperty("MAX_COUNT_GAME_ROOMS"));
             final String playerOneName = prop.getProperty("playerOne.name");
             final String playerTwoName = prop.getProperty("playerTwo.name");
-            final String playerThreeName = prop.getProperty("playerThree.name");
-            final String playerFourName = prop.getProperty("playerFour.name");
-            final String playerFiveName = prop.getProperty("playerFive.name");
-            final String playerSixName = prop.getProperty("playerSix.name");
 
-            mapIdNamePlayers.put(playerOneId, playerOneName);
-            mapIdNamePlayers.put(playerTwoId, playerTwoName);
-            mapIdNamePlayers.put(playerThreeId, playerThreeName);
-            mapIdNamePlayers.put(playerFourId, playerFourName);
-            mapIdNamePlayers.put(playerFiveId, playerFiveName);
-            mapIdNamePlayers.put(playerSixId, playerSixName);
-
+            mapIdNamePlayers.put(1, playerOneName);
+            mapIdNamePlayers.put(2, playerTwoName);
 
         } catch (final IOException e) {
-            LOGGER.error("Ошибка в программе: файл " + PATH_TO_PROPERTIES + " не обнаружен");
-            e.printStackTrace();
+            LOGGER.error("Ошибка в программе: файл {} не обнаружен", PATH_TO_PROPERTIES);
         }
     }
 }

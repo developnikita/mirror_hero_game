@@ -5,7 +5,6 @@ import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
 import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.errors.HeroExceptions;
-import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.samplesSockets.PlayerSocket;
 import com.neolab.heroesGame.server.answers.Answer;
 import com.neolab.heroesGame.server.answers.AnswerProcessor;
@@ -81,7 +80,7 @@ public class GameServer {
         answerProcessor.setWaitingPlayerId(waitingPlayerId);
     }
 
-    private void askPlayerProcess() throws HeroExceptions, IOException, InterruptedException {
+    private void askPlayerProcess() throws IOException, InterruptedException {
         int counter = 0;
         while (counter < 3) {
             battleArena.toLog();
@@ -89,6 +88,7 @@ public class GameServer {
                     GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
             currentPlayer.send(ExtendedServerRequest.getRequestString(
                     GameEvent.NOW_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
+
             final String response;
             if (checkInputStreamReady()) {
                 response = currentPlayer.getIn().readLine();

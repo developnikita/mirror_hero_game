@@ -4,7 +4,7 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.serverNetwork.GameServer;
 
 import java.io.IOException;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Queue;
 
 /**
  * класс реализующий функционал игровой комнты для двух игроков
@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class GameRoom extends Thread {
     private final GameServer gameServer;
 
-    public GameRoom(final ConcurrentLinkedQueue<PlayerSocket> serverList) throws Exception {
+    public GameRoom(final Queue<PlayerSocket> serverList) throws Exception {
         final PlayerSocket playerOne = serverList.poll();
         final PlayerSocket playerTwo = serverList.poll();
         gameServer = new GameServer(playerOne, playerTwo);
@@ -22,8 +22,9 @@ public class GameRoom extends Thread {
     public void run() {
         try {
             gameServer.gameProcess();
+            Server.getCountGameRooms().decrementAndGet();
         } catch (final IOException | HeroExceptions | InterruptedException ex) {
-            ex.printStackTrace();
+            throw new  IllegalStateException("Игра прервана, внутренняя ошибка сервера");
         }
     }
 }

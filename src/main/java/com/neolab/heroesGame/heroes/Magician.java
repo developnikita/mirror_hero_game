@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Magician extends Hero {
 
