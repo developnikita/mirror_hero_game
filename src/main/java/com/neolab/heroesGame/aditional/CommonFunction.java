@@ -151,6 +151,7 @@ public class CommonFunction {
     }
 
     public static String classToString(final Optional<Hero> optionalHero) {
+        final String result;
         if (optionalHero.isEmpty()) {
             return String.format("%12s|", "");
         }
@@ -200,7 +201,39 @@ public class CommonFunction {
                 createAllString(currentString, results, armySize, currentPositions + 1);
             }
         }
+    }
 
+    public static String ArmyCodeToString(Army army) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int y = 0; y < 2; y++) {
+            for (int x = 0; x < 3; x++) {
+                Optional<Hero> hero = army.getHero(new SquareCoordinate(x, y));
+                stringBuilder.append(hero.map(CommonFunction::classCodeToString).orElse(" "));
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    private static String classCodeToString(final Hero hero) {
+        final String result;
+        if (hero.getClass() == Magician.class) {
+            result = "m";
+        } else if (hero instanceof WarlordMagician) {
+            result = "M";
+        } else if (hero instanceof WarlordVampire) {
+            result = "V";
+        } else if (hero instanceof Archer) {
+            result = "a";
+        } else if (hero instanceof Healer) {
+            result = "h";
+        } else if (hero.getClass() == Footman.class) {
+            result = "f";
+        } else if (hero instanceof WarlordFootman) {
+            result = "F";
+        } else {
+            result = "u";
+        }
+        return result;
     }
 
     private static void addWarLord(final char[] currentString, final List<String> results, final int armySize) {

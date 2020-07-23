@@ -1,5 +1,6 @@
 package com.neolab.heroesGame.aditional;
 
+import com.neolab.heroesGame.enumerations.GameEvent;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
@@ -14,6 +15,7 @@ public final class StatisticWriter {
     }
 
     public static final String PLAYER_STATISTIC_FILE_PATH = "src/main/resources/playerStatistic.csv";
+    public static final String ARMY_STATISTIC_FILE_PATH = "src/main/resources/armyStatistic.csv";
 
     public static void writePlayerWinStatistic(final String winnerPlayerName, final String looserPlayerName) throws IOException {
         final File csvOutputFile = new File(PLAYER_STATISTIC_FILE_PATH);
