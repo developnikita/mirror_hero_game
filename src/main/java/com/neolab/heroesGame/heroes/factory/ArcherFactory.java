@@ -5,13 +5,14 @@ import com.neolab.heroesGame.aditional.PropertyUtils;
 import com.neolab.heroesGame.heroes.Archer;
 import com.neolab.heroesGame.heroes.Hero;
 
+import java.io.IOException;
 import java.util.Properties;
 
 public class ArcherFactory implements HeroFactory {
 
     private final Properties prop;
 
-    public ArcherFactory() {
+    public ArcherFactory() throws IOException {
         prop = HeroConfigManager.getHeroConfig();
     }
 

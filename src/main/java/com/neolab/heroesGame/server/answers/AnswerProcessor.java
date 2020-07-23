@@ -64,10 +64,10 @@ public final class AnswerProcessor {
                 activeHero.setDefence();
             } else {
                 if (answer.getAction() == HeroActions.ATTACK) {
-                    effectActionMap = activeHero.toAct(answer.getTargetUnit(), board.getArmy(waitingPlayerId));
+                    effectActionMap = activeHero.toAct(answer.getTargetUnitCoordinate(), board.getArmy(waitingPlayerId));
                     tryToKill(effectActionMap.keySet(), board.getArmy(waitingPlayerId));
                 } else {
-                    effectActionMap = activeHero.toAct(answer.getTargetUnit(), board.getArmy(activePlayerId));
+                    effectActionMap = activeHero.toAct(answer.getTargetUnitCoordinate(), board.getArmy(activePlayerId));
                 }
             }
 
@@ -84,7 +84,7 @@ public final class AnswerProcessor {
     }
 
     private Hero getActiveHero(final BattleArena board, final Answer answer) throws HeroExceptions {
-        final Optional<Hero> activeHero = board.getArmy(activePlayerId).getHero(answer.getActiveHero());
+        final Optional<Hero> activeHero = board.getArmy(activePlayerId).getHero(answer.getActiveHeroCoordinate());
         if (activeHero.isPresent()) {
             return activeHero.get();
         }
@@ -96,7 +96,7 @@ public final class AnswerProcessor {
     }
 
     private void setActionEffect(final Answer answer, final Map<SquareCoordinate, Integer> enemyHeroPosDamage) {
-        actionEffect = new ActionEffect(answer.getAction(), answer.getActiveHero(), enemyHeroPosDamage, activePlayerId);
+        actionEffect = new ActionEffect(answer.getAction(), answer.getActiveHeroCoordinate(), enemyHeroPosDamage, activePlayerId);
     }
 
 }

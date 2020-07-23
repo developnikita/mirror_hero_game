@@ -17,7 +17,7 @@ public class AnswerValidator {
     public static boolean isAnswerValidate(final Answer answer, final BattleArena arena) throws HeroExceptions {
         final Army thisBotArmy = arena.getArmy(answer.getPlayerId());
         final Army enemyArmy = arena.getEnemyArmy(answer.getPlayerId());
-        final Optional<Hero> heroOptional = thisBotArmy.getHero(answer.getActiveHero());
+        final Optional<Hero> heroOptional = thisBotArmy.getHero(answer.getActiveHeroCoordinate());
         final Hero hero;
         if (heroOptional.isPresent()) {
             hero = heroOptional.get();
@@ -41,13 +41,13 @@ public class AnswerValidator {
             return true;
         }
         if (CommonFunction.isUnitArcher(hero)) {
-            if (enemyArmy.getHero(answer.getTargetUnit()).isEmpty()) {
+            if (enemyArmy.getHero(answer.getTargetUnitCoordinate()).isEmpty()) {
                 throw new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK);
             }
             return true;
         }
 
-        footmanTargetCheck(answer.getActiveHero(), answer.getTargetUnit(), enemyArmy);
+        footmanTargetCheck(answer.getActiveHeroCoordinate(), answer.getTargetUnitCoordinate(), enemyArmy);
         return true;
     }
 
@@ -70,7 +70,7 @@ public class AnswerValidator {
             if (answer.getAction() == HeroActions.ATTACK) {
                 throw new HeroExceptions(HeroErrorCode.ERROR_UNIT_ATTACK);
             }
-            if (thisBotArmy.getHero(answer.getTargetUnit()).isEmpty()) {
+            if (thisBotArmy.getHero(answer.getTargetUnitCoordinate()).isEmpty()) {
                 throw new HeroExceptions(HeroErrorCode.ERROR_TARGET_HEAL);
             }
             return true;

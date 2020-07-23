@@ -5,13 +5,14 @@ import com.neolab.heroesGame.aditional.PropertyUtils;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.heroes.WarlordVampire;
 
+import java.io.IOException;
 import java.util.Properties;
 
 public class WarlordVampireFactory implements HeroFactory {
 
     private final Properties prop;
 
-    public WarlordVampireFactory() {
+    public WarlordVampireFactory() throws IOException {
         prop = HeroConfigManager.getHeroConfig();
     }
 

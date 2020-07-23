@@ -27,10 +27,18 @@ public class ServerImitation {
 
     public ServerImitation() throws Exception {
         currentPlayer = new ClientPlayerImitation(1, "Bot1");
-        waitingPlayer = new ClientPlayerImitation(2, "Bot2", true);
+        waitingPlayer = ClientPlayerImitation.createPlayerWithAsciiGraphics(2, "Bot2");
         battleArena = new BattleArena(FactoryArmies.generateArmies(1, 2));
         answerProcessor = new AnswerProcessor(1, 2, battleArena);
         counter = 0;
+    }
+
+    public String getCurrentPlayerName() {
+        return currentPlayer.getPlayerName();
+    }
+
+    public String getWaitingPlayerName() {
+        return waitingPlayer.getPlayerName();
     }
 
     private void changeCurrentAndWaitingPlayers() {
@@ -60,8 +68,8 @@ public class ServerImitation {
                 if (!serverImitation.battleArena.canSomeoneAct()) {
                     serverImitation.counter++;
                     if (serverImitation.counter > MAX_ROUND) {
-                        StatisticWriter.writePlayerDrawStatistic(serverImitation.currentPlayer.getPlayer().getName(),
-                                serverImitation.waitingPlayer.getPlayer().getName());
+                        StatisticWriter.writePlayerDrawStatistic(serverImitation.getCurrentPlayerName(),
+                                serverImitation.getWaitingPlayerName());
                         LOGGER.info("Поединок закончился ничьей");
                         break;
                     }

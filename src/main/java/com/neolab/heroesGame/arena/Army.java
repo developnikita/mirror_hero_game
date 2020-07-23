@@ -78,10 +78,8 @@ public class Army {
     }
 
     public void killHero(final SquareCoordinate coordinate) {
-        if (warlord != null) {
-            if (heroes.get(coordinate) instanceof IWarlord) {
-                cancelImprove();
-            }
+        if (warlord != null && heroes.get(coordinate) instanceof IWarlord) {
+            cancelImprove();
         }
         availableHeroes.remove(coordinate);
         heroes.remove(coordinate);
@@ -99,18 +97,6 @@ public class Army {
 
     public void removeAvailableHeroById(final int heroId) {
         availableHeroes.values().removeIf(value -> value.getUnitId() == heroId);
-    }
-
-    public boolean removeHero(final Hero hero, final Army army) {
-        if (hero.getHp() <= 0) {
-            if (hero instanceof IWarlord) {
-                cancelImprove();
-                army.setWarlord(null);
-            }
-            removeAvailableHeroById(hero.getUnitId());
-            return true;
-        }
-        return false;
     }
 
     private void improveAllies() {

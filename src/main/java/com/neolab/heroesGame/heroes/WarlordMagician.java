@@ -35,12 +35,9 @@ public class WarlordMagician extends Magician implements IWarlord {
         return super.getUnitId();
     }
 
-    public static Hero createInstance() {
-        final int hp = 90;
-        final int damage = 40;
-        final float precision = 0.75f;
-        final float armor = 0.05f;
-        return new WarlordMagician(hp, damage, precision, armor);
+    @Override
+    public String getClassName() {
+        return "Архимаг";
     }
 
     @Override

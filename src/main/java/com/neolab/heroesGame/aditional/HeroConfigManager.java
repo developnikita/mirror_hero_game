@@ -5,25 +5,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class HeroConfigManager {
+public final class HeroConfigManager {
 
-    private static final Properties heroConfig = new Properties();
+    private static final Properties HERO_CONFIG = new Properties();
     private static boolean isLoadHeroConfig = false;
-    private static final String heroConfigFileName = "hero.config";
+    private static final String HERO_CONFIG_FILE_NAME = "hero.config";
 
-    public static Properties getHeroConfig() {
+    private HeroConfigManager() throws Exception {
+        throw new Exception();
+    }
+
+    public static Properties getHeroConfig() throws IOException {
         if (!isLoadHeroConfig) {
             loadConfig();
         }
-        return heroConfig;
+        return HERO_CONFIG;
     }
 
-    private static void loadConfig() {
-        try (final InputStream is = new FileInputStream(heroConfigFileName)) {
-            heroConfig.load(is);
-            isLoadHeroConfig = true;
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
+    private static void loadConfig() throws IOException {
+        final InputStream is = new FileInputStream(HERO_CONFIG_FILE_NAME);
+        HERO_CONFIG.load(is);
+        isLoadHeroConfig = true;
+        is.close();
     }
 }

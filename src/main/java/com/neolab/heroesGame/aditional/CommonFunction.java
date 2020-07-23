@@ -2,7 +2,10 @@ package com.neolab.heroesGame.aditional;
 
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
-import com.neolab.heroesGame.heroes.*;
+import com.neolab.heroesGame.heroes.Archer;
+import com.neolab.heroesGame.heroes.Healer;
+import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.heroes.Magician;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -28,7 +31,7 @@ public class CommonFunction {
      */
     public static @NotNull Set<SquareCoordinate> getCorrectTargetForFootman(final @NotNull SquareCoordinate activeUnit,
                                                                             final @NotNull Army enemyArmy) {
-        final HashSet<SquareCoordinate> validateTarget = new HashSet<>();
+        final Set<SquareCoordinate> validateTarget = new HashSet<>();
         for (int y = 1; y >= 0; y--) {
             if (activeUnit.getX() == 1) {
                 validateTarget.addAll(getTargetForCentralUnit(enemyArmy, y));
@@ -47,7 +50,7 @@ public class CommonFunction {
      * противника все еще не встретилось, то проверяем второй фланг
      */
     private static Set<SquareCoordinate> getTargetForFlankUnit(final int activeUnitX, final Army enemyArmy, final int y) {
-        final HashSet<SquareCoordinate> validateTarget = new HashSet<>();
+        final Set<SquareCoordinate> validateTarget = new HashSet<>();
         if (enemyArmy.getHero(new SquareCoordinate(1, y)).isPresent()) {
             validateTarget.add(new SquareCoordinate(1, y));
         }
@@ -67,7 +70,7 @@ public class CommonFunction {
      * Проверяем всю линию на наличие юнитов в армии противника
      */
     private static Set<SquareCoordinate> getTargetForCentralUnit(final Army enemyArmy, final Integer line) {
-        final HashSet<SquareCoordinate> validateTarget = new HashSet<>();
+        final Set<SquareCoordinate> validateTarget = new HashSet<>();
         for (int x = 0; x < 3; x++) {
             final SquareCoordinate coordinate = new SquareCoordinate(x, line);
             final Optional<Hero> hero = enemyArmy.getHero(coordinate);
@@ -146,41 +149,9 @@ public class CommonFunction {
     }
 
     public static String classToString(final Optional<Hero> optionalHero) {
-        final String result;
         if (optionalHero.isEmpty()) {
             return String.format("%12s|", "");
         }
-        final Hero hero = optionalHero.get();
-        if (hero.getClass() == Magician.class) {
-            result = String.format("%12s|", "Маг");
-        } else if (hero instanceof WarlordMagician) {
-            result = String.format("%12s|", "Архимаг");
-        } else if (hero instanceof WarlordVampire) {
-            result = String.format("%12s|", "Вампир");
-        } else if (hero instanceof Archer) {
-            result = String.format("%12s|", "Лучник");
-        } else if (hero instanceof Healer) {
-            result = String.format("%12s|", "Лекарь");
-        } else if (hero.getClass() == Footman.class) {
-            result = String.format("%12s|", "Мечник");
-        } else if (hero instanceof WarlordFootman) {
-            result = String.format("%12s|", "Генерал");
-        } else {
-            result = String.format("%12s|", "Unknown");
-        }
-        return result;
+        return String.format("%12s|", optionalHero.get().getClassName());
     }
-
-    /**
-     * Для генеариия id героев
-     */
-    private static class MyInt {
-        public static int i = 0;
-    }
-
-    public interface IdGeneration {
-        int getNextId();
-    }
-
-    public static IdGeneration idGeneration = () -> ++MyInt.i;
 }

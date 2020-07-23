@@ -19,11 +19,8 @@ public class Archer extends Hero {
         super(unitId, hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
     }
 
-    public static Hero createInstance() {
-        final int hp = 90;
-        final int damage = 40;
-        final float precision = 0.85f;
-        final float armor = 0;
-        return new Archer(hp, damage, precision, armor);
+    @Override
+    public String getClassName() {
+        return "Лучник";
     }
 }

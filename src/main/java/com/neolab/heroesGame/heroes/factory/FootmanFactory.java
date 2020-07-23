@@ -5,13 +5,14 @@ import com.neolab.heroesGame.aditional.PropertyUtils;
 import com.neolab.heroesGame.heroes.Footman;
 import com.neolab.heroesGame.heroes.Hero;
 
+import java.io.IOException;
 import java.util.Properties;
 
 public class FootmanFactory implements HeroFactory {
 
     private final Properties prop;
 
-    public FootmanFactory() {
+    public FootmanFactory() throws IOException {
         prop = HeroConfigManager.getHeroConfig();
     }
 

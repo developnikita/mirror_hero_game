@@ -40,20 +40,17 @@ public class WarlordVampire extends Magician implements IWarlord {
     }
 
     @Override
+    public String getClassName() {
+        return "Вампир";
+    }
+
+    @Override
     public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position, final Army army) {
         final Map<SquareCoordinate, Integer> enemyHeroPosDamage = super.toAct(position, army);
         final AtomicInteger heal = new AtomicInteger(this.getHp());
         enemyHeroPosDamage.values().forEach(heal::addAndGet);
         this.setHp(Math.min(heal.get(), this.getHpMax()));
         return enemyHeroPosDamage;
-    }
-
-    public static Hero createInstance() {
-        final int hp = 90;
-        final int damage = 10;
-        final float precision = 0.8f;
-        final float armor = 0.05f;
-        return new WarlordVampire(hp, damage, precision, armor);
     }
 
     @Override

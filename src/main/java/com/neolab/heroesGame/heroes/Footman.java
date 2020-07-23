@@ -19,11 +19,8 @@ public class Footman extends Hero {
         super(unitId, hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
     }
 
-    public static Hero createInstance() {
-        final int hp = 170;
-        final int damage = 50;
-        final float precision = 0.8f;
-        final float armor = 0.1f;
-        return new Footman(hp, damage, precision, armor);
+    @Override
+    public String getClassName() {
+        return "Мечник";
     }
 }
