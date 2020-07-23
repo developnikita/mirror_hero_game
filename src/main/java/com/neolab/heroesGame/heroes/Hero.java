@@ -141,7 +141,7 @@ public abstract class Hero implements Cloneable {
     public abstract String getClassName();
 
     /**
-     * Если герой погибает удаляем его из оНбеих коллекций
+     * Если герой погибает удаляем его из обеих коллекций
      *
      * @param position позиция героя
      * @param army     армия противника
@@ -170,7 +170,17 @@ public abstract class Hero implements Cloneable {
     }
 
     protected int calculateDamage(final Hero targetAttack) {
-        return Math.round(this.getDamage() - targetAttack.getArmor() * this.getDamage());
+        return Math.round(randomIncreaseDamage(this.getDamage()) - targetAttack.getArmor() * this.getDamage());
+    }
+
+    private int randomIncreaseDamage(final int damage) {
+        final double probability = new Random().nextFloat();
+        if (probability < 0.15f) {
+            return damage - 5;
+        } else if (probability >= 0.15f && probability < 0.70f) {
+            return damage;
+        }
+        return damage + 5;
     }
 
     /**
