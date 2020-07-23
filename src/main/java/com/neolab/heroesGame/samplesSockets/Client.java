@@ -2,6 +2,7 @@ package com.neolab.heroesGame.samplesSockets;
 
 import com.neolab.heroesGame.ClientPlayerImitation;
 import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
+import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 
@@ -25,9 +26,7 @@ public class Client {
     private Socket socket = null;
     private BufferedReader in = null; // поток чтения из сокета
     private BufferedWriter out = null; // поток записи в сокет
-
-    protected String requestJson;
-    protected String answerJson;
+    private ClientPlayerImitation player;
 
     /**
      * для создания необходимо принять адрес и номер порта
@@ -51,13 +50,14 @@ public class Client {
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        } catch (final IOException e) {
+        } catch (final IOException ex) {
+            ex.printStackTrace();
             downService();
             return;
         }
 
         System.out.println(String.format("Client started, ip: %s, port: %d", ip, port));
-        new ReadWriteMsg().start(); // нить читающая сообщения из сокета в бесконечном цикле
+        gameRun(); // читаем и пишем в поток сообщений в бесконечном цикле
     }
 
     /**
@@ -88,70 +88,58 @@ public class Client {
         }
     }
 
-    /**
-     * нить для чтения и записи сообщений в сокет
-     */
-    private class ReadWriteMsg extends Thread {
-        private ClientPlayerImitation player;
 
-        @Override
-        public void run() {
+    private void gameRun() {
 
-            try {
-                /*
-                 * получаем id и имя игрока от сервера и создаем нашего бота
-                 */
-                createPlayer();
+        try {
+            /*
+             * получаем id и имя игрока от сервера и создаем нашего бота
+             * если на сервере уже максимум игроков, то подключиться не удастся
+             */
+            if (!createPlayer()){
+                System.out.println("На сервере подключено максимально число игроков, попробуйте позже...");
+                return;
+            }
 
-                while (true) {
-                    requestJson = in.readLine(); // ждем сообщения с сервера
-                    if (requestJson == null) {
-                        downService();
-                        break;
-                    }
+            while (true) {
+                String requestJson = in.readLine(); // ждем сообщения с сервера
+                if (requestJson == null) {
+                    downService();
+                    break;
+                }
 
-                    ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(requestJson);
+                ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(requestJson);
 
-                    switch (response.event){
-                        case NOW_YOUR_TURN -> send(player.getAnswer(response));
-                        case WAIT_ITS_NOT_YOUR_TURN -> player.sendInformation(response);
-                        case YOU_WIN_GAME, YOU_LOSE_GAME -> player.endGame(response);
-                        default -> throw new HeroExceptions(HeroErrorCode.ERROR_EVENT);
-                    }
+                switch (response.event){
+                    case NOW_YOUR_TURN -> send(player.getAnswer(response));
+                    case WAIT_ITS_NOT_YOUR_TURN -> player.sendInformation(response);
+                    case YOU_WIN_GAME, YOU_LOSE_GAME -> player.endGame(response);
+                    default -> throw new HeroExceptions(HeroErrorCode.ERROR_EVENT);
                 }
             }
-            catch (Exception e) {
-                downService();
-                e.printStackTrace();
-            }
         }
-
-        private void createPlayer() throws IOException {
-            int playerId = Integer.parseInt(in.readLine());
-            String playerName = in.readLine();
-            player = new ClientPlayerImitation(playerId, playerName, false);
-            send("OK");
+        catch (Exception e) {
+            downService();
+            e.printStackTrace();
         }
     }
+
+    private boolean createPlayer() throws IOException {
+        String res = in.readLine();
+        // на сервере уже максимально число игроков
+        if(res.equals(GameEvent.MAX_COUNT_PLAYERS.toString())){
+            return false;
+        }
+        int playerId = Integer.parseInt(res);
+        String playerName = in.readLine();
+        player = new ClientPlayerImitation(playerId, playerName, false);
+        send(GameEvent.CLIENT_IS_CREATED.toString());
+        return true;
+    }
+
 
     public static void main(final String[] args) {
         final Client client = new Client(IP, PORT);
         client.startClient();
-
-//        final Client client_2 = new Client(IP, PORT);
-//        client_2.startClient();
-
-//        final Client client_3 = new Client(IP, PORT);
-//        client_3.startClient();
-//
-//        final Client client_4 = new Client(IP, PORT);
-//        client_4.startClient();
-//
-//        final Client client_5 = new Client(IP, PORT);
-//        client_5.startClient();
-//
-//        final Client client_6 = new Client(IP, PORT);
-//        client_6.startClient();
-
     }
 }

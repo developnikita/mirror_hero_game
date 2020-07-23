@@ -1,5 +1,7 @@
 package com.neolab.heroesGame.samplesSockets;
 
+import com.neolab.heroesGame.enumerations.GameEvent;
+
 import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -39,12 +41,24 @@ public class PlayerSocket {
         out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
-    public boolean isAssignIdAndNameClient() throws IOException {
+    /**
+     * проверяем что клиент получил от сервера id и name, и готов к сессии
+     * @return флаг указывающий что клиент установил полученные id и name
+     */
+    public boolean isAssignIdAndNameClient() throws IOException, InterruptedException {
         send(String.valueOf(playerId));
         send(playerName);
-        String response = in.readLine();
-        if(response.equals("OK")){
-            return true;
+        for(int i = 0; i < 3; i++){
+            Thread.sleep(50);
+            if(in.ready()){
+                String response = in.readLine();
+                if(response.equals(GameEvent.CLIENT_IS_CREATED.toString())){
+                    return true;
+                }
+                downService();
+                return false;
+            }
+            Thread.sleep(500);
         }
         downService();
         return false;

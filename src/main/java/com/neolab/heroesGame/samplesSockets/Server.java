@@ -56,7 +56,7 @@ public class Server {
      * @param socket копия клиенсткого сокета на стороне сервера
      * @param playerId назначается сервером на игрока
      */
-    private void createResponseSocket(Socket socket, int playerId) throws IOException {
+    private void createResponseSocket(Socket socket, int playerId) throws IOException, InterruptedException {
         final PlayerSocket playerSocket =  new PlayerSocket(socket, playerId, props.mapIdNamePlayers.get(playerId));
 
         if(playerSocket.isAssignIdAndNameClient()){
