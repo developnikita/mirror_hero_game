@@ -5,13 +5,14 @@ import com.neolab.heroesGame.aditional.PropertyUtils;
 import com.neolab.heroesGame.heroes.Healer;
 import com.neolab.heroesGame.heroes.Hero;
 
+import java.io.IOException;
 import java.util.Properties;
 
 public class HealerFactory implements HeroFactory {
 
     private final Properties prop;
 
-    public HealerFactory() {
+    public HealerFactory() throws IOException {
         prop = HeroConfigManager.getHeroConfig();
     }
 
