@@ -138,20 +138,20 @@ public class Client {
         final Client client = new Client(IP, PORT);
         client.startClient();
 
-        final Client client_2 = new Client(IP, PORT);
-        client_2.startClient();
+//        final Client client_2 = new Client(IP, PORT);
+//        client_2.startClient();
 
-        final Client client_3 = new Client(IP, PORT);
-        client_3.startClient();
-
-        final Client client_4 = new Client(IP, PORT);
-        client_4.startClient();
-
-        final Client client_5 = new Client(IP, PORT);
-        client_5.startClient();
-
-        final Client client_6 = new Client(IP, PORT);
-        client_6.startClient();
+//        final Client client_3 = new Client(IP, PORT);
+//        client_3.startClient();
+//
+//        final Client client_4 = new Client(IP, PORT);
+//        client_4.startClient();
+//
+//        final Client client_5 = new Client(IP, PORT);
+//        client_5.startClient();
+//
+//        final Client client_6 = new Client(IP, PORT);
+//        client_6.startClient();
 
     }
 }

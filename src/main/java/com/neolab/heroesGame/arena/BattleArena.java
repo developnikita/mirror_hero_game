@@ -29,6 +29,10 @@ public class BattleArena {
         return armies.get(playerId).getHeroes().isEmpty();
     }
 
+    public void diedArmy(final int playerId) {
+        armies.get(playerId).getHeroes().clear();
+    }
+
     public Army getArmy(final int playerId) {
         return armies.get(playerId);
     }

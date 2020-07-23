@@ -34,38 +34,38 @@ public class GameServer {
         counter = 0;
     }
 
-    public void gameProcess() throws IOException, HeroExceptions {
+    public void gameProcess() throws IOException, HeroExceptions, InterruptedException {
         LOGGER.info("-----------------Начинается великая битва---------------");
 
         while (true){
-                final Optional<PlayerSocket> whoIsWin = someoneWhoWin();
-                if (whoIsWin.isPresent()) {
-                    someoneWin(whoIsWin.get());
-                    waitingPlayer.send(ExtendedServerRequest.getRequestString(
-                            GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
-                    currentPlayer.send(ExtendedServerRequest.getRequestString(
-                            GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
+            final Optional<PlayerSocket> whoIsWin = someoneWhoWin();
+            if (whoIsWin.isPresent()) {
+                someoneWin(whoIsWin.get());
+                waitingPlayer.send(ExtendedServerRequest.getRequestString(
+                        GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
+                currentPlayer.send(ExtendedServerRequest.getRequestString(
+                        GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
+                break;
+            }
+
+            if (!battleArena.canSomeoneAct()) {
+                counter++;
+                if (counter > MAX_ROUND) {
+                    StatisticWriter.writePlayerDrawStatistic(currentPlayer.getPlayerName(),
+                            waitingPlayer.getPlayerName());
+                    LOGGER.info("Поединок закончился ничьей");
                     break;
                 }
-
-                if (!battleArena.canSomeoneAct()) {
-                    counter++;
-                    if (counter > MAX_ROUND) {
-                        StatisticWriter.writePlayerDrawStatistic(currentPlayer.getPlayerName(),
-                                waitingPlayer.getPlayerName());
-                        LOGGER.info("Поединок закончился ничьей");
-                        break;
-                    }
-                    LOGGER.info("-----------------Начинается раунд <{}>---------------", counter);
-                    battleArena.endRound();
-                }
-
-                if (checkCanMove(currentPlayer.getPlayerId())) {
-                    askPlayerProcess();
-                }
-                changeCurrentAndWaitingPlayers();
+                LOGGER.info("-----------------Начинается раунд <{}>---------------", counter);
+                battleArena.endRound();
             }
+
+            if (checkCanMove(currentPlayer.getPlayerId())) {
+                askPlayerProcess();
+            }
+            changeCurrentAndWaitingPlayers();
         }
+    }
 
 
 
@@ -81,13 +81,21 @@ public class GameServer {
         answerProcessor.setWaitingPlayerId(waitingPlayerId);
     }
 
-    private void askPlayerProcess() throws HeroExceptions, IOException {
+    private void askPlayerProcess() throws HeroExceptions, IOException, InterruptedException {
         battleArena.toLog();
         waitingPlayer.send(ExtendedServerRequest.getRequestString(
                 GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
         currentPlayer.send(ExtendedServerRequest.getRequestString(
                 GameEvent.NOW_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
-        final String response = currentPlayer.getIn().readLine();
+        final String response;
+        if(checkInputStreamReady()){
+            response = currentPlayer.getIn().readLine();
+        }
+        else {
+            //если игрок не отвечает уничтожаем его армию
+            battleArena.diedArmy(currentPlayer.getPlayerId());
+            return;
+        }
         final Answer answer = new ClientResponse(response).getAnswer();
         answer.toLog();
         answerProcessor.handleAnswer(answer);
@@ -127,6 +135,22 @@ public class GameServer {
 
     private PlayerSocket getLoser(PlayerSocket winner) {
         return winner.equals(currentPlayer) ? waitingPlayer : currentPlayer;
+    }
+
+    /**
+     * опрашиваем клиента по таймаюту до 3 раз, или до ответа
+     * делаем небольшую задежку т.к. у клиентов пинг
+     * @return флаг готовность входного потока от клиета
+     */
+    private boolean checkInputStreamReady() throws IOException, InterruptedException {
+        for(int i = 0; i < 3; i++ ){
+            Thread.sleep(50);
+            if(currentPlayer.getIn().ready()){
+                return true;
+            }
+            Thread.sleep(500);
+        }
+        return false;
     }
 }
 

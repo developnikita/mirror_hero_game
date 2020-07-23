@@ -22,8 +22,8 @@ public class GameRoom extends Thread{
     public void run() {
         try {
             gameServer.gameProcess();
-        } catch (IOException | HeroExceptions e) {
-            e.printStackTrace();
+        } catch (IOException | HeroExceptions | InterruptedException ex) {
+            ex.printStackTrace();
         }
     }
 }

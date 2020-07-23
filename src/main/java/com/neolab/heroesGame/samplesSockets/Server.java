@@ -1,6 +1,7 @@
 package com.neolab.heroesGame.samplesSockets;
 
 import com.neolab.heroesGame.aditional.CommonFunction;
+import com.neolab.heroesGame.enumerations.GameEvent;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,12 +26,17 @@ public class Server {
 
                 // Блокируется до возникновения нового соединения
                 final Socket socket = serverSocket.accept();
-                countPlayers++;
+                countPlayers = (countPlayers <= props.MAX_COUNT_PLAYERS) ? ++countPlayers : countPlayers;
 
                 try {
                     if(countPlayers <= props.MAX_COUNT_PLAYERS){
                         createResponseSocket(socket, nextPlayerId.getNextId());
                         createGameRoom();
+                    }
+                    else {
+                        final PlayerSocket playerSocket =  new PlayerSocket(socket, 0, "null");
+                        playerSocket.send(GameEvent.MAX_COUNT_PLAYERS.toString());
+                        playerSocket.downService();
                     }
                 } catch (final IOException e) {
                     // Если завершится неудачей, закрывается сокет,
