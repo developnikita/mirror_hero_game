@@ -54,6 +54,10 @@ public class GameServer {
                     StatisticWriter.writePlayerDrawStatistic(currentPlayer.getPlayerName(),
                             waitingPlayer.getPlayerName());
                     LOGGER.info("Поединок закончился ничьей");
+                    currentPlayer.send(ExtendedServerRequest.getRequestString(
+                            GameEvent.GAME_END_WITH_A_TIE, battleArena, answerProcessor.getActionEffect()));
+                    waitingPlayer.send(ExtendedServerRequest.getRequestString(
+                            GameEvent.GAME_END_WITH_A_TIE, battleArena, answerProcessor.getActionEffect()));
                     break;
                 }
                 LOGGER.info("-----------------Начинается раунд <{}>---------------", counter);
@@ -135,7 +139,7 @@ public class GameServer {
         final PlayerSocket loser = getLoser(winner);
         StatisticWriter.writePlayerWinStatistic(winner.getPlayerName(), loser.getPlayerName());
         battleArena.toLog();
-        LOGGER.warn("Игрок<{}> выиграл это тяжкое сражение", winner.getPlayerId());
+        LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", winner.getPlayerId());
         winner.send(ExtendedServerRequest.getRequestString(
                 GameEvent.YOU_WIN_GAME, battleArena, answerProcessor.getActionEffect()));
         loser.send(ExtendedServerRequest.getRequestString(
