@@ -8,6 +8,7 @@ import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.heroes.factory.*;
+import com.neolab.heroesGame.validators.AnswerValidator;
 import org.junit.Test;
 
 import java.io.IOException;

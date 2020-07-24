@@ -160,47 +160,6 @@ public class CommonFunction {
         return String.format("%12s|", optionalHero.get().getClassName());
     }
 
-    public static boolean validateArmyString(final String army, final int armySize) {
-        char[] characters = new char[6];
-        army.getChars(0, 6, characters, 0);
-        if (containWrongCharacter(characters)
-                && full(characters, armySize) > 0
-                && containNotOneWarlord(characters)) {
-            return false;
-        }
-        return true;
-    }
-
-    private static boolean containNotOneWarlord(char[] characters) {
-        Set<Character> warlordCharacters = new HashSet<>(Arrays.asList('F', 'M', 'V'));
-        boolean alreadyMet = false;
-        for (int i = 0; i < 6; i++) {
-            if (warlordCharacters.contains(characters[i])) {
-                if (alreadyMet) {
-                    return true;
-                }
-                alreadyMet = true;
-            }
-        }
-        return !alreadyMet;
-    }
-
-    private static boolean containWrongCharacter(char[] army) {
-        Set<Character> correctCharactersBackLine = new HashSet<>(Arrays.asList('a', 'm', 'h', 'M', 'V', emptyUnit));
-        Set<Character> correctCharactersFrontLine = new HashSet<>(Arrays.asList('f', 'F', emptyUnit));
-        for (int i = 0; i < 3; i++) {
-            if (!correctCharactersBackLine.contains(army[i])) {
-                return false;
-            }
-        }
-        for (int i = 3; i < 6; i++) {
-            if (!correctCharactersFrontLine.contains(army[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public static List<String> getAllAvailableArmiesCode(final int armySize) {
         final char[] string = new char[6];
         final List<String> results = new ArrayList<>();
