@@ -10,10 +10,7 @@ import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.server.answers.Answer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class PlayerHuman extends Player {
     private final IGraphics gui;
@@ -25,6 +22,10 @@ public class PlayerHuman extends Player {
     }
 
     /**
+     * Выбираем героя в функции chooseUnit
+     * Выбираем действие, если null возвращаемся к выбору героя
+     * Выбираем цели: для мага и защиты цель не выбирается. Если null возвращаемся к выбору героя
+     *
      * @param board принимаем текущую ситуацию на игровом поле
      * @return возвращаем Answer, который определяет действие игрока в текущем ходу
      */
@@ -55,17 +56,32 @@ public class PlayerHuman extends Player {
         }
     }
 
+    public String getStringArmyFirst(final int armySize) {
+        final List<String> armies = CommonFunction.getAllAvailableArmiesCode(armySize);
+        return armies.get(new Random().nextInt(armies.size()));
+    }
+
+    public String getStringArmySecond(final int armySize, final Army army) {
+        return getStringArmyFirst(armySize);
+    }
+
+    /**
+     * Формируем строки, которые увидет пользователь, из доступных для действия героев
+     * counter используется только для обозначения номера строки
+     * gui.getChoose() возвращает номер строки, которую выбрал пользователь.
+     * Индекс строки на 1 больше индекса соответствующей координаты
+     */
     protected SquareCoordinate chooseUnit(final Army army) throws IOException {
         final List<String> strings = new ArrayList<>();
         final List<SquareCoordinate> listVariationCoordinate = new ArrayList<>();
         final Map<SquareCoordinate, Hero> heroes = army.getAvailableHeroes();
         strings.add("Выберите юнита для действия:");
         int counter = 1;
-        for (SquareCoordinate key : heroes.keySet()) {
+        for (final SquareCoordinate key : heroes.keySet()) {
             strings.add(String.format("%d. %s", counter++, makeUnitChooseString(key, heroes.get(key))));
             listVariationCoordinate.add(key);
         }
-        return listVariationCoordinate.get(gui.getChoose(strings));
+        return listVariationCoordinate.get(gui.getChoose(strings) - 1);
     }
 
     private String makeUnitChooseString(final SquareCoordinate coordinate, final Hero hero) {
@@ -81,6 +97,9 @@ public class PlayerHuman extends Player {
         return stringBuilder.toString();
     }
 
+    /**
+     * Формируем список строк, которые увидет пользователь. Смотрим его выбор и отправляем соответствующий результат
+     */
     private HeroActions chooseActionForHero(final SquareCoordinate coordinate, final Hero hero) throws IOException {
         final List<String> strings = new ArrayList<>();
         strings.add(String.format("Выберите действие для %s:", makeUnitChooseString(coordinate, hero)));
@@ -88,14 +107,22 @@ public class PlayerHuman extends Player {
         strings.add(CommonFunction.isUnitHealer(hero) ? "2. Лечить союзников" : "2. Атаковать");
         strings.add("3. Вернуться к выбору юнита");
         final int choose = gui.getChoose(strings);
-        if (choose == 2) {
+        if (choose == 3) {
             return null;
-        } else if (choose == 0) {
+        } else if (choose == 1) {
             return HeroActions.DEFENCE;
         }
         return CommonFunction.isUnitHealer(hero) ? HeroActions.HEAL : HeroActions.ATTACK;
     }
 
+    /**
+     * Формируем сет доступных целей. Для лучника это вся вражеская армия, для лекаря - вся своя армия, для воинов
+     * определяем доступные цели с помощью функции CommonFunction.getCorrectTargetForFootman()
+     * Формируем строки, которые увидет пользователь. counter будет равен индексу последней строки
+     * gui.getChoose() возвращает номер строки, которую выбрал пользователь. Если это последняя строка, то возвращаемся
+     * к выбору героя. Иначе выбираем координаты из списка доступных.
+     * Индекс строки на 1 больше индекса соответствующей координаты
+     */
     private SquareCoordinate chooseTargetCoordinate(final SquareCoordinate activeHeroCoordinate, final Hero activeHero,
                                                     final Army enemyArmy, final Army yourArmy) throws IOException {
         final Set<SquareCoordinate> legalTargetCoordinate;
@@ -112,13 +139,13 @@ public class PlayerHuman extends Player {
         strings.add(String.format("Выберите цель %s: ", makeUnitChooseString(activeHeroCoordinate, activeHero)));
 
         int counter = 1;
-        for (SquareCoordinate key : legalTargetCoordinate) {
+        for (final SquareCoordinate key : legalTargetCoordinate) {
             strings.add(String.format("%d. %s", counter++, makeUnitChooseString(key, correctArmy.getHero(key).get())));
             listVariationCoordinate.add(key);
         }
         strings.add(String.format("%d. Вернуться к выбору юнита", counter));
         final int choose = gui.getChoose(strings);
-        return choose == counter - 1 ? null : listVariationCoordinate.get(choose);
+        return choose == counter ? null : listVariationCoordinate.get(choose - 1);
     }
 
 }

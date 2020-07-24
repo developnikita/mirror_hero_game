@@ -7,10 +7,15 @@ import com.neolab.heroesGame.heroes.Healer;
 import com.neolab.heroesGame.heroes.Hero;
 import com.neolab.heroesGame.heroes.Magician;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class CommonFunction {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommonFunction.class);
+
+    final static private char emptyUnit = ' ';
 
     public static boolean isUnitMagician(final Hero hero) {
         return hero instanceof Magician;
@@ -154,4 +159,126 @@ public class CommonFunction {
         }
         return String.format("%12s|", optionalHero.get().getClassName());
     }
+
+    public static boolean validateArmyString(final String army, final int armySize) {
+        char[] characters = new char[6];
+        army.getChars(0, 6, characters, 0);
+        if (containWrongCharacter(characters)
+                && full(characters, armySize) > 0
+                && containNotOneWarlord(characters)) {
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean containNotOneWarlord(char[] characters) {
+        Set<Character> warlordCharacters = new HashSet<>(Arrays.asList('F', 'M', 'V'));
+        boolean alreadyMet = false;
+        for (int i = 0; i < 6; i++) {
+            if (warlordCharacters.contains(characters[i])) {
+                if (alreadyMet) {
+                    return true;
+                }
+                alreadyMet = true;
+            }
+        }
+        return !alreadyMet;
+    }
+
+    private static boolean containWrongCharacter(char[] army) {
+        Set<Character> correctCharactersBackLine = new HashSet<>(Arrays.asList('a', 'm', 'h', 'M', 'V', emptyUnit));
+        Set<Character> correctCharactersFrontLine = new HashSet<>(Arrays.asList('f', 'F', emptyUnit));
+        for (int i = 0; i < 3; i++) {
+            if (!correctCharactersBackLine.contains(army[i])) {
+                return false;
+            }
+        }
+        for (int i = 3; i < 6; i++) {
+            if (!correctCharactersFrontLine.contains(army[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static List<String> getAllAvailableArmiesCode(final int armySize) {
+        final char[] string = new char[6];
+        final List<String> results = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            string[i] = emptyUnit;
+        }
+        createAllString(string, results, armySize, 0);
+        return results;
+    }
+
+    private static void createAllString(final char[] currentString, final List<String> results,
+                                        final int armySize, final int currentPositions) {
+        LOGGER.trace("{} {}", currentString, currentPositions);
+        if (full(currentString, armySize) == 0) {
+            LOGGER.trace("{}  записываем строку", currentString);
+            results.add(new String(currentString));
+            return;
+        }
+        if (empty(currentString)) {
+            addWarLord(currentString, results, armySize);
+            return;
+        }
+        if (currentPositions < 3) {
+            if (currentString[currentPositions] == emptyUnit) {
+                currentString[currentPositions] = 'a';
+                createAllString(currentString, results, armySize, currentPositions + 1);
+                currentString[currentPositions] = 'h';
+                createAllString(currentString, results, armySize, currentPositions + 1);
+                currentString[currentPositions] = 'm';
+                createAllString(currentString, results, armySize, currentPositions + 1);
+                currentString[currentPositions] = emptyUnit;
+            }
+            createAllString(currentString, results, armySize, currentPositions + 1);
+        } else {
+            if (currentPositions < 6) {
+                if (currentString[currentPositions] == emptyUnit) {
+                    currentString[currentPositions] = 'f';
+                    createAllString(currentString, results, armySize, currentPositions + 1);
+                    currentString[currentPositions] = emptyUnit;
+                }
+                createAllString(currentString, results, armySize, currentPositions + 1);
+            }
+        }
+
+    }
+
+    private static void addWarLord(final char[] currentString, final List<String> results, final int armySize) {
+        for (int i = 0; i < 3; i++) {
+            currentString[i] = 'M';
+            createAllString(currentString, results, armySize, 0);
+            currentString[i] = 'V';
+            createAllString(currentString, results, armySize, 0);
+            currentString[i] = emptyUnit;
+        }
+        for (int i = 3; i < 6; i++) {
+            currentString[i] = 'F';
+            createAllString(currentString, results, armySize, 0);
+            currentString[i] = emptyUnit;
+        }
+    }
+
+    private static boolean empty(final char[] currentString) {
+        for (int i = 0; i < 6; i++) {
+            if (currentString[i] != emptyUnit) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static int full(final char[] currentString, final int armySize) {
+        int counter = 0;
+        for (int i = 0; i < 6; i++) {
+            if (currentString[i] != emptyUnit) {
+                counter++;
+            }
+        }
+        return counter - armySize;
+    }
+
 }

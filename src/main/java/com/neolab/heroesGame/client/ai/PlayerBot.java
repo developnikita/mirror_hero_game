@@ -71,6 +71,15 @@ public class PlayerBot extends Player {
         return new Answer(activeHero, action, targetUnit, getId());
     }
 
+    public String getStringArmyFirst(final int armySize) {
+        final List<String> armies = CommonFunction.getAllAvailableArmiesCode(armySize);
+        return armies.get(RANDOM.nextInt(armies.size()));
+    }
+
+    public String getStringArmySecond(final int armySize, final Army army) {
+        return getStringArmyFirst(armySize);
+    }
+
     protected SquareCoordinate chooseUnit(final Army army) {
         final Set<SquareCoordinate> availableHeroes = army.getAvailableHeroes().keySet();
         return availableHeroes.iterator().next();

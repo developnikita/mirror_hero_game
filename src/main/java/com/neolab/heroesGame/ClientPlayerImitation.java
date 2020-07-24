@@ -1,5 +1,6 @@
 package com.neolab.heroesGame;
 
+import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.client.ai.Player;
 import com.neolab.heroesGame.client.ai.PlayerBot;
 import com.neolab.heroesGame.client.ai.PlayerHuman;
@@ -59,6 +60,14 @@ public class ClientPlayerImitation {
 
     public void endGame(final ExtendedServerResponse response) throws IOException {
         gui.endGame(response);
+    }
+
+    public String getArmyFirst(final int armySize) {
+        return player.getStringArmyFirst(armySize);
+    }
+
+    public String getArmySecond(final int armySize, final Army army) {
+        return player.getStringArmySecond(armySize, army);
     }
 
     public Player getPlayer() {
