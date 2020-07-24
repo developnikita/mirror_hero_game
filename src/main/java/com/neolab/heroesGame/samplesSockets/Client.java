@@ -113,7 +113,7 @@ public class Client {
                 switch (response.event){
                     case NOW_YOUR_TURN -> send(player.getAnswer(response));
                     case WAIT_ITS_NOT_YOUR_TURN -> player.sendInformation(response);
-                    case YOU_WIN_GAME, YOU_LOSE_GAME -> player.endGame(response);
+                    case YOU_WIN_GAME, YOU_LOSE_GAME, GAME_END_WITH_A_TIE -> player.endGame(response);
                     default -> throw new HeroExceptions(HeroErrorCode.ERROR_EVENT);
                 }
             }
