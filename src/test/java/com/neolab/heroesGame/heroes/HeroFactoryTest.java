@@ -16,7 +16,7 @@ public class HeroFactoryTest {
 
     @Before
     public void initProp() throws IOException {
-        final String propertyFileName = "hero.config";
+        final String propertyFileName = "src/main/resources/hero.config";
         try (final InputStream is = new FileInputStream(propertyFileName)) {
             prop.load(is);
         }
