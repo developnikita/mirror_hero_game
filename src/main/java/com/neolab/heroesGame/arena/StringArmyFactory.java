@@ -38,6 +38,8 @@ public class StringArmyFactory implements ArmyFactory {
                     case 'F' -> armyMap.put(new SquareCoordinate(i, j), warlordFootmanFactory.create());
                     case 'M' -> armyMap.put(new SquareCoordinate(i, j), warlordMagicianFactory.create());
                     case 'V' -> armyMap.put(new SquareCoordinate(i, j), warlordVampireFactory.create());
+                    case ' ' -> {
+                    }
                     default -> throw new IllegalArgumentException("Неверно сформирована строка армии");
                 }
                 ++k;

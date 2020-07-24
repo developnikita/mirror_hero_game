@@ -26,19 +26,18 @@ public class Server {
         LOGGER.warn("Server started, port: {}", PORT);
         try (final ServerSocket serverSocket = new ServerSocket(PORT)) {
 
-            while(true) {
+            while (true) {
 
                 // Блокируется до возникновения нового соединения
                 final Socket socket = serverSocket.accept();
-                int countPlayers = serverList.size();
+                final int countPlayers = serverList.size();
 
                 try {
-                    if(countPlayers < props.MAX_COUNT_PLAYERS){
+                    if (countPlayers < props.MAX_COUNT_PLAYERS) {
                         createResponseSocket(socket);
                         createGameRoom();
-                    }
-                    else {
-                        final PlayerSocket playerSocket =  new PlayerSocket(socket, 0, "null");
+                    } else {
+                        final PlayerSocket playerSocket = new PlayerSocket(socket, 0, "null");
                         playerSocket.send(GameEvent.MAX_COUNT_PLAYERS.toString());
                         playerSocket.downService();
                     }
@@ -68,15 +67,16 @@ public class Server {
 
     /**
      * создаём серверный сокет для общения с конкретным клиентом
+     *
      * @param socket копия клиенсткого сокета на стороне сервера
      */
     private static void createResponseSocket(final Socket socket) throws IOException, InterruptedException {
         final int playerId = idGenerator.getAsInt();
         final String name = props.mapIdNamePlayers.get(playerId);
         final String playerName = (name == null) ? generatePlayerName(playerId) : name;
-        final PlayerSocket playerSocket =  new PlayerSocket(socket, playerId, playerName);
+        final PlayerSocket playerSocket = new PlayerSocket(socket, playerId, playerName);
 
-        if(playerSocket.isAssignIdAndNameClient()){
+        if (playerSocket.isAssignIdAndNameClient()) {
             serverList.add(playerSocket);
             queuePlayers.add(playerSocket);
         }
@@ -87,7 +87,7 @@ public class Server {
      */
     private static void createGameRoom() {
 
-        if(countGameRooms.get() < props.MAX_COUNT_GAME_ROOMS && queuePlayers.size() >= 2){
+        if (countGameRooms.get() < props.MAX_COUNT_GAME_ROOMS && queuePlayers.size() >= 2) {
             countGameRooms.incrementAndGet();
             new GameRoom(queuePlayers, props.MAX_COUNT_BATTLES).start();
         }
@@ -97,7 +97,7 @@ public class Server {
      * закрытие сервера, удаление себя из списка нитей
      */
     private static void downService() throws IOException {
-        for(PlayerSocket playerSocket : serverList){
+        for (final PlayerSocket playerSocket : serverList) {
             playerSocket.downService();
         }
     }
@@ -113,10 +113,9 @@ public class Server {
         }
     };
 
-    private static String generatePlayerName(int playerId){
+    private static String generatePlayerName(final int playerId) {
         return String.format("player_%d", playerId);
     }
-
 
 
     public static void main(final String[] args) throws IOException {

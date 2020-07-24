@@ -1,6 +1,7 @@
 package com.neolab.heroesGame.samplesSockets;
 
 import com.neolab.heroesGame.ClientPlayerImitation;
+import com.neolab.heroesGame.arena.StringArmyFactory;
 import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
 import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
@@ -34,7 +35,7 @@ public class Client {
      * @param ip   ip адрес клиента
      * @param port порт соединения
      */
-    private Client(final String ip, final int port){
+    private Client(final String ip, final int port) {
         this.ip = ip;
         this.port = port;
     }
@@ -66,7 +67,7 @@ public class Client {
      * @param message сообщение
      */
     private void send(final String message) throws IOException {
-        out.write( message + "\n");
+        out.write(message + "\n");
         out.flush();
     }
 
@@ -96,42 +97,49 @@ public class Client {
              * получаем id и имя игрока от сервера и создаем нашего бота
              * если на сервере уже максимум игроков, то подключиться не удастся
              */
-            if (!createPlayer()){
+            if (!createPlayer()) {
                 System.out.println("На сервере подключено максимально число игроков, попробуйте позже...");
                 return;
             }
 
+            final String armySize = in.readLine();
+            final String emenyArmy = in.readLine();
+            if (emenyArmy.isEmpty()) {
+                send(player.getArmyFirst(Integer.parseInt(armySize)));
+            } else {
+                send(player.getArmySecond(Integer.parseInt(armySize), new StringArmyFactory(emenyArmy).create()));
+            }
+
             while (true) {
-                String requestJson = in.readLine(); // ждем сообщения с сервера
+                final String requestJson = in.readLine(); // ждем сообщения с сервера
                 if (requestJson == null) {
                     downService();
                     break;
                 }
 
-                ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(requestJson);
+                final ExtendedServerResponse response = ExtendedServerResponse.getResponseFromString(requestJson);
 
-                switch (response.event){
+                switch (response.event) {
                     case NOW_YOUR_TURN -> send(player.getAnswer(response));
                     case WAIT_ITS_NOT_YOUR_TURN -> player.sendInformation(response);
                     case YOU_WIN_GAME, YOU_LOSE_GAME -> player.endGame(response);
                     default -> throw new HeroExceptions(HeroErrorCode.ERROR_EVENT);
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (final Exception e) {
             downService();
             e.printStackTrace();
         }
     }
 
     private boolean createPlayer() throws IOException {
-        String res = in.readLine();
+        final String res = in.readLine();
         // на сервере уже максимально число игроков
-        if(res.equals(GameEvent.MAX_COUNT_PLAYERS.toString())){
+        if (res.equals(GameEvent.MAX_COUNT_PLAYERS.toString())) {
             return false;
         }
-        int playerId = Integer.parseInt(res);
-        String playerName = in.readLine();
+        final int playerId = Integer.parseInt(res);
+        final String playerName = in.readLine();
         player = new ClientPlayerImitation(playerId, playerName);
         send(GameEvent.CLIENT_IS_CREATED.toString());
         return true;
