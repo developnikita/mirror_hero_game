@@ -9,7 +9,7 @@ public final class HeroConfigManager {
 
     private static final Properties HERO_CONFIG = new Properties();
     private static boolean isLoadHeroConfig = false;
-    private static final String HERO_CONFIG_FILE_NAME = "hero.config";
+    private static final String HERO_CONFIG_FILE_NAME = "src/main/resources/hero.config";
 
     private HeroConfigManager() throws Exception {
         throw new Exception();
