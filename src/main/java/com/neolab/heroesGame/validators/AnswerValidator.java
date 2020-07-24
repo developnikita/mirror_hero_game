@@ -1,4 +1,4 @@
-package com.neolab.heroesGame.server.answers;
+package com.neolab.heroesGame.validators;
 
 import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.arena.Army;
@@ -8,6 +8,7 @@ import com.neolab.heroesGame.enumerations.HeroActions;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.server.answers.Answer;
 
 import java.util.Optional;
 import java.util.Set;
