@@ -15,7 +15,7 @@ public class GameRoom extends Thread {
     private final PlayerSocket playerTwo;
     private final int countBattles;
 
-    public GameRoom(final Queue<PlayerSocket> serverList, int countBattles){
+    public GameRoom(final Queue<PlayerSocket> serverList, final int countBattles) {
         playerOne = serverList.poll();
         playerTwo = serverList.poll();
         this.countBattles = countBattles;
@@ -24,19 +24,21 @@ public class GameRoom extends Thread {
     @Override
     public void run() {
         try {
-            long start = System.nanoTime();
+            final long start = System.nanoTime();
 
-            for(int i = 0; i < countBattles; i++){
-                new GameServer(playerOne, playerTwo).gameProcess();
+            for (int i = 0; i < countBattles; i++) {
+                final GameServer server = new GameServer(playerOne, playerTwo);
+                server.prepareForBattle();
+                server.gameProcess();
             }
-            long end = System.nanoTime();
+            final long end = System.nanoTime();
             //1 second = 1__000__000__000 nano seconds
-            double elapsedTimeInSecond = (double) (end - start)/1__000__000__000;
+            final double elapsedTimeInSecond = (double) (end - start) / 1__000__000__000;
             LOGGER.warn("Игра длилась {}", elapsedTimeInSecond);
 
             Server.getCountGameRooms().decrementAndGet();
         } catch (final Exception ex) {
-            throw new  IllegalStateException("Игра прервана, внутренняя ошибка сервера");
+            throw new IllegalStateException("Игра прервана, внутренняя ошибка сервера");
         }
     }
 }

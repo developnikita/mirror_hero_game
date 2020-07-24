@@ -8,5 +8,6 @@ public enum GameEvent {
     YOU_LOSE_GAME,
     NOTHING_HAPPEN,
     NOW_YOUR_TURN,
-    WAIT_ITS_NOT_YOUR_TURN
+    WAIT_ITS_NOT_YOUR_TURN,
+    CREATE_ARMY,
 }

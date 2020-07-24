@@ -1,8 +1,8 @@
 package com.neolab.heroesGame.server.serverNetwork;
 
+import com.neolab.heroesGame.aditional.HeroConfigManager;
 import com.neolab.heroesGame.aditional.StatisticWriter;
-import com.neolab.heroesGame.arena.BattleArena;
-import com.neolab.heroesGame.arena.FactoryArmies;
+import com.neolab.heroesGame.arena.*;
 import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.samplesSockets.PlayerSocket;
@@ -14,27 +14,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
-
 
 public class GameServer {
     public static final Integer MAX_ROUND = 15;
     private static final Logger LOGGER = LoggerFactory.getLogger(GameServer.class);
     private PlayerSocket currentPlayer;
     private PlayerSocket waitingPlayer;
-    private final AnswerProcessor answerProcessor;
-    private final BattleArena battleArena;
+    private AnswerProcessor answerProcessor;
+    private BattleArena battleArena;
     private int counter;
 
-    public GameServer(final PlayerSocket playerOne, final PlayerSocket playerTwo) throws Exception {
+    public GameServer(final PlayerSocket playerOne, final PlayerSocket playerTwo) {
         currentPlayer = playerOne;
         waitingPlayer = playerTwo;
-        battleArena = new BattleArena(FactoryArmies.generateArmies(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId()));
-        answerProcessor = new AnswerProcessor(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId(), battleArena);
+        /*battleArena = new BattleArena(FactoryArmies.generateArmies(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId()));
+        answerProcessor = new AnswerProcessor(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId(), battleArena);*/
         counter = 0;
     }
 
-    public void gameProcess() throws IOException, HeroExceptions, InterruptedException {
+    public void gameProcess() throws IOException, InterruptedException {
         LOGGER.info("-----------------Начинается великая битва---------------");
 
         while (true) {
@@ -72,6 +73,26 @@ public class GameServer {
 
     }
 
+    public void prepareForBattle() throws IOException, HeroExceptions {
+        currentPlayer.send(HeroConfigManager.getHeroConfig().getProperty("hero.army.size"));
+        currentPlayer.send("");
+        final String player1ArmyResponse = currentPlayer.getIn().readLine();
+        final Army player1Army = new StringArmyFactory(player1ArmyResponse).create();
+        System.out.println("currentPlayerArmy: " + player1ArmyResponse + " size: " + player1ArmyResponse.length());
+
+        waitingPlayer.send(HeroConfigManager.getHeroConfig().getProperty("hero.army.size"));
+        waitingPlayer.send(player1ArmyResponse);
+        final String player2ArmyResponse = waitingPlayer.getIn().readLine();
+        final Army player2Army = new StringArmyFactory(player2ArmyResponse).create();
+        System.out.println("waitingPlayerArmy: " + player2ArmyResponse + " size: " + player2ArmyResponse.length());
+
+        final Map<Integer, Army> battleMap = new HashMap<>();
+        battleMap.put(currentPlayer.getPlayerId(), player1Army);
+        battleMap.put(waitingPlayer.getPlayerId(), player2Army);
+        this.battleArena = new BattleArena(battleMap);
+        this.answerProcessor = new AnswerProcessor(currentPlayer.getPlayerId(),
+                waitingPlayer.getPlayerId(), battleArena);
+    }
 
     private void changeCurrentAndWaitingPlayers() {
         final PlayerSocket temp = currentPlayer;
@@ -166,6 +187,8 @@ public class GameServer {
         }
         return false;
     }
+
+
 }
 
 

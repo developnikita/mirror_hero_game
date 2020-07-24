@@ -47,16 +47,17 @@ public class PlayerSocket {
 
     /**
      * проверяем что клиент получил от сервера id и name, и готов к сессии
+     *
      * @return флаг указывающий что клиент установил полученные id и name
      */
     public boolean isAssignIdAndNameClient() throws IOException, InterruptedException {
         send(String.valueOf(playerId));
         send(playerName);
-        for(int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             Thread.sleep(50);
-            if(in.ready()){
-                String response = in.readLine();
-                if(response.equals(GameEvent.CLIENT_IS_CREATED.toString())){
+            if (in.ready()) {
+                final String response = in.readLine();
+                if (response.equals(GameEvent.CLIENT_IS_CREATED.toString())) {
                     return true;
                 }
                 downService();
@@ -78,8 +79,7 @@ public class PlayerSocket {
         try {
             out.write(msg + "\n");
             out.flush();
-        }
-        catch (IOException ex){
+        } catch (final IOException ex) {
             LOGGER.error("Игрок {} разорвал соединение", playerId);
             downService();
             Server.getServerList().remove(this);
@@ -96,10 +96,10 @@ public class PlayerSocket {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof PlayerSocket)) return false;
-        PlayerSocket that = (PlayerSocket) o;
+        final PlayerSocket that = (PlayerSocket) o;
         return getPlayerId() == that.getPlayerId() &&
                 socket.equals(that.socket) &&
                 getIn().equals(that.getIn()) &&
