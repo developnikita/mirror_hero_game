@@ -25,9 +25,10 @@ public class GameRoom extends Thread {
     public void run() {
         try {
             final long start = System.nanoTime();
-            final GameServer server = new GameServer(playerOne, playerTwo);
-            server.prepareForBattle();
+
             for (int i = 0; i < countBattles; i++) {
+                final GameServer server = new GameServer(playerOne, playerTwo);
+                server.prepareForBattle();
                 server.gameProcess();
             }
             final long end = System.nanoTime();
