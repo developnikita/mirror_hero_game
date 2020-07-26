@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
+import com.neolab.heroesGame.enumerations.HeroErrorCode;
 import com.neolab.heroesGame.errors.HeroExceptions;
 
 import java.util.HashMap;
@@ -11,17 +12,18 @@ import java.util.Map;
 
 public class Healer extends Hero {
 
-    protected Healer(int hp, int healing, float precision, float armor) {
+    public Healer(final int hp, final int healing, final float precision, final float armor) {
         super(hp, healing, precision, armor);
     }
 
     @JsonCreator
-    protected Healer(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
-                     @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
-                     @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
-                     @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
+    protected Healer(@JsonProperty("unitId") final int unitId, @JsonProperty("hpDefault") final int hpDefault,
+                     @JsonProperty("hpMax") final int hpMax, @JsonProperty("hp") final int hp,
+                     @JsonProperty("damageDefault") final int damageDefault, @JsonProperty("damage") final int damage,
+                     @JsonProperty("precision") final float precision, @JsonProperty("armor") final float armor,
+                     @JsonProperty("armorDefault") final float armorDefault,
                      @JsonProperty("defence") final boolean defence) {
-        super(hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
+        super(unitId, hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
     }
 
     /**
@@ -31,20 +33,17 @@ public class Healer extends Hero {
      * @param army     армия союзников
      */
     @Override
-    public Map<SquareCoordinate, Integer> toAct(SquareCoordinate position, Army army) throws HeroExceptions {
-        Hero targetHeal = searchTarget(position, army);
-        int healing = targetHeal.getHp() + this.getDamage();
+    public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position, final Army army) throws HeroExceptions {
+        final Hero targetHeal = army.getHero(position).orElseThrow(() -> new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK));
+        final int healing = targetHeal.getHp() + this.getDamage();
         targetHeal.setHp(Math.min(healing, targetHeal.getHpMax()));
-        Map<SquareCoordinate, Integer> allyHeroPosHeal = new HashMap<>();
+        final Map<SquareCoordinate, Integer> allyHeroPosHeal = new HashMap<>();
         allyHeroPosHeal.put(position, this.getDamage());
         return allyHeroPosHeal;
     }
 
-    public static Hero createInstance() {
-        final int hp = 75;
-        final int damage = 40;
-        final float precision = 1;
-        final float armor = 0;
-        return new Healer(hp, damage, precision, armor);
+    @Override
+    public String getClassName() {
+        return "Лекарь";
     }
 }

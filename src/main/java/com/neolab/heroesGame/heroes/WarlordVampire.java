@@ -6,23 +6,27 @@ import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class WarlordVampire extends Magician implements IWarlord {
 
     private float improveCoefficient = 0.05f;
 
-    protected WarlordVampire(int hp, int damage, float precision, float armor) {
+    public WarlordVampire(final int hp, final int damage, final float precision, final float armor) {
         super(hp, damage, precision, armor);
     }
-    
+
     @JsonCreator
-    protected WarlordVampire(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
-                             @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
+    protected WarlordVampire(@JsonProperty("unitId") final int unitId, @JsonProperty("hpDefault") final int hpDefault,
+                             @JsonProperty("hpMax") final int hpMax, @JsonProperty("hp") final int hp,
+                             @JsonProperty("damageDefault") final int damageDefault,
                              @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
-                             @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
-                             @JsonProperty("defence") final boolean defence, @JsonProperty("improveCoefficient") final float improveCoefficient) {
-        super(hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
+                             @JsonProperty("armor") final float armor,
+                             @JsonProperty("armorDefault") final float armorDefault,
+                             @JsonProperty("defence") final boolean defence,
+                             @JsonProperty("improveCoefficient") final float improveCoefficient) {
+        super(unitId, hpDefault, hpMax, hp, damageDefault, damage, precision, armor, armorDefault, defence);
         this.improveCoefficient = improveCoefficient;
     }
 
@@ -36,19 +40,30 @@ public class WarlordVampire extends Magician implements IWarlord {
     }
 
     @Override
+    public String getClassName() {
+        return "Вампир";
+    }
+
+    @Override
     public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position, final Army army) {
         final Map<SquareCoordinate, Integer> enemyHeroPosDamage = super.toAct(position, army);
-        AtomicInteger heal = new AtomicInteger(this.getHp());
+        final AtomicInteger heal = new AtomicInteger(this.getHp());
         enemyHeroPosDamage.values().forEach(heal::addAndGet);
         this.setHp(Math.min(heal.get(), this.getHpMax()));
         return enemyHeroPosDamage;
     }
 
-    public static Hero createInstance() {
-        final int hp = 90;
-        final int damage = 10;
-        final float precision = 0.8f;
-        final float armor = 0.05f;
-        return new WarlordVampire(hp, damage, precision, armor);
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        final WarlordVampire that = (WarlordVampire) o;
+        return Float.compare(that.improveCoefficient, improveCoefficient) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), improveCoefficient);
     }
 }

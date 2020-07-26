@@ -16,12 +16,12 @@ import java.util.*;
 
 public class PlayerBot extends Player {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Answer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerBot.class);
     private final long SEED = 5916;
     private final Random RANDOM = new Random(SEED);
 
-    public PlayerBot(final int id) {
-        super(id);
+    public PlayerBot(final int id, final String name) {
+        super(id, name);
     }
 
     /**
@@ -41,7 +41,7 @@ public class PlayerBot extends Player {
     @Override
     public Answer getAnswer(final BattleArena board) throws HeroExceptions {
 
-        final Army thisBotArmy = board.getCurrentPlayerArmy(getId());
+        final Army thisBotArmy = board.getArmy(getId());
         final Army enemyArmy = board.getEnemyArmy(getId());
         final SquareCoordinate activeHero = chooseUnit(thisBotArmy);
         final Hero hero = thisBotArmy.getHeroes().get(activeHero);
@@ -71,8 +71,17 @@ public class PlayerBot extends Player {
         return new Answer(activeHero, action, targetUnit, getId());
     }
 
+    public String getStringArmyFirst(final int armySize) {
+        final List<String> armies = CommonFunction.getAllAvailableArmiesCode(armySize);
+        return armies.get(RANDOM.nextInt(armies.size()));
+    }
+
+    public String getStringArmySecond(final int armySize, final Army army) {
+        return getStringArmyFirst(armySize);
+    }
+
     protected SquareCoordinate chooseUnit(final Army army) {
-        final Set<SquareCoordinate> availableHeroes = army.getAvailableHero().keySet();
+        final Set<SquareCoordinate> availableHeroes = army.getAvailableHeroes().keySet();
         return availableHeroes.iterator().next();
     }
 
@@ -81,6 +90,9 @@ public class PlayerBot extends Player {
         return availableHeroes.iterator().next();
     }
 
+    /**
+     * Ищем раненых юнитов. Если таких нет возвразаем Null
+     */
     protected SquareCoordinate chooseTargetByHealer(final Army army) {
         final Map<SquareCoordinate, Hero> heroes = army.getHeroes();
         final HashSet<SquareCoordinate> damagedHeroes = new HashSet<>();
@@ -96,6 +108,11 @@ public class PlayerBot extends Player {
         return damagedHeroes.iterator().next();
     }
 
+    /**
+     * Ищем легальную цель для милишника
+     *
+     * @throws HeroExceptions Цель должна существовать, иначе армия противника пустая и бой должен был завершиться.
+     */
     protected SquareCoordinate chooseTargetByFootman(final SquareCoordinate activeUnit, final Army enemyArmy) throws HeroExceptions {
         if (RANDOM.nextInt(10) == 0) {
             return null;

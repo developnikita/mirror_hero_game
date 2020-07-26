@@ -1,6 +1,7 @@
 package com.neolab.heroesGame.arena;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -14,6 +15,7 @@ import com.neolab.heroesGame.heroes.IWarlord;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -37,20 +39,20 @@ public class Army {
     @JsonCreator
     public Army(@JsonProperty("heroes") final Map<SquareCoordinate, Hero> heroes,
                 @JsonProperty("warlord") final IWarlord warlord,
-                @JsonProperty("availableHero") final Map<SquareCoordinate, Hero> availableHero) {
+                @JsonProperty("availableHeroes") final Map<SquareCoordinate, Hero> availableHeroes) {
         this.heroes = heroes;
         this.warlord = warlord;
-        this.availableHeroes = availableHero;
+        this.availableHeroes = availableHeroes;
     }
 
     private IWarlord findWarlord() throws HeroExceptions {
         IWarlord iWarlord = null;
-        for (final SquareCoordinate coordinate : heroes.keySet()) {
-            if (heroes.get(coordinate) instanceof IWarlord) {
-                if (warlord != null) {
+        for (final Hero hero : heroes.values()) {
+            if (hero instanceof IWarlord) {
+                if (iWarlord != null) {
                     throw new HeroExceptions(HeroErrorCode.ERROR_SECOND_WARLORD_ON_ARMY);
                 }
-                iWarlord = (IWarlord) heroes.get(coordinate);
+                iWarlord = (IWarlord) hero;
             }
         }
         if (iWarlord == null) {
@@ -63,7 +65,7 @@ public class Army {
         return heroes;
     }
 
-    public Map<SquareCoordinate, Hero> getAvailableHero() {
+    public Map<SquareCoordinate, Hero> getAvailableHeroes() {
         return availableHeroes;
     }
 
@@ -75,14 +77,18 @@ public class Army {
         this.availableHeroes = new HashMap<>(heroes);
     }
 
-    public void killHero(final int heroId) {
-        if (warlord != null) {
-            if (warlord.getUnitId() == heroId) {
-                cancelImprove();
-            }
+    public void killHero(final SquareCoordinate coordinate) {
+        if (warlord != null && heroes.get(coordinate) instanceof IWarlord) {
+            cancelImprove();
         }
-        removeAvailableHeroById(heroId);
-        heroes.values().removeIf(value -> value.getUnitId() == heroId);
+        availableHeroes.remove(coordinate);
+        heroes.remove(coordinate);
+    }
+
+    public void tryToKill(final SquareCoordinate coordinate) {
+        if (heroes.get(coordinate) != null && heroes.get(coordinate).isDead()) {
+            killHero(coordinate);
+        }
     }
 
     public void setWarlord(final IWarlord warlord) {
@@ -91,18 +97,6 @@ public class Army {
 
     public void removeAvailableHeroById(final int heroId) {
         availableHeroes.values().removeIf(value -> value.getUnitId() == heroId);
-    }
-
-    public boolean removeHero(final Hero hero, final Army army) {
-        if (hero.getHp() <= 0) {
-            if (hero instanceof IWarlord) {
-                cancelImprove();
-                army.setWarlord(null);
-            }
-            removeAvailableHeroById(hero.getUnitId());
-            return true;
-        }
-        return false;
     }
 
     private void improveAllies() {
@@ -123,17 +117,55 @@ public class Army {
         hero.setArmor(armor);
     }
 
-    public void cancelImprove() {
+    protected void cancelImprove() {
         heroes.values().forEach(this::cancel);
     }
 
     private void cancel(final Hero hero) {
         hero.setArmor(hero.getArmor() - warlord.getImproveCoefficient());
         hero.setHpMax(hero.getHpDefault());
+        hero.setHp(Math.min(hero.getHp(), hero.getHpDefault()));
         hero.setDamage(hero.getDamageDefault());
+    }
+
+    @JsonIgnore
+    public Army getCopy() {
+        final Hero warlord = (Hero) this.warlord;
+        final IWarlord cloneWarlord = (IWarlord) warlord.getCopy();
+        final Map<SquareCoordinate, Hero> heroes = getCloneMap(getHeroes());
+        final Map<SquareCoordinate, Hero> availableHeroes = getCloneAvailableMap(getAvailableHeroes(), heroes);
+        return new Army(heroes, cloneWarlord, availableHeroes);
+    }
+
+    private static Map<SquareCoordinate, Hero> getCloneAvailableMap(final Map<SquareCoordinate, Hero> availableHeroes,
+                                                                    final Map<SquareCoordinate, Hero> heroes) {
+        final Map<SquareCoordinate, Hero> clone = new HashMap<>();
+        availableHeroes.keySet().forEach((key) -> clone.put(key, heroes.get(key)));
+        return clone;
+    }
+
+    private static Map<SquareCoordinate, Hero> getCloneMap(final Map<SquareCoordinate, Hero> heroes) {
+        final Map<SquareCoordinate, Hero> clone = new HashMap<>();
+        heroes.keySet().forEach((key) -> clone.put(key, heroes.get(key).getCopy()));
+        return clone;
     }
 
     public boolean canSomeOneAct() {
         return !availableHeroes.isEmpty();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Army army = (Army) o;
+        return Objects.equals(heroes, army.heroes) &&
+                Objects.equals(warlord, army.warlord) &&
+                Objects.equals(availableHeroes, army.availableHeroes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(heroes, warlord, availableHeroes);
     }
 }

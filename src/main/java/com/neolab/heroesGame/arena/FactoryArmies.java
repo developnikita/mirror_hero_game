@@ -1,20 +1,26 @@
 package com.neolab.heroesGame.arena;
 
 import com.neolab.heroesGame.errors.HeroExceptions;
-import com.neolab.heroesGame.heroes.*;
+import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.heroes.WarlordFootman;
+import com.neolab.heroesGame.heroes.factory.*;
 
+import java.io.IOException;
 import java.util.*;
 
-public class FactoryArmies {
+public final class FactoryArmies {
 
-    private static final long SEED = 1523;
+    private static final long SEED = 1700;
     private static final Random RANDOM = new Random(SEED);
 
+    private FactoryArmies() {
+    }
+
     public static Map<Integer, Army> generateArmies(final Integer firstPlayerId,
-                                                    final Integer secondPlayerId) throws HeroExceptions {
+                                                    final Integer secondPlayerId) throws HeroExceptions, IOException {
         final Map<Integer, Army> armies = new HashMap<>();
-        armies.put(firstPlayerId, createArmy());
-        armies.put(secondPlayerId, createArmy());
+        armies.put(firstPlayerId, createRandomArmy());
+        armies.put(secondPlayerId, createRandomArmy());
         return armies;
     }
 
@@ -24,18 +30,18 @@ public class FactoryArmies {
      * Вторую линию забивает Healer, Magician, Archer с равным шансом
      * Место для варлорда выбирает Set.iterator().next()
      */
-    private static Army createArmy() throws HeroExceptions {
+    public static Army createRandomArmy() throws HeroExceptions, IOException {
         final Map<SquareCoordinate, Hero> heroes = new HashMap<>();
         final Hero warlord = createWarlord();
         final Set<SquareCoordinate> firstLine = makeLine(1);
         final Set<SquareCoordinate> secondLine = makeLine(0);
-        if (warlord instanceof WarlordFootman){
+        if (warlord instanceof WarlordFootman) {
             addWarlord(heroes, firstLine, warlord);
-        } else{
+        } else {
             addWarlord(heroes, secondLine, warlord);
         }
         for (final SquareCoordinate key : firstLine) {
-            heroes.put(key, Footman.createInstance());
+            heroes.put(key, new FootmanFactory().create());
         }
         for (final SquareCoordinate key : secondLine) {
             heroes.put(key, createSecondLineUnit());
@@ -50,25 +56,25 @@ public class FactoryArmies {
         line.remove(temp);
     }
 
-    private static Hero createWarlord() {
+    private static Hero createWarlord() throws IOException {
         final int switcher = RANDOM.nextInt(4);
         if (switcher == 0) {
-            return WarlordMagician.createInstance();
+            return new WarlordMagicianFactory().create();
         } else if (switcher == 1) {
-            return WarlordVampire.createInstance();
+            return new WarlordVampireFactory().create();
         } else {
-            return WarlordFootman.createInstance();
+            return new WarlordFootmanFactory().create();
         }
     }
 
-    private static Hero createSecondLineUnit() {
+    private static Hero createSecondLineUnit() throws IOException {
         final int switcher = RANDOM.nextInt(3) % 3;
         if (switcher == 0) {
-            return Archer.createInstance();
+            return new ArcherFactory().create();
         } else if (switcher == 1) {
-            return Magician.createInstance();
+            return new MagicianFactory().create();
         } else {
-            return Healer.createInstance();
+            return new HealerFactory().create();
         }
     }
 

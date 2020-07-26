@@ -11,7 +11,8 @@ public class SquareCoordinate {
     private final int y;
 
     @JsonCreator
-    public SquareCoordinate(@JsonProperty("x") final int x, @JsonProperty("y") final int y) {
+    public SquareCoordinate(@JsonProperty("x") final int x,
+                            @JsonProperty("y") final int y) {
         this.x = x;
         this.y = y;
     }

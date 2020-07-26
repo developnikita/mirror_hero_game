@@ -1,7 +1,6 @@
 package com.neolab.heroesGame.heroes;
 
 import com.fasterxml.jackson.annotation.*;
-import com.neolab.heroesGame.aditional.CommonFunction;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.enumerations.HeroErrorCode;
@@ -13,7 +12,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Archer.class, name = "Archer"),
         @JsonSubTypes.Type(value = Footman.class, name = "Footman"),
@@ -21,10 +20,10 @@ import java.util.Random;
         @JsonSubTypes.Type(value = Magician.class, name = "Magician"),
         @JsonSubTypes.Type(value = WarlordFootman.class, name = "WarlordFootman"),
         @JsonSubTypes.Type(value = WarlordMagician.class, name = "WarlordMagician"),
-        @JsonSubTypes.Type(value = WarlordMagician.class, name = "WarlordVampire")
+        @JsonSubTypes.Type(value = WarlordVampire.class, name = "WarlordVampire")
 }
 )
-public abstract class Hero {
+public abstract class Hero implements Cloneable {
     private final int unitId;
     private final int hpDefault;
     private int hpMax;
@@ -35,10 +34,11 @@ public abstract class Hero {
     private float armor;
     private final float armorDefault;
     private boolean defence = false;
+    private static int nextId = 0;
 
 
     public Hero(final int hp, final int damage, final float precision, final float armor) {
-        this.unitId = CommonFunction.idGeneration.getNextId();
+        this.unitId = nextId++;
         this.hpDefault = hp;
         this.hpMax = hp;
         this.hp = hp;
@@ -50,12 +50,13 @@ public abstract class Hero {
     }
 
     @JsonCreator
-    protected Hero(@JsonProperty("hpDefault") final int hpDefault, @JsonProperty("hpMax") final int hpMax,
-                   @JsonProperty("hp") final int hp, @JsonProperty("damageDefault") final int damageDefault,
-                   @JsonProperty("damage") final int damage, @JsonProperty("precision") final float precision,
-                   @JsonProperty("armor") final float armor, @JsonProperty("armorDefault") final float armorDefault,
+    protected Hero(@JsonProperty("unitId") final int unitId, @JsonProperty("hpDefault") final int hpDefault,
+                   @JsonProperty("hpMax") final int hpMax, @JsonProperty("hp") final int hp,
+                   @JsonProperty("damageDefault") final int damageDefault, @JsonProperty("damage") final int damage,
+                   @JsonProperty("precision") final float precision, @JsonProperty("armor") final float armor,
+                   @JsonProperty("armorDefault") final float armorDefault,
                    @JsonProperty("defence") final boolean defence) {
-        this.unitId = CommonFunction.idGeneration.getNextId();
+        this.unitId = unitId;
         this.hpDefault = hpDefault;
         this.hpMax = hpMax;
         this.hp = hp;
@@ -137,6 +138,8 @@ public abstract class Hero {
         }
     }
 
+    public abstract String getClassName();
+
     /**
      * Если герой погибает удаляем его из обеих коллекций
      *
@@ -144,48 +147,40 @@ public abstract class Hero {
      * @param army     армия противника
      * @return возращается значение нанесенного урона и координата цели(ей)
      */
-    public Map<SquareCoordinate, Integer> toAttack(final SquareCoordinate position, final Army army) throws HeroExceptions {
-        final Hero targetAttack = searchTarget(position, army);
-        int damageDone = 0;
-        if (isHit(this.getPrecision())) {
-            damageDone = calculateDamage(targetAttack);
-            targetAttack.setHp(targetAttack.getHp() - damageDone);
-            removeTarget(targetAttack, army);
-        }
-        final Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
-        enemyHeroPosDamage.put(position, damageDone);
-        return enemyHeroPosDamage;
-    }
-
     public Map<SquareCoordinate, Integer> toAct(final SquareCoordinate position,
                                                 final Army army) throws HeroExceptions {
-        final Hero targetAttack = searchTarget(position, army);
+        final Hero targetAttack = army.getHero(position).orElseThrow(() -> new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK));
         int damageDone = 0;
         if (isHit(this.getPrecision())) {
-            damageDone = calculateDamage(targetAttack);
-            targetAttack.setHp(targetAttack.getHp() - damageDone);
-            removeTarget(targetAttack, army);
+            damageDone = makeAction(targetAttack);
         }
         final Map<SquareCoordinate, Integer> enemyHeroPosDamage = new HashMap<>();
         enemyHeroPosDamage.put(position, damageDone);
         return enemyHeroPosDamage;
     }
 
-    protected Hero searchTarget(final SquareCoordinate position, final Army army) throws HeroExceptions {
-        final Hero target = army.getHeroes().get(position);
-        if (target == null) {
-            throw new HeroExceptions(HeroErrorCode.ERROR_TARGET_ATTACK);
-        } else return target;
+    private int makeAction(final Hero target) {
+        final int damage = calculateDamage(target);
+        target.setHp(target.getHp() - damage);
+        return damage;
     }
 
-    protected void removeTarget(final Hero targetAttack, final Army army) {
-        if (targetAttack.getHp() <= 0) {
-            army.killHero(targetAttack.getUnitId());
-        }
+    public boolean isDead() {
+        return this.hp <= 0;
     }
 
     protected int calculateDamage(final Hero targetAttack) {
-        return Math.round(this.getDamage() - targetAttack.getArmor() * this.getDamage());
+        return Math.round(randomIncreaseDamage(this.getDamage()) * (1 - targetAttack.getArmor()));
+    }
+
+    protected int randomIncreaseDamage(final int damage) {
+        final double probability = new Random().nextFloat();
+        if (probability < 0.15f) {
+            return damage - 5;
+        } else if (probability >= 0.15f && probability < 0.70f) {
+            return damage;
+        }
+        return damage + 5;
     }
 
     /**
@@ -200,11 +195,25 @@ public abstract class Hero {
         return precision > number;
     }
 
+    @JsonIgnore
+    public Hero getCopy() {
+        return clone();
+    }
+
+    public Hero clone() {
+        try {
+            return (Hero) super.clone();
+        } catch (final CloneNotSupportedException ex) {
+            //!!!!Никогда не возникнет. Исключение CloneNotSupported возникает если не cloneable
+            throw new AssertionError();
+        }
+    }
+
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof Hero)) return false;
-        Hero hero = (Hero) o;
+        final Hero hero = (Hero) o;
         return getUnitId() == hero.getUnitId() &&
                 getHpDefault() == hero.getHpDefault() &&
                 getHpMax() == hero.getHpMax() &&
