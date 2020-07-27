@@ -15,7 +15,7 @@ import java.util.*;
 public class CommonFunction {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonFunction.class);
 
-    final static private char emptyUnit = ' ';
+    final static public char EMPTY_UNIT = ' ';
 
     public static boolean isUnitMagician(final Hero hero) {
         return hero instanceof Magician;
@@ -164,7 +164,7 @@ public class CommonFunction {
         final char[] string = new char[6];
         final List<String> results = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            string[i] = emptyUnit;
+            string[i] = EMPTY_UNIT;
         }
         createAllString(string, results, armySize, 0);
         return results;
@@ -183,22 +183,22 @@ public class CommonFunction {
             return;
         }
         if (currentPositions < 3) {
-            if (currentString[currentPositions] == emptyUnit) {
+            if (currentString[currentPositions] == EMPTY_UNIT) {
                 currentString[currentPositions] = 'a';
                 createAllString(currentString, results, armySize, currentPositions + 1);
                 currentString[currentPositions] = 'h';
                 createAllString(currentString, results, armySize, currentPositions + 1);
                 currentString[currentPositions] = 'm';
                 createAllString(currentString, results, armySize, currentPositions + 1);
-                currentString[currentPositions] = emptyUnit;
+                currentString[currentPositions] = EMPTY_UNIT;
             }
             createAllString(currentString, results, armySize, currentPositions + 1);
         } else {
             if (currentPositions < 6) {
-                if (currentString[currentPositions] == emptyUnit) {
+                if (currentString[currentPositions] == EMPTY_UNIT) {
                     currentString[currentPositions] = 'f';
                     createAllString(currentString, results, armySize, currentPositions + 1);
-                    currentString[currentPositions] = emptyUnit;
+                    currentString[currentPositions] = EMPTY_UNIT;
                 }
                 createAllString(currentString, results, armySize, currentPositions + 1);
             }
@@ -212,18 +212,18 @@ public class CommonFunction {
             createAllString(currentString, results, armySize, 0);
             currentString[i] = 'V';
             createAllString(currentString, results, armySize, 0);
-            currentString[i] = emptyUnit;
+            currentString[i] = EMPTY_UNIT;
         }
         for (int i = 3; i < 6; i++) {
             currentString[i] = 'F';
             createAllString(currentString, results, armySize, 0);
-            currentString[i] = emptyUnit;
+            currentString[i] = EMPTY_UNIT;
         }
     }
 
     private static boolean empty(final char[] currentString) {
         for (int i = 0; i < 6; i++) {
-            if (currentString[i] != emptyUnit) {
+            if (currentString[i] != EMPTY_UNIT) {
                 return false;
             }
         }
@@ -233,7 +233,7 @@ public class CommonFunction {
     private static int full(final char[] currentString, final int armySize) {
         int counter = 0;
         for (int i = 0; i < 6; i++) {
-            if (currentString[i] != emptyUnit) {
+            if (currentString[i] != EMPTY_UNIT) {
                 counter++;
             }
         }

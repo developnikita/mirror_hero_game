@@ -1,9 +1,13 @@
 package com.neolab.heroesGame.client.gui;
 
+import com.neolab.heroesGame.arena.Army;
+import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
+import com.neolab.heroesGame.enumerations.HeroActions;
+import com.neolab.heroesGame.heroes.Hero;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
 public interface IGraphics {
 
@@ -17,12 +21,22 @@ public interface IGraphics {
 
     void endGame(final ExtendedServerResponse response) throws IOException;
 
-    /**
-     * Используется для выбора действий пользователем.
-     * Отображает принятый список строк.
-     *
-     * @param strings - списко доступных пользователю действий
-     * @return -  номер выбранной строки
-     */
-    int getChoose(final List<String> strings) throws IOException;
+    SquareCoordinate chooseUnit(final Army army) throws IOException;
+
+    HeroActions chooseActionForHero(final SquareCoordinate coordinate, final Hero hero) throws IOException;
+
+    SquareCoordinate chooseTargetCoordinate(final SquareCoordinate activeHeroCoordinate, final Hero activeHero,
+                                            final Army army) throws IOException;
+
+    Hero getHeroChoose(Map<Integer, Hero> army) throws IOException;
+
+    int getHeroPositionChoose(Hero hero, Map<Integer, Hero> army) throws IOException;
+
+    boolean finishCreatingArmy(Map<Integer, Hero> army) throws IOException;
+
+    Hero getHeroChoose(Army enemyArmy, Map<Integer, Hero> yourArmy) throws IOException;
+
+    int getHeroPositionChoose(Hero hero, Army enemyArmy, Map<Integer, Hero> yourArmy) throws IOException;
+
+    boolean finishCreatingArmy(Army enemyArmy, Map<Integer, Hero> yourArmy) throws IOException;
 }
