@@ -2,10 +2,13 @@ package com.neolab.heroesGame.server.serverNetwork;
 
 import com.neolab.heroesGame.aditional.HeroConfigManager;
 import com.neolab.heroesGame.aditional.StatisticWriter;
-import com.neolab.heroesGame.arena.*;
+import com.neolab.heroesGame.arena.Army;
+import com.neolab.heroesGame.arena.BattleArena;
+import com.neolab.heroesGame.arena.StringArmyFactory;
 import com.neolab.heroesGame.enumerations.GameEvent;
 import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.samplesSockets.PlayerSocket;
+import com.neolab.heroesGame.samplesSockets.Server;
 import com.neolab.heroesGame.server.answers.Answer;
 import com.neolab.heroesGame.server.answers.AnswerProcessor;
 import com.neolab.heroesGame.server.dto.ClientResponse;
@@ -30,8 +33,6 @@ public class GameServer {
     public GameServer(final PlayerSocket playerOne, final PlayerSocket playerTwo) {
         currentPlayer = playerOne;
         waitingPlayer = playerTwo;
-        /*battleArena = new BattleArena(FactoryArmies.generateArmies(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId()));
-        answerProcessor = new AnswerProcessor(currentPlayer.getPlayerId(), waitingPlayer.getPlayerId(), battleArena);*/
         counter = 0;
     }
 
@@ -42,10 +43,6 @@ public class GameServer {
             final Optional<PlayerSocket> whoIsWin = someoneWhoWin();
             if (whoIsWin.isPresent()) {
                 someoneWin(whoIsWin.get());
-                waitingPlayer.send(ExtendedServerRequest.getRequestString(
-                        GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
-                currentPlayer.send(ExtendedServerRequest.getRequestString(
-                        GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect()));
                 break;
             }
 
@@ -78,13 +75,11 @@ public class GameServer {
         currentPlayer.send("");
         final String player1ArmyResponse = currentPlayer.getIn().readLine();
         final Army player1Army = new StringArmyFactory(player1ArmyResponse).create();
-        System.out.println("currentPlayerArmy: " + player1ArmyResponse + " size: " + player1ArmyResponse.length());
 
         waitingPlayer.send(HeroConfigManager.getHeroConfig().getProperty("hero.army.size"));
         waitingPlayer.send(player1ArmyResponse);
         final String player2ArmyResponse = waitingPlayer.getIn().readLine();
         final Army player2Army = new StringArmyFactory(player2ArmyResponse).create();
-        System.out.println("waitingPlayerArmy: " + player2ArmyResponse + " size: " + player2ArmyResponse.length());
 
         final Map<Integer, Army> battleMap = new HashMap<>();
         battleMap.put(currentPlayer.getPlayerId(), player1Army);
@@ -183,12 +178,9 @@ public class GameServer {
             if (currentPlayer.getIn().ready()) {
                 return true;
             }
-            Thread.sleep(500);
+            Thread.sleep(Server.props.MAX_ANSWER_TIMEOUT);
         }
         return false;
     }
-
-
 }
-
 

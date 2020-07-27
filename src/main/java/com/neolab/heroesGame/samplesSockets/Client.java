@@ -102,13 +102,7 @@ public class Client {
                 return;
             }
 
-            final String armySize = in.readLine();
-            final String emenyArmy = in.readLine();
-            if (emenyArmy.isEmpty()) {
-                send(player.getArmyFirst(Integer.parseInt(armySize)));
-            } else {
-                send(player.getArmySecond(Integer.parseInt(armySize), new StringArmyFactory(emenyArmy).create()));
-            }
+            collectArmy();
 
             while (true) {
                 final String requestJson = in.readLine(); // ждем сообщения с сервера
@@ -122,7 +116,10 @@ public class Client {
                 switch (response.event) {
                     case NOW_YOUR_TURN -> send(player.getAnswer(response));
                     case WAIT_ITS_NOT_YOUR_TURN -> player.sendInformation(response);
-                    case YOU_WIN_GAME, YOU_LOSE_GAME, GAME_END_WITH_A_TIE -> player.endGame(response);
+                    case YOU_WIN_GAME, YOU_LOSE_GAME, GAME_END_WITH_A_TIE -> {
+                        player.endGame(response);
+                        collectArmy();
+                    }
                     default -> throw new HeroExceptions(HeroErrorCode.ERROR_EVENT);
                 }
             }
@@ -133,6 +130,7 @@ public class Client {
     }
 
     private boolean createPlayer() throws IOException {
+
         final String res = in.readLine();
         // на сервере уже максимально число игроков
         if (res.equals(GameEvent.MAX_COUNT_PLAYERS.toString())) {
@@ -140,9 +138,26 @@ public class Client {
         }
         final int playerId = Integer.parseInt(res);
         final String playerName = in.readLine();
+
+        //final IGraphics gui = new AsciiGraphics(playerId);
         player = new ClientPlayerImitation(playerId, playerName);
         send(GameEvent.CLIENT_IS_CREATED.toString());
         return true;
+    }
+
+    /**
+     * получаем от сервера размер армии и армию
+     * противника и на основе этих данных
+     * создаем собственную армию
+     */
+    private void collectArmy() throws IOException, HeroExceptions {
+        final String armySize = in.readLine();
+        final String enemyArmy = in.readLine();
+        if (enemyArmy.isEmpty()) {
+            send(player.getArmyFirst(Integer.parseInt(armySize)));
+        } else {
+            send(player.getArmySecond(Integer.parseInt(armySize), new StringArmyFactory(enemyArmy).create()));
+        }
     }
 
 

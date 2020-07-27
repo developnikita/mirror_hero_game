@@ -1,9 +1,11 @@
 package com.neolab.heroesGame.samplesSockets;
 
+import com.neolab.heroesGame.errors.HeroExceptions;
 import com.neolab.heroesGame.server.serverNetwork.GameServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Queue;
 
 /**
@@ -15,9 +17,9 @@ public class GameRoom extends Thread {
     private final PlayerSocket playerTwo;
     private final int countBattles;
 
-    public GameRoom(final Queue<PlayerSocket> serverList, final int countBattles) {
-        playerOne = serverList.poll();
-        playerTwo = serverList.poll();
+    public GameRoom(final Queue<PlayerSocket> queuePlayers, final int countBattles) {
+        playerOne = queuePlayers.poll();
+        playerTwo = queuePlayers.poll();
         this.countBattles = countBattles;
     }
 
@@ -37,7 +39,8 @@ public class GameRoom extends Thread {
             LOGGER.warn("Игра длилась {}", elapsedTimeInSecond);
 
             Server.getCountGameRooms().decrementAndGet();
-        } catch (final Exception ex) {
+        } catch (InterruptedException | HeroExceptions | IOException e) {
+            LOGGER.warn(e.getMessage());
             throw new IllegalStateException("Игра прервана, внутренняя ошибка сервера");
         }
     }

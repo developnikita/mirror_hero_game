@@ -17,6 +17,7 @@ public class PropsServerManager {
     public int MAX_COUNT_PLAYERS;
     public int MAX_COUNT_GAME_ROOMS;
     public int MAX_COUNT_BATTLES;
+    public int MAX_ANSWER_TIMEOUT;
     public final Map<Integer, String> mapIdNamePlayers = new HashMap<>();
 
     public PropsServerManager() {
@@ -33,6 +34,7 @@ public class PropsServerManager {
             MAX_COUNT_PLAYERS = Integer.parseInt(prop.getProperty("MAX_COUNT_PLAYERS"));
             MAX_COUNT_GAME_ROOMS = Integer.parseInt(prop.getProperty("MAX_COUNT_GAME_ROOMS"));
             MAX_COUNT_BATTLES = Integer.parseInt(prop.getProperty("MAX_COUNT_BATTLES"));
+            MAX_ANSWER_TIMEOUT = Integer.parseInt(prop.getProperty("MAX_ANSWER_TIMEOUT"));
             final String playerOneName = prop.getProperty("playerOne.name");
             final String playerTwoName = prop.getProperty("playerTwo.name");
 

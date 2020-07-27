@@ -23,7 +23,7 @@ public class ClientPlayerImitation {
         gui = new NullGraphics();
     }
 
-    private ClientPlayerImitation(final int playerId, final String name,
+    public ClientPlayerImitation(final int playerId, final String name,
                                   final IGraphics gui) {
         player = new PlayerBot(playerId, name);
         this.gui = gui;

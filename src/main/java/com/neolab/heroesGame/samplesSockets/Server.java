@@ -16,7 +16,7 @@ import java.util.function.IntSupplier;
 
 public class Server {
     private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
-    private static final PropsServerManager props = new PropsServerManager();
+    public static final PropsServerManager props = new PropsServerManager();
     public static final int PORT = props.PORT;
     private static final ConcurrentLinkedQueue<PlayerSocket> serverList = new ConcurrentLinkedQueue<>();
     private static final Queue<PlayerSocket> queuePlayers = new LinkedList<>();
