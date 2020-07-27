@@ -2,10 +2,7 @@ package com.neolab.heroesGame.aditional;
 
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.SquareCoordinate;
-import com.neolab.heroesGame.heroes.Archer;
-import com.neolab.heroesGame.heroes.Healer;
-import com.neolab.heroesGame.heroes.Hero;
-import com.neolab.heroesGame.heroes.Magician;
+import com.neolab.heroesGame.heroes.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,6 @@
 package com.neolab.heroesGame.server.serverNetwork;
 
 import com.neolab.heroesGame.aditional.HeroConfigManager;
-import com.neolab.heroesGame.aditional.StatisticWriter;
 import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.StringArmyFactory;
@@ -36,27 +35,27 @@ public class GameServer {
         counter = 0;
     }
 
-    public void gameProcess() throws IOException, InterruptedException {
+    public GameEvent gameProcess() throws IOException, InterruptedException {
         LOGGER.info("-----------------Начинается великая битва---------------");
-
+        final PlayerSocket thisPlayerStartFirst = currentPlayer;
+        final PlayerSocket secondPlayer = waitingPlayer;
         while (true) {
             final Optional<PlayerSocket> whoIsWin = someoneWhoWin();
             if (whoIsWin.isPresent()) {
                 someoneWin(whoIsWin.get());
-                break;
+                return thisPlayerStartFirst.equals(whoIsWin.get()) ?
+                        GameEvent.YOU_WIN_GAME : GameEvent.YOU_LOSE_GAME;
             }
 
             if (!battleArena.canSomeoneAct()) {
                 counter++;
                 if (counter > MAX_ROUND) {
-                    StatisticWriter.writePlayerDrawStatistic(currentPlayer.getPlayerName(),
-                            waitingPlayer.getPlayerName());
                     LOGGER.info("Поединок закончился ничьей");
                     currentPlayer.send(ExtendedServerRequest.getRequestString(
                             GameEvent.GAME_END_WITH_A_TIE, battleArena, answerProcessor.getActionEffect()));
                     waitingPlayer.send(ExtendedServerRequest.getRequestString(
                             GameEvent.GAME_END_WITH_A_TIE, battleArena, answerProcessor.getActionEffect()));
-                    break;
+                    return GameEvent.GAME_END_WITH_A_TIE;
                 }
                 LOGGER.info("-----------------Начинается раунд <{}>---------------", counter);
                 battleArena.endRound();
@@ -67,7 +66,6 @@ public class GameServer {
             }
             changeCurrentAndWaitingPlayers();
         }
-
     }
 
     public void prepareForBattle() throws IOException, HeroExceptions {
@@ -153,7 +151,6 @@ public class GameServer {
 
     private void someoneWin(final PlayerSocket winner) throws IOException {
         final PlayerSocket loser = getLoser(winner);
-        StatisticWriter.writePlayerWinStatistic(winner.getPlayerName(), loser.getPlayerName());
         battleArena.toLog();
         LOGGER.info("Игрок<{}> выиграл это тяжкое сражение", winner.getPlayerId());
         winner.send(ExtendedServerRequest.getRequestString(
