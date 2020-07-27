@@ -21,8 +21,8 @@ public class ServerImitation {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerImitation.class);
     private ClientPlayerImitation currentPlayer;
     private ClientPlayerImitation waitingPlayer;
-    private final AnswerProcessor answerProcessor;
-    private final BattleArena battleArena;
+    private AnswerProcessor answerProcessor;
+    private BattleArena battleArena;
     private int counter;
 
     public ServerImitation() throws Exception {
@@ -56,6 +56,16 @@ public class ServerImitation {
     public static void main(final String[] args) {
         try {
             final ServerImitation serverImitation = new ServerImitation();
+            /*
+            Army botArmy = new StringArmyFactory(serverImitation.currentPlayer.getArmyFirst(6)).create();
+            Army playerArmy = new StringArmyFactory(serverImitation.waitingPlayer.getArmySecond(6, botArmy)).create();
+            Map<Integer, Army> armies = new HashMap<>();
+            armies.put(1, botArmy);
+            armies.put(2, playerArmy);
+            serverImitation.battleArena = new BattleArena(armies);
+            serverImitation.answerProcessor = new AnswerProcessor(1, 2, serverImitation.battleArena);
+
+             */
             LOGGER.info("-----------------Начинается великая битва---------------");
             while (true) {
 

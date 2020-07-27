@@ -21,9 +21,9 @@ public abstract class Player {
 
     public abstract Answer getAnswer(final BattleArena board) throws HeroExceptions, IOException;
 
-    public abstract String getStringArmyFirst(final int armySize);
+    public abstract String getStringArmyFirst(final int armySize) throws IOException;
 
-    public abstract String getStringArmySecond(final int armySize, final Army army);
+    public abstract String getStringArmySecond(final int armySize, final Army army) throws IOException;
 
     public int getId() {
         return id;

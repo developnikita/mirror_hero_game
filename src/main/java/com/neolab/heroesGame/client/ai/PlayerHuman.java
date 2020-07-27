@@ -6,13 +6,18 @@ import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.SquareCoordinate;
 import com.neolab.heroesGame.client.gui.IGraphics;
 import com.neolab.heroesGame.enumerations.HeroActions;
-import com.neolab.heroesGame.heroes.Hero;
+import com.neolab.heroesGame.heroes.*;
 import com.neolab.heroesGame.server.answers.Answer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 public class PlayerHuman extends Player {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerHuman.class);
     private final IGraphics gui;
     private final SquareCoordinate coordinateDoesntMatters = new SquareCoordinate(-1, -1);
 
@@ -35,10 +40,10 @@ public class PlayerHuman extends Player {
         final Army yourArmy = board.getArmy(getId());
         final Army enemyArmy = board.getEnemyArmy(getId());
         while (true) {
-            final SquareCoordinate activeHeroCoordinate = chooseUnit(yourArmy);
+            final SquareCoordinate activeHeroCoordinate = gui.chooseUnit(yourArmy);
             final Hero activeHero = yourArmy.getHero(activeHeroCoordinate).orElseThrow();
 
-            final HeroActions action = chooseActionForHero(activeHeroCoordinate, activeHero);
+            final HeroActions action = gui.chooseActionForHero(activeHeroCoordinate, activeHero);
             if (action == null) {
                 continue;
             }
@@ -46,7 +51,8 @@ public class PlayerHuman extends Player {
             final SquareCoordinate targetUnitCoordinate =
                     (action == HeroActions.DEFENCE || CommonFunction.isUnitMagician(activeHero)) ?
                             coordinateDoesntMatters :
-                            chooseTargetCoordinate(activeHeroCoordinate, activeHero, enemyArmy, yourArmy);
+                            gui.chooseTargetCoordinate(activeHeroCoordinate, activeHero,
+                                    CommonFunction.isUnitHealer(activeHero) ? yourArmy : enemyArmy);
 
             if (targetUnitCoordinate == null) {
                 continue;
@@ -56,96 +62,95 @@ public class PlayerHuman extends Player {
         }
     }
 
-    public String getStringArmyFirst(final int armySize) {
-        final List<String> armies = CommonFunction.getAllAvailableArmiesCode(armySize);
-        return armies.get(new Random().nextInt(armies.size()));
-    }
-
-    public String getStringArmySecond(final int armySize, final Army army) {
-        return getStringArmyFirst(armySize);
-    }
-
-    /**
-     * Формируем строки, которые увидет пользователь, из доступных для действия героев
-     * counter используется только для обозначения номера строки
-     * gui.getChoose() возвращает номер строки, которую выбрал пользователь.
-     * Индекс строки на 1 больше индекса соответствующей координаты
-     */
-    protected SquareCoordinate chooseUnit(final Army army) throws IOException {
-        final List<String> strings = new ArrayList<>();
-        final List<SquareCoordinate> listVariationCoordinate = new ArrayList<>();
-        final Map<SquareCoordinate, Hero> heroes = army.getAvailableHeroes();
-        strings.add("Выберите юнита для действия:");
-        int counter = 1;
-        for (final SquareCoordinate key : heroes.keySet()) {
-            strings.add(String.format("%d. %s", counter++, makeUnitChooseString(key, heroes.get(key))));
-            listVariationCoordinate.add(key);
+    @Override
+    public String getStringArmyFirst(final int armySize) throws IOException {
+        final Map<Integer, Hero> army = new HashMap<>();
+        final Stack<Integer> lastChoose = new Stack<>();
+        while (true) {
+            final Hero hero;
+            hero = gui.getHeroChoose(army);
+            if (hero == null) {
+                army.remove(lastChoose.pop());
+                LOGGER.trace("Unit - null");
+                continue;
+            }
+            LOGGER.trace("Unit - {}", hero.getClassName());
+            final int position = gui.getHeroPositionChoose(hero, army);
+            LOGGER.trace("Unit  position- {}", position);
+            if (position != -1) {
+                army.put(position, hero);
+                lastChoose.push(position);
+            }
+            if (army.size() == armySize) {
+                if (gui.finishCreatingArmy(army)) {
+                    break;
+                }
+                army.remove(lastChoose.pop());
+            }
         }
-        return listVariationCoordinate.get(gui.getChoose(strings) - 1);
+        return makeStringArmiesFromMap(army);
     }
 
-    private String makeUnitChooseString(final SquareCoordinate coordinate, final Hero hero) {
+    @Override
+    public String getStringArmySecond(final int armySize, final Army enemy) throws IOException {
+        final Map<Integer, Hero> army = new HashMap<>();
+        final Stack<Integer> lastChoose = new Stack<>();
+        while (true) {
+            final Hero hero;
+            hero = gui.getHeroChoose(enemy, army);
+            if (hero == null) {
+                army.remove(lastChoose.pop());
+                LOGGER.trace("Unit - null");
+                continue;
+            }
+            LOGGER.trace("Unit - {}", hero.getClassName());
+            final int position = gui.getHeroPositionChoose(hero, enemy, army);
+            LOGGER.trace("Unit  position- {}", position);
+            if (position != -1) {
+                army.put(position, hero);
+                lastChoose.push(position);
+            }
+            if (army.size() == armySize) {
+                if (gui.finishCreatingArmy(enemy, army)) {
+                    break;
+                }
+                army.remove(lastChoose.pop());
+            }
+        }
+        return makeStringArmiesFromMap(army);
+    }
+
+    private String makeStringArmiesFromMap(final Map<Integer, Hero> army) {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(hero.getClassName());
-        if (coordinate.getX() == 0) {
-            stringBuilder.append(" на левом фланге");
-        } else if (coordinate.getX() == 1) {
-            stringBuilder.append(" по центру");
-        } else {
-            stringBuilder.append(" на правом фланге");
+        for (int i = 0; i < 6; i++) {
+            stringBuilder.append(classCodeToString(army.get(i)));
         }
         return stringBuilder.toString();
     }
 
-    /**
-     * Формируем список строк, которые увидет пользователь. Смотрим его выбор и отправляем соответствующий результат
-     */
-    private HeroActions chooseActionForHero(final SquareCoordinate coordinate, final Hero hero) throws IOException {
-        final List<String> strings = new ArrayList<>();
-        strings.add(String.format("Выберите действие для %s:", makeUnitChooseString(coordinate, hero)));
-        strings.add("1. Защита");
-        strings.add(CommonFunction.isUnitHealer(hero) ? "2. Лечить союзников" : "2. Атаковать");
-        strings.add("3. Вернуться к выбору юнита");
-        final int choose = gui.getChoose(strings);
-        if (choose == 3) {
-            return null;
-        } else if (choose == 1) {
-            return HeroActions.DEFENCE;
+    private String classCodeToString(final Hero hero) {
+        if (hero == null) {
+            return String.valueOf(CommonFunction.EMPTY_UNIT);
         }
-        return CommonFunction.isUnitHealer(hero) ? HeroActions.HEAL : HeroActions.ATTACK;
-    }
-
-    /**
-     * Формируем сет доступных целей. Для лучника это вся вражеская армия, для лекаря - вся своя армия, для воинов
-     * определяем доступные цели с помощью функции CommonFunction.getCorrectTargetForFootman()
-     * Формируем строки, которые увидет пользователь. counter будет равен индексу последней строки
-     * gui.getChoose() возвращает номер строки, которую выбрал пользователь. Если это последняя строка, то возвращаемся
-     * к выбору героя. Иначе выбираем координаты из списка доступных.
-     * Индекс строки на 1 больше индекса соответствующей координаты
-     */
-    private SquareCoordinate chooseTargetCoordinate(final SquareCoordinate activeHeroCoordinate, final Hero activeHero,
-                                                    final Army enemyArmy, final Army yourArmy) throws IOException {
-        final Set<SquareCoordinate> legalTargetCoordinate;
-        final Army correctArmy = CommonFunction.isUnitHealer(activeHero) ? yourArmy : enemyArmy;
-        if (CommonFunction.isUnitArcher(activeHero)) {
-            legalTargetCoordinate = enemyArmy.getHeroes().keySet();
-        } else if (CommonFunction.isUnitHealer(activeHero)) {
-            legalTargetCoordinate = yourArmy.getHeroes().keySet();
+        final String result;
+        if (hero.getClass() == Magician.class) {
+            result = "m";
+        } else if (hero instanceof WarlordMagician) {
+            result = "M";
+        } else if (hero instanceof WarlordVampire) {
+            result = "V";
+        } else if (hero instanceof Archer) {
+            result = "a";
+        } else if (hero instanceof Healer) {
+            result = "h";
+        } else if (hero.getClass() == Footman.class) {
+            result = "f";
+        } else if (hero instanceof WarlordFootman) {
+            result = "F";
         } else {
-            legalTargetCoordinate = CommonFunction.getCorrectTargetForFootman(activeHeroCoordinate, enemyArmy);
+            result = "u";
         }
-        final List<String> strings = new ArrayList<>();
-        final List<SquareCoordinate> listVariationCoordinate = new ArrayList<>();
-        strings.add(String.format("Выберите цель %s: ", makeUnitChooseString(activeHeroCoordinate, activeHero)));
-
-        int counter = 1;
-        for (final SquareCoordinate key : legalTargetCoordinate) {
-            strings.add(String.format("%d. %s", counter++, makeUnitChooseString(key, correctArmy.getHero(key).get())));
-            listVariationCoordinate.add(key);
-        }
-        strings.add(String.format("%d. Вернуться к выбору юнита", counter));
-        final int choose = gui.getChoose(strings);
-        return choose == counter ? null : listVariationCoordinate.get(choose - 1);
+        return result;
     }
 
 }

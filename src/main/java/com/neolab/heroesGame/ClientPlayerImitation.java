@@ -62,11 +62,11 @@ public class ClientPlayerImitation {
         gui.endGame(response);
     }
 
-    public String getArmyFirst(final int armySize) {
+    public String getArmyFirst(final int armySize) throws IOException {
         return player.getStringArmyFirst(armySize);
     }
 
-    public String getArmySecond(final int armySize, final Army army) {
+    public String getArmySecond(final int armySize, final Army army) throws IOException {
         return player.getStringArmySecond(armySize, army);
     }
 
