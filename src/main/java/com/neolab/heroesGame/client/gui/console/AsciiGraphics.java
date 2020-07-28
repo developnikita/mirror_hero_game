@@ -26,8 +26,6 @@ public class AsciiGraphics implements IGraphics {
     public static final int ENEMY_ARMY_ROW_START_AT = 0;
     public static final int YOUR_ARMY_ROW_START_AT = 20;
     public static final SquareCoordinate IS_AOE_EFFECT = new SquareCoordinate(-1, -1);
-    private final Terminal term;
-    private final TextGraphics textGraphics;
     private int lastRow = 0;
     private final DialogForCreatingArmies armiesDialog;
     private final DialogForChoosingAction actionDialog;
@@ -35,17 +33,17 @@ public class AsciiGraphics implements IGraphics {
 
     public AsciiGraphics(final int playerId) throws IOException {
 
-        term = new DefaultTerminalFactory().setInitialTerminalSize(
+        Terminal term = new DefaultTerminalFactory().setInitialTerminalSize(
                 new TerminalSize(TERMINAL_WIDTH, TERMINAL_HEIGHT)).createTerminal();
-        textGraphics = term.newTextGraphics();
+        TextGraphics textGraphics = term.newTextGraphics();
         armiesDialog = new DialogForCreatingArmies(term, textGraphics);
         actionDialog = new DialogForChoosingAction(term, textGraphics);
         presenter = new ActionPresenter(playerId, term, textGraphics);
     }
 
     @Override
-    public void showPosition(final ExtendedServerResponse response, final boolean isYourTurn) throws IOException {
-        lastRow = presenter.showPosition(response, isYourTurn);
+    public void showPosition(final ExtendedServerResponse response) throws IOException {
+        lastRow = presenter.showPosition(response);
     }
 
     @Override
@@ -99,8 +97,8 @@ public class AsciiGraphics implements IGraphics {
         return armiesDialog.finishCreatingArmy(enemyArmy.getHeroes(), yourArmy);
     }
 
-    public static int getChoose(final List<String> strings, final int lastRow, final int leftOffset, final Terminal term,
-                                final TextGraphics textGraphics) throws IOException {
+    public static int getChoose(final List<String> strings, final int lastRow, final int leftOffset,
+                                final Terminal term, final TextGraphics textGraphics) throws IOException {
         while (true) {
             clearChooseSector(lastRow, term, textGraphics);
             textGraphics.putString(leftOffset, lastRow, strings.get(0), SGR.BOLD);
@@ -166,11 +164,7 @@ public class AsciiGraphics implements IGraphics {
 
     public static String putToTheCenter(final String state, final int width) {
         final int offset = (width - state.length()) / 2;
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(" ".repeat(offset));
-        stringBuilder.append(state);
-        stringBuilder.append(" ".repeat(width - offset - state.length()));
-        return stringBuilder.toString();
+        return " ".repeat(offset) + state + " ".repeat(width - offset - state.length());
     }
 
 }

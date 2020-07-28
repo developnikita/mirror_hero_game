@@ -23,8 +23,7 @@ public class ClientPlayerImitation {
         gui = new NullGraphics();
     }
 
-    public ClientPlayerImitation(final int playerId, final String name,
-                                  final IGraphics gui) {
+    public ClientPlayerImitation(final int playerId, final String name, final IGraphics gui) {
         player = new PlayerBot(playerId, name);
         this.gui = gui;
     }
@@ -49,13 +48,13 @@ public class ClientPlayerImitation {
     }
 
     public String getAnswer(final ExtendedServerResponse response) throws IOException, HeroExceptions {
-        gui.showPosition(response, true);
+        gui.showPosition(response);
         final Answer answer = player.getAnswer(response.arena);
         return new ClientRequest(answer).jsonAnswer;
     }
 
     public void sendInformation(final ExtendedServerResponse response) throws IOException {
-        gui.showPosition(response, false);
+        gui.showPosition(response);
     }
 
     public void endGame(final ExtendedServerResponse response) throws IOException {

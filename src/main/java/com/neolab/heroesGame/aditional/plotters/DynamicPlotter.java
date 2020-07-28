@@ -63,7 +63,6 @@ public class DynamicPlotter {
             dynamicPlot.addLinePlot("", secondColor, getYPoint(statistic.get(secondName)),
                     getXPoint(statistic.get(secondName)));
         }
-        dynamicFrame.setSize(600, 600);
         dynamicFrame.setContentPane(dynamicPlot);
         dynamicFrame.setVisible(true);
     }
@@ -183,6 +182,5 @@ public class DynamicPlotter {
         frame.setVisible(true);
         return frame;
     }
-
 
 }

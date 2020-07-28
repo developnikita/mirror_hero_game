@@ -47,6 +47,7 @@ public class DialogForCreatingArmies {
     public int getHeroPositionChoose(final Hero hero, final Map<Integer, Hero> army) throws IOException {
         term.clearScreen();
         lastRow = 0;
+        setBlackOnWhiteText();
         showCurrentArmy(army);
         lastRow = 15;
         final int offset = (AsciiGraphics.TERMINAL_WIDTH - 14) / 2;
@@ -64,6 +65,7 @@ public class DialogForCreatingArmies {
         strings.add("Вы уверены, что хотите закончить создание своей армии?");
         strings.add("1. Я уверен, что хочу закончить формировать армию");
         strings.add("2. Я еще не готов. Отменяем последнее действие");
+        setWhiteOnBlackText();
         return AsciiGraphics.getChoose(strings, lastRow, leftOffset, term, textGraphics) == 1;
     }
 
@@ -109,15 +111,16 @@ public class DialogForCreatingArmies {
         strings.add("Вы уверены, что хотите закончить создание своей армии?");
         strings.add("1. Я уверен, что хочу закончить формировать армию");
         strings.add("2. Я еще не готов. Отменяем последнее действие");
+        setWhiteOnBlackText();
         return AsciiGraphics.getChoose(strings, lastRow, leftOffset, term, textGraphics) == 1;
     }
 
     private void showCurrentArmy(final Map<Integer, Hero> army) {
+        setWhiteOnBlackText();
         final String head = "Твоя текущая армия";
         final int headOffset = (70 - head.length()) / 2;
         textGraphics.putString(headOffset, lastRow, head, SGR.BOLD);
-        textGraphics.setBackgroundColor(TextColor.ANSI.WHITE);
-        textGraphics.setForegroundColor(TextColor.ANSI.BLACK);
+        setBlackOnWhiteText();
         final int currentLeftOffset = 15;
         for (int i = 0; i < 6; i++) {
             final int widthOffset = currentLeftOffset + (i % 3) * 15;
@@ -132,11 +135,11 @@ public class DialogForCreatingArmies {
     }
 
     private void showEnemy(final Map<SquareCoordinate, Hero> army) {
+        setWhiteOnBlackText();
         final String head = "Твой враг";
         final int headOffset = (70 - head.length()) / 2;
         textGraphics.putString(headOffset, 0, head, SGR.BOLD);
-        textGraphics.setBackgroundColor(TextColor.ANSI.WHITE);
-        textGraphics.setForegroundColor(TextColor.ANSI.BLACK);
+        setBlackOnWhiteText();
         final int currentLeftOffset = 15;
         for (int y = 0; y < 2; y++) {
             final int heightOffset = y == 0 ? lastRow + 1 : lastRow + 8;
@@ -153,16 +156,13 @@ public class DialogForCreatingArmies {
     }
 
     private void fillTheField(final int widthOffset, final int heightOffset) {
-        textGraphics.setBackgroundColor(TextColor.ANSI.WHITE);
-        textGraphics.setForegroundColor(TextColor.ANSI.BLACK);
         for (int i = 0; i < 6; i++) {
             textGraphics.putString(widthOffset, heightOffset + i, "             ");
         }
-        textGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
-        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
     }
 
     private void show(final List<Hero> heroes) {
+        setBlackOnWhiteText();
         final int stringSize = 15;
         int widthOffset = (70 - (stringSize * heroes.size())) / 2;
         for (final Hero hero : heroes) {
@@ -174,8 +174,6 @@ public class DialogForCreatingArmies {
     }
 
     private void showHeroStats(final Hero hero, final int widthOffset, int heightOffset) {
-        textGraphics.setBackgroundColor(TextColor.ANSI.WHITE);
-        textGraphics.setForegroundColor(TextColor.ANSI.BLACK);
         textGraphics.putString(widthOffset, heightOffset++, putToTheCenter(hero.getClassName(), 13));
         textGraphics.putString(widthOffset, heightOffset++, String.format("HP %3d       ", hero.getHpDefault()));
         textGraphics.putString(widthOffset, heightOffset++, String.format("Damage %2d    ", hero.getDamageDefault()));
@@ -187,8 +185,6 @@ public class DialogForCreatingArmies {
         } else {
             textGraphics.putString(widthOffset, heightOffset, "             ");
         }
-        textGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
-        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
     }
 
     private int choosePosition(final Hero hero, final Map<Integer, Hero> army) throws IOException {
@@ -207,6 +203,7 @@ public class DialogForCreatingArmies {
             strings.add(String.format("%d. Поместить юнита на правый фланг", counter++));
         }
         strings.add(String.format("%d. Вернуться к выбору юнита", counter));
+        setWhiteOnBlackText();
         final int choose = AsciiGraphics.getChoose(strings, lastRow, leftOffset, term, textGraphics);
         counter = 0;
         for (int i = 0; i < 3; i++) {
@@ -232,6 +229,7 @@ public class DialogForCreatingArmies {
         strings.add("3. Выбрать Вампира");
         show(warlords);
         term.flush();
+        setWhiteOnBlackText();
         final int choose = AsciiGraphics.getChoose(strings, lastRow, leftOffset, term, textGraphics);
         return warlords.get(choose - 1);
     }
@@ -256,6 +254,7 @@ public class DialogForCreatingArmies {
         strings.add(String.format("%d. Отменить предыдущий выбор", counter));
         show(units);
         term.flush();
+        setWhiteOnBlackText();
         final int choose = AsciiGraphics.getChoose(strings, lastRow, leftOffset, term, textGraphics);
         if (choose == counter) {
             return null;
@@ -279,5 +278,15 @@ public class DialogForCreatingArmies {
             }
         }
         return false;
+    }
+
+    private void setBlackOnWhiteText() {
+        textGraphics.setBackgroundColor(TextColor.ANSI.WHITE);
+        textGraphics.setForegroundColor(TextColor.ANSI.BLACK);
+    }
+
+    private void setWhiteOnBlackText() {
+        textGraphics.setBackgroundColor(TextColor.ANSI.BLACK);
+        textGraphics.setForegroundColor(TextColor.ANSI.WHITE);
     }
 }

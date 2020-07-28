@@ -13,6 +13,7 @@ public class CommonFunction {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonFunction.class);
 
     final static public char EMPTY_UNIT = ' ';
+    final static private String cleanLine = "            |";
 
     public static boolean isUnitMagician(final Hero hero) {
         return hero instanceof Magician;
@@ -105,57 +106,41 @@ public class CommonFunction {
         }
         stringBuilder.append("|");
         for (int x = 0; x < 3; x++) {
-            stringBuilder.append(classToString(heroes.get(x)));
+            stringBuilder.append(heroes.get(x).isPresent() ? classToString(heroes.get(x).get()) : cleanLine);
         }
         stringBuilder.append("\n|");
         for (int x = 0; x < 3; x++) {
-            stringBuilder.append(hpToString(heroes.get(x)));
+            stringBuilder.append(heroes.get(x).isPresent() ? hpToString(heroes.get(x).get()) : cleanLine);
         }
         stringBuilder.append("\n|");
         for (int x = 0; x < 3; x++) {
-            stringBuilder.append(statusToString(heroes.get(x), army));
+            stringBuilder.append(heroes.get(x).isPresent() ? statusToString(heroes.get(x).get(), army) : cleanLine);
         }
         stringBuilder.append("\n");
         return stringBuilder.toString();
     }
 
-    public static String statusToString(final Optional<Hero> optionalHero, final Army army) {
+    private static String statusToString(final Hero hero, final Army army) {
         final StringBuilder result = new StringBuilder();
-        if (optionalHero.isEmpty()) {
-            result.append(String.format("%12s|", ""));
+        if (hero.isDefence()) {
+            result.append("   D  ");
         } else {
-            final Hero hero = optionalHero.get();
-            if (hero.isDefence()) {
-                result.append("   D  ");
-            } else {
-                result.append("      ");
-            }
-            if (army.getAvailableHeroes().containsValue(hero)) {
-                result.append("  CA  |");
-            } else {
-                result.append("   W  |");
-            }
+            result.append("      ");
+        }
+        if (army.getAvailableHeroes().containsValue(hero)) {
+            result.append("  CA  |");
+        } else {
+            result.append("   W  |");
         }
         return result.toString();
     }
 
-    public static String hpToString(final Optional<Hero> optionalHero) {
-        final String result;
-        if (optionalHero.isEmpty()) {
-            result = String.format("%12s|", "");
-        } else {
-            final Hero hero = optionalHero.get();
-            result = String.format("  HP%3d/%3d |", hero.getHp(), hero.getHpMax());
-        }
-        return result;
+    private static String hpToString(final Hero hero) {
+        return String.format("  HP%3d/%3d |", hero.getHp(), hero.getHpMax());
     }
 
-    public static String classToString(final Optional<Hero> optionalHero) {
-        final String result;
-        if (optionalHero.isEmpty()) {
-            return String.format("%12s|", "");
-        }
-        return String.format("%12s|", optionalHero.get().getClassName());
+    private static String classToString(final Hero hero) {
+        return String.format("%12s|", hero.getClassName());
     }
 
     public static List<String> getAllAvailableArmiesCode(final int armySize) {

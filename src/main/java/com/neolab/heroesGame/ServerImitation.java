@@ -1,8 +1,10 @@
 package com.neolab.heroesGame;
 
 import com.neolab.heroesGame.aditional.StatisticWriter;
+import com.neolab.heroesGame.arena.Army;
 import com.neolab.heroesGame.arena.BattleArena;
 import com.neolab.heroesGame.arena.FactoryArmies;
+import com.neolab.heroesGame.arena.StringArmyFactory;
 import com.neolab.heroesGame.client.ai.Player;
 import com.neolab.heroesGame.client.dto.ExtendedServerResponse;
 import com.neolab.heroesGame.enumerations.GameEvent;
@@ -14,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class ServerImitation {
@@ -27,7 +31,7 @@ public class ServerImitation {
 
     public ServerImitation() throws Exception {
         currentPlayer = new ClientPlayerImitation(1, "Bot1");
-        waitingPlayer = ClientPlayerImitation.createHumanPlayerWithAsciiGraphics(2, "Bot2");
+        waitingPlayer = ClientPlayerImitation.createPlayerWithAsciiGraphics(2, "Bot2");
         battleArena = new BattleArena(FactoryArmies.generateArmies(1, 2));
         answerProcessor = new AnswerProcessor(1, 2, battleArena);
         counter = 0;
@@ -56,7 +60,6 @@ public class ServerImitation {
     public static void main(final String[] args) {
         try {
             final ServerImitation serverImitation = new ServerImitation();
-            /*
             Army botArmy = new StringArmyFactory(serverImitation.currentPlayer.getArmyFirst(6)).create();
             Army playerArmy = new StringArmyFactory(serverImitation.waitingPlayer.getArmySecond(6, botArmy)).create();
             Map<Integer, Army> armies = new HashMap<>();
@@ -65,7 +68,6 @@ public class ServerImitation {
             serverImitation.battleArena = new BattleArena(armies);
             serverImitation.answerProcessor = new AnswerProcessor(1, 2, serverImitation.battleArena);
 
-             */
             LOGGER.info("-----------------Начинается великая битва---------------");
             while (true) {
 
@@ -102,11 +104,11 @@ public class ServerImitation {
         battleArena.toLog();
         waitingPlayer.sendInformation(ExtendedServerResponse.getResponseFromString(
                 ExtendedServerRequest.getRequestString(
-                        GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect())));
+                        GameEvent.WAIT_ITS_NOT_YOUR_TURN, battleArena, answerProcessor.getActionEffect())));
 
         final String response = currentPlayer.getAnswer(ExtendedServerResponse.getResponseFromString(
                 ExtendedServerRequest.getRequestString(
-                        GameEvent.NOTHING_HAPPEN, battleArena, answerProcessor.getActionEffect())));
+                        GameEvent.NOW_YOUR_TURN, battleArena, answerProcessor.getActionEffect())));
 
         final Answer answer = new ClientResponse(response).getAnswer();
         answer.toLog();

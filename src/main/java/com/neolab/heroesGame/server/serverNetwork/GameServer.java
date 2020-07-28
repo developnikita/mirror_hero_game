@@ -38,7 +38,6 @@ public class GameServer {
     public GameEvent gameProcess() throws IOException, InterruptedException {
         LOGGER.info("-----------------Начинается великая битва---------------");
         final PlayerSocket thisPlayerStartFirst = currentPlayer;
-        final PlayerSocket secondPlayer = waitingPlayer;
         while (true) {
             final Optional<PlayerSocket> whoIsWin = someoneWhoWin();
             if (whoIsWin.isPresent()) {
