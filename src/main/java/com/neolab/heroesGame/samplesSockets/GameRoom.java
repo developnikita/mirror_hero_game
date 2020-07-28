@@ -35,7 +35,10 @@ public class GameRoom extends Thread {
 
             for (int i = 0; i < countBattles; i++) {
                 final GameServer server = new GameServer(playerOne, playerTwo);
-                server.prepareForBattle();
+                //
+                if(!server.prepareForBattle()){
+                    continue;
+                }
                 final GameEvent event = server.gameProcess();
 
                 StatisticWriter.writePlayerAnyStatistic(playerOne.getPlayerName(),

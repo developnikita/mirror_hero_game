@@ -158,6 +158,11 @@ public class Client {
         } else {
             send(player.getArmySecond(Integer.parseInt(armySize), new StringArmyFactory(enemyArmy).create()));
         }
+
+        String serverRes = in.readLine();
+        if(serverRes.equals(GameEvent.ERROR_ARMY_CREATED.toString())){
+            collectArmy();
+        }
     }
 
 

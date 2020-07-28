@@ -12,6 +12,7 @@ import com.neolab.heroesGame.server.answers.Answer;
 import com.neolab.heroesGame.server.answers.AnswerProcessor;
 import com.neolab.heroesGame.server.dto.ClientResponse;
 import com.neolab.heroesGame.server.dto.ExtendedServerRequest;
+import com.neolab.heroesGame.validators.StringArmyValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,23 +68,42 @@ public class GameServer {
         }
     }
 
-    public void prepareForBattle() throws IOException, HeroExceptions {
+    public boolean prepareForBattle() throws IOException, HeroExceptions {
         currentPlayer.send(HeroConfigManager.getHeroConfig().getProperty("hero.army.size"));
         currentPlayer.send("");
         final String player1ArmyResponse = currentPlayer.getIn().readLine();
         final Army player1Army = new StringArmyFactory(player1ArmyResponse).create();
 
-        waitingPlayer.send(HeroConfigManager.getHeroConfig().getProperty("hero.army.size"));
-        waitingPlayer.send(player1ArmyResponse);
+        if(StringArmyValidator.validateArmyString(player1ArmyResponse, player1Army.getHeroes().size())){
+            waitingPlayer.send(HeroConfigManager.getHeroConfig().getProperty("hero.army.size"));
+            waitingPlayer.send(player1ArmyResponse);
+        } else {
+            LOGGER.info("Игрок {} отправил невалидную армию, игра не может быть продолжена", currentPlayer.getPlayerName());
+            currentPlayer.send(GameEvent.ERROR_ARMY_CREATED.toString());
+            waitingPlayer.send(GameEvent.ERROR_ARMY_CREATED.toString());
+            return false;
+        }
+
         final String player2ArmyResponse = waitingPlayer.getIn().readLine();
         final Army player2Army = new StringArmyFactory(player2ArmyResponse).create();
 
-        final Map<Integer, Army> battleMap = new HashMap<>();
-        battleMap.put(currentPlayer.getPlayerId(), player1Army);
-        battleMap.put(waitingPlayer.getPlayerId(), player2Army);
-        this.battleArena = new BattleArena(battleMap);
-        this.answerProcessor = new AnswerProcessor(currentPlayer.getPlayerId(),
-                waitingPlayer.getPlayerId(), battleArena);
+        if(StringArmyValidator.validateArmyString(player2ArmyResponse, player2Army.getHeroes().size())){
+            final Map<Integer, Army> battleMap = new HashMap<>();
+            battleMap.put(currentPlayer.getPlayerId(), player1Army);
+            battleMap.put(waitingPlayer.getPlayerId(), player2Army);
+            this.battleArena = new BattleArena(battleMap);
+            this.answerProcessor = new AnswerProcessor(currentPlayer.getPlayerId(),
+                    waitingPlayer.getPlayerId(), battleArena);
+        } else {
+            LOGGER.info("Игрок {} отправил невалидную армию, игра не может быть продолжена", waitingPlayer.getPlayerName());
+            currentPlayer.send(GameEvent.ERROR_ARMY_CREATED.toString());
+            waitingPlayer.send(GameEvent.ERROR_ARMY_CREATED.toString());
+            return false;
+        }
+
+        currentPlayer.send(GameEvent.ARMY_IS_CREATED.toString());
+        waitingPlayer.send(GameEvent.ARMY_IS_CREATED.toString());
+        return true;
     }
 
     private void changeCurrentAndWaitingPlayers() {

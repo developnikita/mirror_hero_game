@@ -11,7 +11,9 @@ public enum GameEvent {
     NOTHING_HAPPEN(""),
     NOW_YOUR_TURN(""),
     WAIT_ITS_NOT_YOUR_TURN(""),
-    CREATE_ARMY("");
+    ARMY_IS_CREATED("Армия была успешно создана"),
+    ERROR_ARMY_CREATED("Ошибка создания армии");
+
     private final String description;
 
     GameEvent(final String description) {
