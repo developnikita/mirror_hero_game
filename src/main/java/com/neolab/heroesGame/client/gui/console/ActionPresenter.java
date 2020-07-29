@@ -53,7 +53,6 @@ public class ActionPresenter {
         printGameResult(response.event);
         term.flush();
         term.readInput();
-        term.close();
         return lastRow;
     }
 
