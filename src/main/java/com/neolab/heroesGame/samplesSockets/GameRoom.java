@@ -74,8 +74,8 @@ public class GameRoom extends Thread {
             return failedPlayer.equals(firstPlayer) ? GameEvent.YOU_LOSE_GAME : GameEvent.YOU_WIN_GAME;
         }
         final GameEvent event = server.gameProcess();
-        StatisticWriter.writePlayerAnyStatistic(playerOne.getPlayerName(),
-                playerTwo.getPlayerName(), event);
+        StatisticWriter.writePlayerAnyStatistic(firstPlayer.getPlayerName(),
+                secondPlayer.getPlayerName(), event);
         return event;
     }
 
@@ -89,7 +89,7 @@ public class GameRoom extends Thread {
         try {
             plotter.plotDynamicInfo(firstPlayer.getPlayerName(), event);
             plotter.dynamicHistogramPlot();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
