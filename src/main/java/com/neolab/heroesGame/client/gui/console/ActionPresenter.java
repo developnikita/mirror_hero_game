@@ -22,7 +22,7 @@ public class ActionPresenter {
     private final Terminal term;
     private final TextGraphics textGraphics;
     private int leftOffset;
-    private final int playerId;
+    private int playerId;
     private final int infoString = 22;
     private final int offsetForEffect = 23;
     private int lastRow = 0;
@@ -31,6 +31,10 @@ public class ActionPresenter {
         this.term = term;
         this.textGraphics = textGraphics;
         leftOffset = (term.getTerminalSize().getColumns() - ARMY_WIDTH) / 2;
+        this.playerId = playerId;
+    }
+
+    public void setPlayerId(final int playerId) {
         this.playerId = playerId;
     }
 
@@ -85,7 +89,7 @@ public class ActionPresenter {
      * Для определения умер ли юнит только что проверяем чей последний ход и обращаемся к функции isUnitDiedRightNow
      * для того, чтобы определить наносился ли этому юниту в прошлом ходу урон
      */
-    private void printArmy(final Army yours, final ActionEffect effect, final boolean isItYourArmy) {
+    private void printArmy(final Army army, final ActionEffect effect, final boolean isItYourArmy) {
         int topString = isItYourArmy ? 12 : 2;
         final int step = 13;
         final boolean isLastMoveMakeThisArmy = (effect.getLastMovedPlayerId() == playerId) == isItYourArmy;
@@ -94,13 +98,13 @@ public class ActionPresenter {
             final int y = isItYourArmy ? 1 - i : i;
             for (int x = 0; x < 3; x++) {
                 final SquareCoordinate coordinate = new SquareCoordinate(x, y);
-                final Optional<Hero> hero = yours.getHero(coordinate);
+                final Optional<Hero> hero = army.getHero(coordinate);
                 if (!isLastMoveMakeThisArmy && hero.isEmpty() && isUnitDiedRightNow(effect, coordinate)) {
                     printDeadUnit(topString, leftOffset + 1 + x * step);
                 } else {
                     if (hero.isPresent()) {
                         setBackGroundColorForHero(coordinate, effect, isLastMoveMakeThisArmy);
-                        printHero(hero.get(), yours, topString, leftOffset + 1 + x * step);
+                        printHero(hero.get(), army, topString, leftOffset + 1 + x * step);
                     } else {
                         printEmptyUnit(topString, leftOffset + 1 + x * step);
                     }

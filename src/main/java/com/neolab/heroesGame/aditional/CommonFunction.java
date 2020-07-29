@@ -155,9 +155,9 @@ public class CommonFunction {
 
     private static void createAllString(final char[] currentString, final List<String> results,
                                         final int armySize, final int currentPositions) {
-        LOGGER.trace("{} {}", currentString, currentPositions);
+        //LOGGER.trace("{} {}", currentString, currentPositions);
         if (full(currentString, armySize) == 0) {
-            LOGGER.trace("{}  записываем строку", currentString);
+            //LOGGER.trace("{}  записываем строку", currentString);
             results.add(new String(currentString));
             return;
         }

@@ -33,12 +33,16 @@ public class AsciiGraphics implements IGraphics {
 
     public AsciiGraphics(final int playerId) throws IOException {
 
-        Terminal term = new DefaultTerminalFactory().setInitialTerminalSize(
+        final Terminal term = new DefaultTerminalFactory().setInitialTerminalSize(
                 new TerminalSize(TERMINAL_WIDTH, TERMINAL_HEIGHT)).createTerminal();
-        TextGraphics textGraphics = term.newTextGraphics();
+        final TextGraphics textGraphics = term.newTextGraphics();
         armiesDialog = new DialogForCreatingArmies(term, textGraphics);
         actionDialog = new DialogForChoosingAction(term, textGraphics);
         presenter = new ActionPresenter(playerId, term, textGraphics);
+    }
+
+    public void setPresenterPlayerId(final int id) {
+        presenter.setPlayerId(id);
     }
 
     @Override
@@ -83,17 +87,17 @@ public class AsciiGraphics implements IGraphics {
     }
 
     @Override
-    public Hero getHeroChoose(Army enemyArmy, Map<Integer, Hero> yourArmy) throws IOException {
+    public Hero getHeroChoose(final Army enemyArmy, final Map<Integer, Hero> yourArmy) throws IOException {
         return armiesDialog.getHeroChoose(enemyArmy.getHeroes(), yourArmy);
     }
 
     @Override
-    public int getHeroPositionChoose(Hero hero, Army enemyArmy, Map<Integer, Hero> yourArmy) throws IOException {
+    public int getHeroPositionChoose(final Hero hero, final Army enemyArmy, final Map<Integer, Hero> yourArmy) throws IOException {
         return armiesDialog.getHeroPositionChoose(hero, enemyArmy.getHeroes(), yourArmy);
     }
 
     @Override
-    public boolean finishCreatingArmy(Army enemyArmy, Map<Integer, Hero> yourArmy) throws IOException {
+    public boolean finishCreatingArmy(final Army enemyArmy, final Map<Integer, Hero> yourArmy) throws IOException {
         return armiesDialog.finishCreatingArmy(enemyArmy.getHeroes(), yourArmy);
     }
 

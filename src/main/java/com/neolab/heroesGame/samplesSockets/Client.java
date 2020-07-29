@@ -118,6 +118,7 @@ public class Client {
                     case WAIT_ITS_NOT_YOUR_TURN -> player.sendInformation(response);
                     case YOU_WIN_GAME, YOU_LOSE_GAME, GAME_END_WITH_A_TIE -> {
                         player.endGame(response);
+                        System.out.printf("You %s\n", response.event.getDescription());
                         collectArmy();
                     }
                     default -> throw new HeroExceptions(HeroErrorCode.ERROR_EVENT);
@@ -139,8 +140,8 @@ public class Client {
         final int playerId = Integer.parseInt(res);
         final String playerName = in.readLine();
 
-        //final IGraphics gui = new AsciiGraphics(playerId);
-        player = new ClientPlayerImitation(playerId, playerName);
+        player.setPlayerId(playerId);
+        player.setPlayerName(playerName);
         send(GameEvent.CLIENT_IS_CREATED.toString());
         return true;
     }
@@ -159,15 +160,16 @@ public class Client {
             send(player.getArmySecond(Integer.parseInt(armySize), new StringArmyFactory(enemyArmy).create()));
         }
 
-        String serverRes = in.readLine();
-        if(serverRes.equals(GameEvent.ERROR_ARMY_CREATED.toString())){
+        final String serverRes = in.readLine();
+        if (serverRes.equals(GameEvent.ERROR_ARMY_CREATED.toString())) {
             collectArmy();
         }
     }
 
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws IOException {
         final Client client = new Client(IP, PORT);
+        client.player = ClientPlayerImitation.createCustomPlayer(0, "");
         client.startClient();
     }
 }
