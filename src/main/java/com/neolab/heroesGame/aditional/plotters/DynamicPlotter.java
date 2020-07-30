@@ -54,6 +54,13 @@ public class DynamicPlotter {
         return plotter;
     }
 
+    public static void plotLoadedInformation(final String firstName, final String secondName,
+                                             final Map<String, List<String>> statistic) {
+        DynamicPlotter plotter = new DynamicPlotter(firstName, secondName, statistic);
+        plotter.oldStatisticPlot();
+        plotter.dynamicHistogramPlot();
+    }
+
     private void oldStatisticPlot() {
         if (!Optional.ofNullable(statistic.get(firstName)).orElse(Collections.emptyList()).isEmpty()) {
             dynamicPlot.addLinePlot("", firstColor, getYPoint(statistic.get(firstName)),
