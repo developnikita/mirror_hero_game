@@ -59,7 +59,7 @@ public class GameRoom extends Thread {
             Server.getCountGameRooms().decrementAndGet();
         } catch (final InterruptedException | HeroExceptions | IOException e) {
             LOGGER.warn(e.getMessage());
-            throw new IllegalStateException("Игра прервана, внутренняя ошибка сервера");
+            //throw new IllegalStateException("Игра прервана, внутренняя ошибка сервера");
         }
     }
 

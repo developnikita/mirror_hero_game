@@ -10,6 +10,7 @@ import com.neolab.heroesGame.errors.HeroExceptions;
 import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.Scanner;
 
 /**
  * Консольный многопользовательский чат.
@@ -131,17 +132,14 @@ public class Client {
     }
 
     private boolean createPlayer() throws IOException {
-
+        send(player.getPlayerName());
         final String res = in.readLine();
         // на сервере уже максимально число игроков
         if (res.equals(GameEvent.MAX_COUNT_PLAYERS.toString())) {
             return false;
         }
         final int playerId = Integer.parseInt(res);
-        final String playerName = in.readLine();
-
         player.setPlayerId(playerId);
-        player.setPlayerName(playerName);
         send(GameEvent.CLIENT_IS_CREATED.toString());
         return true;
     }
@@ -169,7 +167,10 @@ public class Client {
 
     public static void main(final String[] args) throws IOException {
         final Client client = new Client(IP, PORT);
-        client.player = ClientPlayerImitation.createCustomPlayer(0, "");
+        System.out.println("Введите ваше имя");
+        Scanner in = new Scanner(System.in);
+        String name =  in.nextLine();
+        client.player = ClientPlayerImitation.createCustomPlayer(0, name);
         client.startClient();
     }
 }
